@@ -3,12 +3,15 @@ import { requireComplainant } from "@/lib/auth/session";
 import { createServerClient } from "@/lib/supabase/server";
 import { caseSlug } from "@/lib/cases/case-number";
 import { StageBadge } from "@/components/case/StageBadge";
+import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
+import { isStage } from "@/lib/cases/stages";
 import { Link, type Locale } from "@/i18n/routing";
 
 export default async function MyCasesPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   await requireComplainant(locale);
   const t = await getTranslations("myCases");
+  const stageOverrides = (await loadWorkflowConfig()).stageLabels[locale] ?? {};
   const format = await getFormatter();
   const supabase = await createServerClient();
   const { data: cases } = await supabase
@@ -39,7 +42,7 @@ export default async function MyCasesPage({ params }: { params: Promise<{ locale
                   {t("filedOn", { date: format.dateTime(new Date(c.created_at), { dateStyle: "medium", timeZone: "Africa/Nairobi" }) })}
                 </p>
               </div>
-              <StageBadge stage={c.stage} />
+              <StageBadge stage={c.stage} label={isStage(c.stage) ? stageOverrides[c.stage] : undefined} />
             </li>
           ))}
         </ul>

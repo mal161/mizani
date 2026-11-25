@@ -1,14 +1,15 @@
 import { useTranslations } from "next-intl";
 import { stageLabel } from "@/lib/cases/stages";
 
-export function StageBadge({ stage }: { stage: string }) {
+/** Stage pill. Pass `label` when an admin has renamed the stage (see labelFor). */
+export function StageBadge({ stage, label }: { stage: string; label?: string }) {
   const t = useTranslations("stages");
   return (
     <span
       data-testid="stage"
       className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-800"
     >
-      {stageLabel(stage, t)}
+      {label ?? stageLabel(stage, t)}
     </span>
   );
 }

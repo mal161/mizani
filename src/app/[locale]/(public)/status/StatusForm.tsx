@@ -1,18 +1,20 @@
 "use client";
 
 import { useActionState } from "react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { statusAction, type StatusState } from "./actions";
 
 export function StatusForm() {
   const t = useTranslations("status");
   const ts = useTranslations("stages");
   const format = useFormatter();
+  const locale = useLocale();
   const [state, action, pending] = useActionState(statusAction, { status: "idle" } as StatusState);
 
   return (
     <div className="flex flex-col gap-6">
       <form action={action} className="flex flex-col gap-4">
+        <input type="hidden" name="locale" value={locale} />
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{t("caseNumber")}</span>
           <input name="caseNumber" required placeholder="ACC/2026/000123" className="rounded-md border px-3 py-2 font-mono" />
@@ -39,7 +41,7 @@ export function StatusForm() {
         <section className="rounded-lg border bg-slate-50 p-4" aria-live="polite">
           <p className="font-mono text-sm">{state.caseNumber}</p>
           <p className="text-lg">
-            {t("currentStage")}: <strong data-testid="status-stage">{ts(state.stage)}</strong>
+            {t("currentStage")}: <strong data-testid="status-stage">{state.label ?? ts(state.stage)}</strong>
           </p>
           <p className="text-xs text-slate-500">
             {t("updated", {

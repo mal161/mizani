@@ -2,6 +2,7 @@ import en from "../../../messages/en.json";
 import sw from "../../../messages/sw.json";
 import { parseCaseNumberInput } from "@/lib/cases/case-number";
 import type { checkStatus } from "@/lib/cases/status-check";
+import type { StageLabels } from "@/lib/cases/workflow-config";
 
 type Lang = "en" | "sw";
 
@@ -34,6 +35,7 @@ export async function ussdResponse(
   input: string,
   check: typeof checkStatus,
   caller: string,
+  labels?: StageLabels,
 ): Promise<string> {
   const parts = input === "" ? [] : input.split("*");
 
@@ -51,6 +53,9 @@ export async function ussdResponse(
   if (parts.length === 2) return `CON ${t.askPin}`;
 
   const r = await check(caseNumber, parts[2].trim(), "ussd", caller);
-  if (r.ok) return `END ${t.status(caseNumber, stageNames[lang][r.stage])}`;
+  if (r.ok) {
+    const label = labels?.[lang]?.[r.stage] || stageNames[lang][r.stage];
+    return `END ${t.status(caseNumber, label)}`;
+  }
   return `END ${r.reason === "locked" ? t.locked : t.invalid}`;
 }

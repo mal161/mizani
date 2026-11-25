@@ -6,6 +6,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { caseNumberFromSlug } from "@/lib/cases/case-number";
 import { logAudit } from "@/lib/audit";
 import { StageBadge } from "@/components/case/StageBadge";
+import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
+import { isStage } from "@/lib/cases/stages";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 
@@ -45,6 +47,7 @@ export default async function CaseDetailPage({
   );
 
   const t = await getTranslations("caseDetail");
+  const stageOverrides = (await loadWorkflowConfig()).stageLabels[locale] ?? {};
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <Link href="/my/cases" className="text-sm underline">
@@ -52,7 +55,7 @@ export default async function CaseDetailPage({
       </Link>
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
-        <StageBadge stage={c.stage} />
+        <StageBadge stage={c.stage} label={isStage(c.stage) ? stageOverrides[c.stage] : undefined} />
       </div>
 
       <section className="flex flex-col gap-2">

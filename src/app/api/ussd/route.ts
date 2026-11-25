@@ -1,5 +1,6 @@
 import { ussdResponse } from "@/lib/ussd/menu";
 import { checkStatus } from "@/lib/cases/status-check";
+import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
 
 /**
  * Africa's Talking USSD callback. AT posts form fields: sessionId, serviceCode, phoneNumber, text.
@@ -15,7 +16,8 @@ export async function POST(req: Request) {
   const caller = String(form.get("phoneNumber") ?? "") || "unknown";
   let reply: string;
   try {
-    reply = await ussdResponse(text, checkStatus, caller);
+    const { stageLabels } = await loadWorkflowConfig();
+    reply = await ussdResponse(text, checkStatus, caller, stageLabels);
   } catch (e) {
     console.error("USSD error", e);
     reply = "END Service unavailable. Try again later. / Huduma haipatikani kwa sasa.";

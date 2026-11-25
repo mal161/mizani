@@ -44,6 +44,12 @@ describe("USSD menu", () => {
     expect(await ussdResponse("2*2026000123*123456", ok, "+254700000000")).toContain("Usikilizaji");
   });
 
+  it("uses admin-renamed stage labels when given", async () => {
+    const labels = { en: { hearing: "Commission hearing" }, sw: {} };
+    expect(await ussdResponse("1*2026000123*123456", ok, "+254700000000", labels)).toContain("Commission hearing");
+    expect(await ussdResponse("2*2026000123*123456", ok, "+254700000000", labels)).toContain("Usikilizaji");
+  });
+
   it("gives the same message for unknown case and wrong PIN", async () => {
     expect(await ussdResponse("1*2026000123*000000", invalid, "+254700000000")).toMatch(/^END .*not match/i);
   });
