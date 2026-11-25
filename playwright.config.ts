@@ -1,5 +1,12 @@
 import { defineConfig } from "@playwright/test";
 
+// Tests that inspect the database need the same env as the app.
+try {
+  process.loadEnvFile(".env.local");
+} catch {
+  // no .env.local (CI): rely on the environment
+}
+
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 90000,

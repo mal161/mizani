@@ -25,7 +25,10 @@
     }
   },
   "myCases": {
-    "title": "Kesi zangu"
+    "title": "Kesi zangu",
+    "fileNew": "Wasilisha lalamiko jipya",
+    "empty": "Bado hujawasilisha lalamiko lolote.",
+    "filedOn": "Liliwasilishwa {date}"
   },
   "file": {
     "title": "Wasilisha lalamiko",
@@ -64,5 +67,37 @@
       "pinWarning": "Weka PIN hii siri. Unaihitaji pamoja na nambari ya kesi kuangalia hali kwa USSD au kwenye ukurasa wa hali.",
       "viewCases": "Nenda kwa kesi zangu"
     }
+  },
+  "stages": {
+    "received": "Imepokelewa",
+    "screening": "Uchunguzi wa awali",
+    "advocate_notified": "Wakili amearifiwa",
+    "investigation": "Uchunguzi",
+    "conciliation": "Upatanishi",
+    "hearing": "Usikilizaji",
+    "decision": "Uamuzi",
+    "closed": "Imefungwa"
+  },
+  "timeline": {
+    "label": "Mfuatano wa matukio",
+    "empty": "Bado hakuna taarifa mpya.",
+    "types": {
+      "filed": "Lalamiko limewasilishwa",
+      "stage_changed": "Hatua imebadilika",
+      "info_requested": "Maelezo zaidi yameombwa",
+      "info_provided": "Maelezo yametolewa",
+      "advocate_responded": "Wakili amejibu",
+      "hearing_scheduled": "Usikilizaji umepangwa",
+      "decision_issued": "Uamuzi umetolewa",
+      "other": "Taarifa"
+    }
+  },
+  "caseDetail": {
+    "back": "Kesi zangu",
+    "complaint": "Lalamiko lako",
+    "against": "Dhidi ya: {name}",
+    "documents": "Nyaraka",
+    "noDocuments": "Hakuna nyaraka zilizoambatishwa.",
+    "timeline": "Mfuatano wa matukio"
   }
 }

@@ -25,7 +25,10 @@
     }
   },
   "myCases": {
-    "title": "My cases"
+    "title": "My cases",
+    "fileNew": "File a new complaint",
+    "empty": "You have not filed any complaints yet.",
+    "filedOn": "Filed {date}"
   },
   "file": {
     "title": "File a complaint",
@@ -64,5 +67,37 @@
       "pinWarning": "Keep this PIN private. You need it with your case number to check status by USSD or on the status page.",
       "viewCases": "Go to my cases"
     }
+  },
+  "stages": {
+    "received": "Received",
+    "screening": "Screening",
+    "advocate_notified": "Advocate notified",
+    "investigation": "Investigation",
+    "conciliation": "Conciliation",
+    "hearing": "Hearing",
+    "decision": "Decision",
+    "closed": "Closed"
+  },
+  "timeline": {
+    "label": "Timeline",
+    "empty": "No updates yet.",
+    "types": {
+      "filed": "Complaint filed",
+      "stage_changed": "Stage changed",
+      "info_requested": "More information requested",
+      "info_provided": "Information provided",
+      "advocate_responded": "Advocate responded",
+      "hearing_scheduled": "Hearing scheduled",
+      "decision_issued": "Decision issued",
+      "other": "Update"
+    }
+  },
+  "caseDetail": {
+    "back": "My cases",
+    "complaint": "Your complaint",
+    "against": "Against: {name}",
+    "documents": "Documents",
+    "noDocuments": "No documents attached.",
+    "timeline": "Timeline"
   }
 }
