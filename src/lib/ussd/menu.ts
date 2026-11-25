@@ -30,7 +30,11 @@ const stageNames = { en: en.stages, sw: sw.stages } as const;
  * Africa's Talking USSD state machine. `input` is the cumulative `text` field ("1*2026000123*123456").
  * Replies start with "CON " (expects more input) or "END " (closes the session).
  */
-export async function ussdResponse(input: string, check: typeof checkStatus): Promise<string> {
+export async function ussdResponse(
+  input: string,
+  check: typeof checkStatus,
+  caller: string,
+): Promise<string> {
   const parts = input === "" ? [] : input.split("*");
 
   if (parts.length === 0) {
@@ -46,7 +50,7 @@ export async function ussdResponse(input: string, check: typeof checkStatus): Pr
   if (!caseNumber) return `END ${t.badCase}`;
   if (parts.length === 2) return `CON ${t.askPin}`;
 
-  const r = await check(caseNumber, parts[2].trim(), "ussd");
+  const r = await check(caseNumber, parts[2].trim(), "ussd", caller);
   if (r.ok) return `END ${t.status(caseNumber, stageNames[lang][r.stage])}`;
   return `END ${r.reason === "locked" ? t.locked : t.invalid}`;
 }

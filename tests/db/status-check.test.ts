@@ -28,7 +28,7 @@ const wrong = () => (pin === "000000" ? "111111" : "000000");
 
 describe("checkStatus", () => {
   it("returns the stage for the right PIN and audits it", async () => {
-    const r = await checkStatus(caseNumber, pin, "web");
+    const r = await checkStatus(caseNumber, pin, "web", "test-caller");
     expect(r).toMatchObject({ ok: true, stage: "received" });
     const { data } = await adminClient()
       .from("audit_log")
@@ -39,14 +39,14 @@ describe("checkStatus", () => {
   });
 
   it("unknown case and wrong PIN both return 'invalid'", async () => {
-    expect(await checkStatus("ACC/1999/999999", "123456", "ussd")).toEqual({ ok: false, reason: "invalid" });
-    expect(await checkStatus(caseNumber, wrong(), "ussd")).toEqual({ ok: false, reason: "invalid" });
+    expect(await checkStatus("ACC/1999/999999", "123456", "ussd", "test-caller")).toEqual({ ok: false, reason: "invalid" });
+    expect(await checkStatus(caseNumber, wrong(), "ussd", "test-caller")).toEqual({ ok: false, reason: "invalid" });
   });
 
   it("locks the case after 5 failures in an hour, even for the right PIN", async () => {
     // one failure already recorded above
-    for (let i = 0; i < 4; i++) await checkStatus(caseNumber, wrong(), "ussd");
-    expect(await checkStatus(caseNumber, wrong(), "ussd")).toEqual({ ok: false, reason: "locked" });
-    expect(await checkStatus(caseNumber, pin, "ussd")).toEqual({ ok: false, reason: "locked" });
+    for (let i = 0; i < 4; i++) await checkStatus(caseNumber, wrong(), "ussd", "test-caller");
+    expect(await checkStatus(caseNumber, wrong(), "ussd", "test-caller")).toEqual({ ok: false, reason: "locked" });
+    expect(await checkStatus(caseNumber, pin, "ussd", "test-caller")).toEqual({ ok: false, reason: "locked" });
   });
 });

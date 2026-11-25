@@ -2,6 +2,7 @@
 
 import { requestLoginCode, verifyLoginCode } from "@/lib/auth/otp";
 import { createServerClient } from "@/lib/supabase/server";
+import { clientIp, isLoopback } from "@/lib/request-ip";
 import { redirect, routing, type Locale } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
 
@@ -21,7 +22,8 @@ export async function loginAction(prev: LoginState, formData: FormData): Promise
   const phone = String(formData.get("phone") ?? "");
 
   if (formData.get("intent") === "send") {
-    const r = await requestLoginCode(phone, locale);
+    const ip = await clientIp();
+    const r = await requestLoginCode(phone, locale, isLoopback(ip) ? null : ip);
     return r.ok ? { step: "code", phone } : { step: "phone", phone, error: r.reason };
   }
 

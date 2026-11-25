@@ -12,9 +12,10 @@ export async function POST(req: Request) {
   }
   const form = await req.formData();
   const text = String(form.get("text") ?? "");
+  const caller = String(form.get("phoneNumber") ?? "") || "unknown";
   let reply: string;
   try {
-    reply = await ussdResponse(text, checkStatus);
+    reply = await ussdResponse(text, checkStatus, caller);
   } catch (e) {
     console.error("USSD error", e);
     reply = "END Service unavailable. Try again later. / Huduma haipatikani kwa sasa.";

@@ -3,31 +3,24 @@ import { verifyPin } from "@/lib/pin";
 import { logAudit } from "@/lib/audit";
 import { isStage, type Stage } from "./stages";
 
-const MAX_FAILURES = 5;
-const WINDOW_MS = 60 * 60 * 1000;
-
 export type StatusResult =
   | { ok: true; stage: Stage; updatedAt: string }
   | { ok: false; reason: "invalid" | "locked" };
 
 /**
  * Public status lookup by case number + PIN (web status page and USSD).
- * Unknown case and wrong PIN look identical; 5 failures per case in a rolling hour lock it.
- * Every attempt is audited.
+ * Unknown case and wrong PIN look identical. Lockout (enforced atomically in the database):
+ * 5 failures per caller per case per hour, and 30 failures per case per hour from all callers.
+ * The attempt is recorded as a failure before the PIN is checked, so parallel guesses count.
+ * `caller` identifies the requester: client IP on the web, MSISDN on USSD.
  */
 export async function checkStatus(
   caseNumber: string,
   pin: string,
   channel: "web" | "ussd",
+  caller: string,
 ): Promise<StatusResult> {
   const admin = createAdminClient();
-  const since = new Date(Date.now() - WINDOW_MS).toISOString();
-  const { count } = await admin
-    .from("status_attempts")
-    .select("id", { count: "exact", head: true })
-    .eq("case_number", caseNumber)
-    .eq("success", false)
-    .gte("at", since);
 
   const { data: c } = await admin
     .from("cases")
@@ -36,18 +29,24 @@ export async function checkStatus(
     .maybeSingle();
   const entityId = c?.id ?? caseNumber;
 
-  if ((count ?? 0) >= MAX_FAILURES) {
-    await logAudit({ actorId: null, channel, action: "status_check", entity: "cases", entityId, details: { ok: false, locked: true } });
+  const { data: attemptId, error } = await admin.rpc("begin_status_attempt", {
+    p_case_number: caseNumber,
+    p_caller: caller,
+    p_channel: channel,
+  });
+  if (error) throw new Error(`status attempt: ${error.message}`);
+  if (attemptId === null) {
+    await logAudit({ actorId: null, channel, action: "status_check", entity: "cases", entityId, details: { ok: false, locked: true, caller } });
     return { ok: false, reason: "locked" };
   }
 
   const ok = !!c && /^\d{6}$/.test(pin) && (await verifyPin(pin, c.pin_hash));
-  await admin.from("status_attempts").insert({ case_number: caseNumber, success: ok, channel });
-  await logAudit({ actorId: null, channel, action: "status_check", entity: "cases", entityId, details: { ok } });
-
-  if (!ok || !c) {
-    const failures = (count ?? 0) + 1;
-    return { ok: false, reason: failures >= MAX_FAILURES ? "locked" : "invalid" };
+  if (ok) {
+    const { error: upd } = await admin.from("status_attempts").update({ success: true }).eq("id", attemptId);
+    if (upd) throw new Error(`status attempt update: ${upd.message}`);
   }
+  await logAudit({ actorId: null, channel, action: "status_check", entity: "cases", entityId, details: { ok, caller } });
+
+  if (!ok || !c) return { ok: false, reason: "invalid" };
   return { ok: true, stage: isStage(c.stage) ? c.stage : "received", updatedAt: c.updated_at };
 }
