@@ -1,0 +1,13 @@
+{
+  "home": {
+    "title": "Mizani — Advocates Complaints Commission",
+    "tagline": "File a complaint against an advocate and follow it to resolution.",
+    "fileComplaint": "File a complaint",
+    "trackCase": "Track a case"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "sw": "Kiswahili"
+  }
+}
