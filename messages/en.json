@@ -26,5 +26,43 @@
   },
   "myCases": {
     "title": "My cases"
+  },
+  "file": {
+    "title": "File a complaint",
+    "intro": "Tell us about the advocate and what happened. You will get a case number and a PIN to track your complaint.",
+    "advocate": "Advocate's name",
+    "advocateHint": "Start typing to search the roll of advocates. If you cannot find them, type the name as you know it.",
+    "advocateMatched": "Matched to roll entry {admission}.",
+    "summary": "Summary of complaint",
+    "description": "What happened",
+    "evidence": "Evidence (optional)",
+    "evidenceHint": "Up to 5 files: PDF, JPG or PNG, 10 MB each.",
+    "consent": "I consent to the Advocates Complaints Commission processing my personal data to handle this complaint, under the Data Protection Act, 2019.",
+    "submit": "Submit complaint",
+    "submitting": "Submitting…",
+    "errors": {
+      "invalid_input": "Please fix the following and submit again:",
+      "too_many_files": "You can attach at most 5 files.",
+      "file_too_large": "Each file must be 10 MB or smaller.",
+      "file_type": "Only PDF, JPG and PNG files are accepted.",
+      "not_signed_in": "Your session has ended. Please sign in again.",
+      "server": "Something went wrong and your complaint was not filed. Please try again."
+    },
+    "fieldErrors": {
+      "advocateNameGiven": "Advocate's name: at least 2 characters.",
+      "advocateId": "Choose the advocate again from the list.",
+      "summary": "Summary: 10 to 200 characters.",
+      "description": "What happened: at least 30 characters.",
+      "language": "Language is not supported.",
+      "consentDataProcessing": "You must give consent to continue."
+    },
+    "success": {
+      "title": "Complaint received",
+      "body": "We have sent these details to your phone by SMS.",
+      "caseNumber": "Case number",
+      "pin": "Status PIN",
+      "pinWarning": "Keep this PIN private. You need it with your case number to check status by USSD or on the status page.",
+      "viewCases": "Go to my cases"
+    }
   }
 }

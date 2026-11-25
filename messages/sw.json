@@ -26,5 +26,43 @@
   },
   "myCases": {
     "title": "Kesi zangu"
+  },
+  "file": {
+    "title": "Wasilisha lalamiko",
+    "intro": "Tueleze kuhusu wakili na kilichotokea. Utapata nambari ya kesi na PIN ya kufuatilia lalamiko lako.",
+    "advocate": "Jina la wakili",
+    "advocateHint": "Anza kuandika ili kutafuta kwenye orodha ya mawakili. Usipompata, andika jina unavyolijua.",
+    "advocateMatched": "Amepatikana kwenye orodha: {admission}.",
+    "summary": "Muhtasari wa lalamiko",
+    "description": "Eleza kilichotokea",
+    "evidence": "Ushahidi (si lazima)",
+    "evidenceHint": "Hadi faili 5: PDF, JPG au PNG, MB 10 kila moja.",
+    "consent": "Nakubali Tume ya Malalamiko dhidi ya Mawakili ichakate data yangu binafsi ili kushughulikia lalamiko hili, kwa mujibu wa Sheria ya Ulinzi wa Data, 2019.",
+    "submit": "Wasilisha lalamiko",
+    "submitting": "Inawasilisha…",
+    "errors": {
+      "invalid_input": "Tafadhali rekebisha yafuatayo kisha uwasilishe tena:",
+      "too_many_files": "Unaweza kuambatisha faili 5 tu.",
+      "file_too_large": "Kila faili lisizidi MB 10.",
+      "file_type": "Faili za PDF, JPG na PNG pekee zinakubaliwa.",
+      "not_signed_in": "Muda wako umeisha. Tafadhali ingia tena.",
+      "server": "Hitilafu imetokea na lalamiko lako halijawasilishwa. Tafadhali jaribu tena."
+    },
+    "fieldErrors": {
+      "advocateNameGiven": "Jina la wakili: angalau herufi 2.",
+      "advocateId": "Mchague wakili tena kutoka kwenye orodha.",
+      "summary": "Muhtasari: herufi 10 hadi 200.",
+      "description": "Kilichotokea: angalau herufi 30.",
+      "language": "Lugha haitumiki.",
+      "consentDataProcessing": "Lazima utoe idhini ili kuendelea."
+    },
+    "success": {
+      "title": "Lalamiko limepokelewa",
+      "body": "Tumetuma maelezo haya kwenye simu yako kwa SMS.",
+      "caseNumber": "Nambari ya kesi",
+      "pin": "PIN ya hali",
+      "pinWarning": "Weka PIN hii siri. Unaihitaji pamoja na nambari ya kesi kuangalia hali kwa USSD au kwenye ukurasa wa hali.",
+      "viewCases": "Nenda kwa kesi zangu"
+    }
   }
 }
