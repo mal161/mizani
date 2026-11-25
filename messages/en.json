@@ -254,5 +254,42 @@
       "assigned": "Case assigned to you",
       "info_provided": "Complainant sent information"
     }
+  },
+  "intake": {
+    "title": "Walk-in intake",
+    "intro": "File a complaint for someone who has come to the office, written in, or called. They get a slip with their case number and PIN.",
+    "person": "Complainant",
+    "fullName": "Complainant's full name",
+    "phone": "Mobile number (optional)",
+    "phoneHint": "Leave empty if they have no phone. With a number, they also get SMS updates and can sign in online.",
+    "language": "Language for updates",
+    "complaint": "Complaint",
+    "evidence": "Scanned documents (optional)",
+    "consent": "The complainant consented (verbally or in writing) to the ACC processing their personal data for this complaint, under the Data Protection Act, 2019.",
+    "submit": "Register complaint",
+    "fieldErrors": {
+      "fullName": "Complainant's name: 2 to 120 characters.",
+      "phone": "Enter a valid Kenyan mobile number, or leave it empty."
+    },
+    "errors": {
+      "invalid_input": "Please fix the following and submit again:",
+      "too_many_files": "You can attach at most 5 files.",
+      "file_too_large": "Each file must be 10 MB or smaller.",
+      "file_type": "Only PDF, JPG and PNG files are accepted.",
+      "forbidden": "Only officers and administrators can register walk-in complaints.",
+      "server": "Something went wrong and the complaint was not registered. Please try again."
+    },
+    "slip": {
+      "title": "Complaint receipt",
+      "org": "Advocates Complaints Commission — Mizani",
+      "caseNumber": "Case number",
+      "pin": "Status PIN",
+      "office": "Office",
+      "date": "Date",
+      "howToCheck": "Check your case status at {url} or by dialling the ACC USSD code, using your case number and PIN.",
+      "keepPin": "Keep this slip safe. Do not share your PIN.",
+      "print": "Print slip",
+      "another": "Register another complaint"
+    }
   }
 }

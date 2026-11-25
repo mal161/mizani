@@ -3,6 +3,7 @@ import { normalizeKenyanPhone } from "@/lib/phone";
 import { generatePin, hashPin, verifyPin } from "@/lib/pin";
 import { getSmsProvider } from "@/lib/sms";
 import { logAudit } from "@/lib/audit";
+import { ensureComplainantForPhone, phoneEmail } from "./accounts";
 import type { Locale } from "@/i18n/routing";
 
 const CODE_TTL_MS = 10 * 60 * 1000;
@@ -12,10 +13,7 @@ const codeSms: Record<Locale, (code: string) => string> = {
   sw: (c) => `Nambari yako ya kuingia Mizani ni ${c}. Inaisha baada ya dakika 10. Usimpe mtu.`,
 };
 
-/** Synthetic email used to back phone-only accounts in Supabase Auth. */
-export function phoneEmail(e164: string): string {
-  return `${e164.replace(/\D/g, "")}@phone.mizani.local`;
-}
+export { phoneEmail } from "./accounts";
 
 export type RequestResult = { ok: true } | { ok: false; reason: "invalid_phone" | "rate_limited" };
 
@@ -84,42 +82,11 @@ export async function verifyLoginCode(
   if (!claimed?.length) return { ok: false, reason: "invalid_code" };
 
   const email = phoneEmail(phone);
-  const userId = await ensureComplainant(email, phone, locale);
+  const userId = await ensureComplainantForPhone(phone, locale);
   const { data: link, error } = await admin.auth.admin.generateLink({ type: "magiclink", email });
   if (error || !link.properties?.hashed_token) {
     throw new Error(`could not create session link: ${error?.message}`);
   }
   await logAudit({ actorId: userId, channel: "web", action: "login", entity: "profiles", entityId: userId });
   return { ok: true, email, tokenHash: link.properties.hashed_token, userId };
-}
-
-async function ensureComplainant(email: string, phone: string, locale: Locale): Promise<string> {
-  const admin = createAdminClient();
-  const { data: existing } = await admin
-    .from("profiles")
-    .select("id")
-    .eq("phone", phone)
-    .maybeSingle();
-  if (existing) return existing.id;
-
-  // Reuse an existing auth user for this phone's email (earlier partial signup or a concurrent login).
-  let id: string | null = null;
-  const created = await admin.auth.admin.createUser({ email, phone, email_confirm: true, phone_confirm: true });
-  if (created.data.user) {
-    id = created.data.user.id;
-  } else {
-    const { data: existingId } = await admin.rpc("auth_user_id_by_email", { p_email: email });
-    if (!existingId) throw new Error(`could not create user: ${created.error?.message}`);
-    id = existingId as string;
-  }
-  const { error } = await admin
-    .from("profiles")
-    .upsert({ id, role: "complainant", phone, preferred_locale: locale }, { onConflict: "id", ignoreDuplicates: true });
-  if (error) {
-    // A concurrent login may have created the profile first.
-    const { data: again } = await admin.from("profiles").select("id").eq("phone", phone).maybeSingle();
-    if (again) return again.id;
-    throw new Error(`could not create profile: ${error.message}`);
-  }
-  return id;
 }

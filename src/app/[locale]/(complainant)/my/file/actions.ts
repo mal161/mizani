@@ -2,26 +2,9 @@
 
 import { hasLocale } from "next-intl";
 import { getCurrentUser } from "@/lib/auth/session";
-import { createServerClient } from "@/lib/supabase/server";
 import { fileComplaint, ComplaintValidationError } from "@/lib/cases/file-complaint";
 import { afterFiling } from "@/lib/cases/after-filing";
 import { routing, type Locale } from "@/i18n/routing";
-
-export type AdvocateOption = { id: string; full_name: string; admission_no: string; firm: string | null };
-
-/** Searches the public advocates roll by name or admission number. */
-export async function searchAdvocates(q: string): Promise<AdvocateOption[]> {
-  const term = q.trim().replace(/[%_,()]/g, "");
-  if (term.length < 2) return [];
-  const supabase = await createServerClient();
-  const { data } = await supabase
-    .from("advocates")
-    .select("id,full_name,admission_no,firm")
-    .or(`full_name.ilike.%${term}%,admission_no.ilike.%${term}%`)
-    .order("full_name")
-    .limit(8);
-  return (data ?? []) as AdvocateOption[];
-}
 
 export type FileState =
   | { status: "idle" }

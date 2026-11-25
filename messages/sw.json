@@ -254,5 +254,42 @@
       "assigned": "Umegawiwa kesi",
       "info_provided": "Mlalamikaji ametuma maelezo"
     }
+  },
+  "intake": {
+    "title": "Usajili wa ana kwa ana",
+    "intro": "Wasilisha lalamiko kwa niaba ya mtu aliyefika ofisini, aliyeandika barua au aliyepiga simu. Atapata risiti yenye nambari ya kesi na PIN.",
+    "person": "Mlalamikaji",
+    "fullName": "Jina kamili la mlalamikaji",
+    "phone": "Nambari ya simu (si lazima)",
+    "phoneHint": "Acha tupu kama hana simu. Akiwa na nambari, atapata pia taarifa kwa SMS na anaweza kuingia mtandaoni.",
+    "language": "Lugha ya taarifa",
+    "complaint": "Lalamiko",
+    "evidence": "Nyaraka zilizochanganuliwa (si lazima)",
+    "consent": "Mlalamikaji amekubali (kwa mdomo au kwa maandishi) Tume ya Malalamiko dhidi ya Mawakili ichakate data yake binafsi kwa lalamiko hili, kwa mujibu wa Sheria ya Ulinzi wa Data, 2019.",
+    "submit": "Sajili lalamiko",
+    "fieldErrors": {
+      "fullName": "Jina la mlalamikaji: herufi 2 hadi 120.",
+      "phone": "Weka nambari sahihi ya simu ya Kenya, au iache tupu."
+    },
+    "errors": {
+      "invalid_input": "Tafadhali rekebisha yafuatayo kisha uwasilishe tena:",
+      "too_many_files": "Unaweza kuambatisha faili 5 tu.",
+      "file_too_large": "Kila faili lisizidi MB 10.",
+      "file_type": "Faili za PDF, JPG na PNG pekee zinakubaliwa.",
+      "forbidden": "Maafisa na wasimamizi pekee wanaweza kusajili malalamiko ya ana kwa ana.",
+      "server": "Hitilafu imetokea na lalamiko halijasajiliwa. Tafadhali jaribu tena."
+    },
+    "slip": {
+      "title": "Risiti ya lalamiko",
+      "org": "Tume ya Malalamiko dhidi ya Mawakili — Mizani",
+      "caseNumber": "Nambari ya kesi",
+      "pin": "PIN ya hali",
+      "office": "Ofisi",
+      "date": "Tarehe",
+      "howToCheck": "Angalia hali ya kesi yako kwenye {url} au kwa kupiga nambari ya USSD ya ACC, ukitumia nambari ya kesi na PIN.",
+      "keepPin": "Hifadhi risiti hii vizuri. Usimpe mtu PIN yako.",
+      "print": "Chapisha risiti",
+      "another": "Sajili lalamiko jingine"
+    }
   }
 }

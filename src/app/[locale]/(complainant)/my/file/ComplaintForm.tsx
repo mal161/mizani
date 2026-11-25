@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { fileComplaintAction, type FileState } from "./actions";
-import { AdvocatePicker } from "./AdvocatePicker";
+import { AdvocatePicker } from "@/components/complaint/AdvocatePicker";
 
 const initial: FileState = { status: "idle" };
 

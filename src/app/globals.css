@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Printing the walk-in slip: hide navigation and anything marked no-print. */
+@media print {
+  header,
+  .no-print {
+    display: none !important;
+  }
+  .slip {
+    border-color: #000;
+  }
+}

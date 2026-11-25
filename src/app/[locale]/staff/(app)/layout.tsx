@@ -8,9 +8,9 @@ export default async function StaffAppLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const locale = (await params).locale as Locale;
   const user = await requireStaff(locale);
   const supabase = await createServerClient();
   const { count } = await supabase

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { searchAdvocates, type AdvocateOption } from "./actions";
+import { searchAdvocates, type AdvocateOption } from "@/lib/advocates/search-action";
 
 /** Name field with live search of the advocates roll; free text is kept if no match is chosen. */
 export function AdvocatePicker({ defaultName = "", invalid = false }: { defaultName?: string; invalid?: boolean }) {
