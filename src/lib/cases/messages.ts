@@ -10,4 +10,8 @@ export const smsText = {
     l === "sw"
       ? `ACC: Kesi ${caseNumber} sasa iko hatua: ${stageLabel}.`
       : `ACC: Case ${caseNumber} is now at stage: ${stageLabel}.`,
+  infoRequested: (l: Locale, caseNumber: string) =>
+    l === "sw"
+      ? `ACC: Tunahitaji maelezo zaidi kuhusu kesi ${caseNumber}. Ingia kwenye Mizani kuona ombi na kujibu.`
+      : `ACC: We need more information on case ${caseNumber}. Sign in to Mizani to see the request and reply.`,
 };

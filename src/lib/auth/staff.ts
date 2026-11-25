@@ -1,18 +1,13 @@
 import "server-only";
 import { createServerClient } from "@/lib/supabase/server";
 import { redirect, type Locale } from "@/i18n/routing";
-import { getCurrentUser, type CurrentUser } from "./session";
+import { getCurrentUser } from "./session";
 import { staffGate, STAFF_ROLES, type StaffRole } from "./staff-gate";
 
 export { type StaffRole, STAFF_ROLES } from "./staff-gate";
 
-export type StaffUser = CurrentUser & { role: StaffRole };
-
-export class ForbiddenError extends Error {
-  constructor(message = "forbidden") {
-    super(message);
-  }
-}
+export { type StaffUser, ForbiddenError } from "./staff-types";
+import { type StaffUser, ForbiddenError } from "./staff-types";
 
 async function currentAal(): Promise<"aal1" | "aal2" | null> {
   const supabase = await createServerClient();
