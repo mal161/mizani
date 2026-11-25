@@ -24,10 +24,13 @@ Hosting: Vercel (app) + Supabase (database, auth, storage). Demo data only.
 | `AT_USERNAME` | `sandbox` for the Africa's Talking sandbox |
 | `AT_API_KEY` | Africa's Talking API key |
 | `USSD_CALLBACK_SECRET` | random string; append `?key=<it>` to the USSD callback URL |
+| `CRON_SECRET` | random string; Vercel Cron sends it to `/api/cron/deadlines` (scheduled hourly in `vercel.json`) |
 
 Do **not** set `OTP_TEST_CODE` on a public deployment.
 
-3. Deploy. Smoke test: file a complaint at `/sw/my/file`, then check it at `/sw/status` — expected stage "Imepokelewa".
+3. In Supabase → Authentication, keep **multi-factor (TOTP)** enabled and **turn off "Allow new users to sign up"** (all accounts are created by the app or an admin).
+4. Create the first admin: `npx tsx scripts/create-staff.mts <email> admin <office> "<Full Name>"` with `.env.local` pointing at the project. They set up their authenticator at first sign-in, then create other staff in the app.
+5. Deploy. Smoke test: file a complaint at `/sw/my/file`, then check it at `/sw/status` — expected stage "Imepokelewa".
 
 ### 3. Africa's Talking (sandbox)
 

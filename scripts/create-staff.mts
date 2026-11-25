@@ -1,6 +1,6 @@
 /**
  * Creates a staff, admin or commissioner account with a one-time temporary password.
- * Usage: npx tsx scripts/create-staff.ts <email> <staff|admin|commissioner> <office> "<Full Name>"
+ * Usage: npx tsx scripts/create-staff.mts <email> <staff|admin|commissioner> <office> "<Full Name>"
  * Needs NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (read from .env.local).
  * The person sets up their authenticator app at first sign-in.
  */
@@ -15,7 +15,7 @@ try {
 
 const [email, role, office, fullName] = process.argv.slice(2);
 if (!email || !["staff", "admin", "commissioner"].includes(role ?? "") || !office || !fullName) {
-  console.error('Usage: npx tsx scripts/create-staff.ts <email> <staff|admin|commissioner> <office> "<Full Name>"');
+  console.error('Usage: npx tsx scripts/create-staff.mts <email> <staff|admin|commissioner> <office> "<Full Name>"');
   process.exit(1);
 }
 
