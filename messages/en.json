@@ -99,5 +99,18 @@
     "documents": "Documents",
     "noDocuments": "No documents attached.",
     "timeline": "Timeline"
+  },
+  "status": {
+    "title": "Check case status",
+    "intro": "Enter your case number and the PIN you received when you filed. You can also dial the ACC USSD code from any phone.",
+    "caseNumber": "Case number",
+    "check": "Check status",
+    "currentStage": "Current stage",
+    "updated": "Last updated {date}",
+    "errors": {
+      "bad_case_number": "Enter the case number as shown on your slip or SMS, e.g. ACC/2026/000123.",
+      "invalid": "Case number and PIN do not match. Please check and try again.",
+      "locked": "Too many wrong attempts for this case. Try again in 1 hour."
+    }
   }
 }

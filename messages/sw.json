@@ -99,5 +99,18 @@
     "documents": "Nyaraka",
     "noDocuments": "Hakuna nyaraka zilizoambatishwa.",
     "timeline": "Mfuatano wa matukio"
+  },
+  "status": {
+    "title": "Angalia hali ya kesi",
+    "intro": "Weka nambari ya kesi na PIN uliyopokea ulipowasilisha. Unaweza pia kupiga nambari ya USSD ya ACC kutoka simu yoyote.",
+    "caseNumber": "Nambari ya kesi",
+    "check": "Angalia hali",
+    "currentStage": "Hatua ya sasa",
+    "updated": "Ilisasishwa {date}",
+    "errors": {
+      "bad_case_number": "Weka nambari ya kesi kama ilivyo kwenye karatasi au SMS, k.m. ACC/2026/000123.",
+      "invalid": "Nambari ya kesi na PIN hazilingani. Tafadhali angalia ujaribu tena.",
+      "locked": "Majaribio mengi yasiyo sahihi kwa kesi hii. Jaribu tena baada ya saa 1."
+    }
   }
 }
