@@ -51,7 +51,7 @@ Received → Screening (admissibility / jurisdiction; may be closed as inadmissi
 
 ## 7. Constraints
 
-- 16 days to submission. Builders: the user + Claude (Claude writes most code; user reviews, tests, owns submission). Entire scope is in.
+- 16 days to submission. Entire scope is in.
 - Build priority (most critical first, so later items can be partial if time runs short): (1) complainant filing & tracking, (2) staff workspace incl. assisted intake, routing, timeline, audit, (3) AI triage & summaries, (4) advocate notification & response, (5) commissioner hearings/decisions, (6) analytics. SMS/USSD and Swahili are woven through each slice, not left to the end.
 - Hackathon hosting: hosted Vercel + Supabase + Claude API with synthetic demo data only (no real complainant data). A handover document describes migrating to ACC-owned infrastructure in Kenya (self-hosted Supabase, Next.js on ACC servers, and a decision on AI provider/data-transfer under the DPA).
 - Kenya Data Protection Act 2019: minimize personal data, role-based access, audit, ability to self-host in Kenya.
@@ -81,7 +81,7 @@ Received → Screening (admissibility / jurisdiction; may be closed as inadmissi
 - Any party seeing data they shouldn't (a single leak of internal notes or another complainant's data is a failure even if everything else works).
 - A pretty demo that can't actually be operated or handed over.
 
-## 11. Calls made (by Claude; user to check)
+## 11. Implementation decisions
 
 - **Redaction:** regex/rule-based redaction of names (of parties on file), ID numbers, phone numbers, emails in free text before any AI call. Advocate and complainant names replaced with stable placeholders (e.g. `[ADVOCATE_A17]`) so repeat-advocate detection still works — repeat detection itself runs on IDs in the database, not in the AI. Uploaded documents: text extracted (OCR for scans) and run through the same redaction before AI summarization; raw files never go to the AI.
 - **Workflow configurability:** fixed set of stages (section 6) in code; admins can rename stages, change SLAs, enable/disable optional stages (e.g. Conciliation) and edit routing rules. No adding brand-new stages at runtime.
