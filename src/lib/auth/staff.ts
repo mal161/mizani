@@ -1,4 +1,5 @@
 import "server-only";
+import { forbidden } from "next/navigation";
 import { createServerClient } from "@/lib/supabase/server";
 import { redirect, type Locale } from "@/i18n/routing";
 import { getCurrentUser } from "./session";
@@ -15,7 +16,7 @@ async function currentAal(): Promise<"aal1" | "aal2" | null> {
   return (data?.currentLevel as "aal1" | "aal2" | null) ?? null;
 }
 
-/** For staff pages: redirects to login / MFA as needed; renders 403 text via ForbiddenError otherwise. */
+/** For staff pages: redirects to login / MFA as needed; responds 403 when the role is not allowed. */
 export async function requireStaff(
   locale: Locale,
   roles: readonly StaffRole[] = STAFF_ROLES,
@@ -24,7 +25,7 @@ export async function requireStaff(
   const gate = staffGate(user, user ? await currentAal() : null, roles);
   if (gate === "login") return redirect({ href: "/staff/login", locale });
   if (gate === "mfa") return redirect({ href: "/staff/mfa", locale });
-  if (gate === "forbidden") throw new ForbiddenError();
+  if (gate === "forbidden") forbidden();
   return user as StaffUser;
 }
 

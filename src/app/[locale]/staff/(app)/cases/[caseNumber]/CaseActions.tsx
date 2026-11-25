@@ -74,7 +74,7 @@ export function CaseActions(props: {
           <h3 className="font-semibold">{t("stageTitle")}</h3>
           <label className="flex flex-col gap-1 text-sm">
             {t("moveTo")}
-            <select name="to" value={target} onChange={(e) => setTarget(e.target.value)} className={field}>
+            <select name="to" value={target} onChange={(e) => setTarget(e.target.value)} aria-label={t("moveTo")} className={field}>
               {props.nextStages.map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}
@@ -100,7 +100,7 @@ export function CaseActions(props: {
         <h3 className="font-semibold">{t("triageTitle")}</h3>
         <label className="flex flex-col gap-1 text-sm">
           {t("category")}
-          <select name="category" defaultValue={props.category ?? ""} className={field}>
+          <select name="category" defaultValue={props.category ?? ""} aria-label={t("category")} className={field}>
             <option value="">{t("noCategory")}</option>
             {props.categories.map((o) => (
               <option key={o.value} value={o.value}>
@@ -111,7 +111,7 @@ export function CaseActions(props: {
         </label>
         <label className="flex flex-col gap-1 text-sm">
           {t("priority")}
-          <select name="priority" defaultValue={props.priority} className={field}>
+          <select name="priority" defaultValue={props.priority} aria-label={t("priority")} className={field}>
             {["low", "normal", "high", "urgent"].map((p) => (
               <option key={p} value={p}>
                 {t(`priorities.${p}`)}
@@ -130,7 +130,7 @@ export function CaseActions(props: {
         <h3 className="font-semibold">{t("assignTitle")}</h3>
         <label className="flex flex-col gap-1 text-sm">
           {t("officer")}
-          <select name="officerId" defaultValue={props.assignedOfficerId ?? ""} className={field}>
+          <select name="officerId" defaultValue={props.assignedOfficerId ?? ""} aria-label={t("officer")} className={field}>
             <option value="">{t("unassigned")}</option>
             {props.officers.map((o) => (
               <option key={o.value} value={o.value}>

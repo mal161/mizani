@@ -10,6 +10,8 @@ try {
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 90000,
+  // One worker: all tests share one dev server, and OneDrive-synced .next folders corrupt under parallel load.
+  workers: 1,
   // Dev server compiles routes on first hit; allow for that.
   expect: { timeout: 30000 },
   // channel "chromium" runs full Chromium in new-headless mode (no separate headless-shell download).

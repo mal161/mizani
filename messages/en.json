@@ -306,5 +306,84 @@
       "not_signed_in": "Your session has ended. Please sign in again.",
       "server": "Your answer could not be sent. Please try again."
     }
+  },
+  "admin": {
+    "title": "Administration",
+    "errors": {
+      "forbidden": "Only administrators can do that.",
+      "self": "You cannot change your own access or role. Ask another administrator.",
+      "invalid": "That could not be saved. Check the values and try again."
+    },
+    "users": {
+      "title": "Staff accounts",
+      "intro": "Create accounts, change roles, deactivate leavers.",
+      "name": "Name",
+      "email": "Email",
+      "fullName": "Full name",
+      "office": "Office",
+      "role": "Role",
+      "status": "Access",
+      "roleFor": "Role for {name}",
+      "save": "Save",
+      "active": "Active",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "create": "Create account",
+      "created": "Account created. Give this temporary password to the person securely; it will not be shown again:"
+    },
+    "settings": {
+      "title": "Workflow settings",
+      "intro": "Time limits, stage names, conciliation and complaint categories.",
+      "stage": "Stage",
+      "slaDays": "Days allowed",
+      "labelEn": "Name (English)",
+      "labelSw": "Name (Kiswahili)",
+      "slaFor": "Days allowed for {stage}",
+      "labelEnFor": "English name for {stage}",
+      "labelSwFor": "Kiswahili name for {stage}",
+      "useDefault": "Default",
+      "usesResponseDays": "Uses the advocate response window",
+      "responseDays": "Advocate response window (days, 7–60)",
+      "conciliation": "Offer conciliation stage",
+      "categories": "Complaint categories (one per line)",
+      "categoriesHint": "Lowercase letters, digits and underscores, e.g. withheld_funds.",
+      "save": "Save settings",
+      "saved": "Settings saved."
+    },
+    "routing": {
+      "title": "Routing rules",
+      "intro": "Decide which officers receive new cases.",
+      "explain": "New cases go to the first matching rule (lowest position), to whichever officer in its list has the fewest open cases. Empty fields match anything. If no rule matches, the least-busy officer overall gets the case.",
+      "position": "Position",
+      "category": "Category",
+      "priority": "Priority",
+      "office": "Office",
+      "officers": "Officers",
+      "any": "Any",
+      "none": "No rules yet: cases go to the least-busy officer.",
+      "inactive": "(inactive)",
+      "delete": "Delete",
+      "addTitle": "Add a rule",
+      "add": "Add rule"
+    },
+    "audit": {
+      "title": "Audit log",
+      "intro": "Every view, download and change, with who and when.",
+      "caseNumber": "Case number",
+      "actor": "Actor ID",
+      "action": "Action",
+      "from": "From",
+      "to": "To",
+      "filter": "Filter",
+      "export": "Export CSV",
+      "count": "{count} entries",
+      "when": "When",
+      "channel": "Channel",
+      "entity": "Record",
+      "details": "Details",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {pages}"
+    }
   }
 }

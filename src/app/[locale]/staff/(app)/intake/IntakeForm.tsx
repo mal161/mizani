@@ -72,7 +72,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{t("language")}</span>
-          <select name="language" defaultValue={v?.language ?? locale} className={field}>
+          <select name="language" defaultValue={v?.language ?? locale} aria-label={t("language")} className={field}>
             <option value="en">English</option>
             <option value="sw">Kiswahili</option>
           </select>

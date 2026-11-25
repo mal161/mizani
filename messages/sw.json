@@ -306,5 +306,84 @@
       "not_signed_in": "Muda wako umeisha. Tafadhali ingia tena.",
       "server": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena."
     }
+  },
+  "admin": {
+    "title": "Utawala",
+    "errors": {
+      "forbidden": "Wasimamizi pekee wanaweza kufanya hivyo.",
+      "self": "Huwezi kubadilisha ruhusa au wadhifa wako mwenyewe. Mwombe msimamizi mwingine.",
+      "invalid": "Haikuweza kuhifadhiwa. Angalia thamani ujaribu tena."
+    },
+    "users": {
+      "title": "Akaunti za wafanyakazi",
+      "intro": "Fungua akaunti, badilisha nyadhifa, zima akaunti za walioondoka.",
+      "name": "Jina",
+      "email": "Barua pepe",
+      "fullName": "Jina kamili",
+      "office": "Ofisi",
+      "role": "Wadhifa",
+      "status": "Ruhusa",
+      "roleFor": "Wadhifa wa {name}",
+      "save": "Hifadhi",
+      "active": "Hai",
+      "deactivate": "Zima",
+      "reactivate": "Washa tena",
+      "create": "Fungua akaunti",
+      "created": "Akaunti imefunguliwa. Mpe mhusika nenosiri hili la muda kwa usalama; halitaonyeshwa tena:"
+    },
+    "settings": {
+      "title": "Mipangilio ya utaratibu",
+      "intro": "Muda wa kila hatua, majina ya hatua, upatanishi na aina za malalamiko.",
+      "stage": "Hatua",
+      "slaDays": "Siku zinazoruhusiwa",
+      "labelEn": "Jina (Kiingereza)",
+      "labelSw": "Jina (Kiswahili)",
+      "slaFor": "Siku zinazoruhusiwa kwa {stage}",
+      "labelEnFor": "Jina la Kiingereza la {stage}",
+      "labelSwFor": "Jina la Kiswahili la {stage}",
+      "useDefault": "Chaguo-msingi",
+      "usesResponseDays": "Inatumia muda wa wakili kujibu",
+      "responseDays": "Muda wa wakili kujibu (siku 7–60)",
+      "conciliation": "Toa hatua ya upatanishi",
+      "categories": "Aina za malalamiko (moja kwa kila mstari)",
+      "categoriesHint": "Herufi ndogo, tarakimu na mistari chini, k.m. withheld_funds.",
+      "save": "Hifadhi mipangilio",
+      "saved": "Mipangilio imehifadhiwa."
+    },
+    "routing": {
+      "title": "Kanuni za ugawaji",
+      "intro": "Amua maafisa gani wanapokea kesi mpya.",
+      "explain": "Kesi mpya huenda kwa kanuni ya kwanza inayolingana (nafasi ya chini kabisa), kwa afisa katika orodha yake mwenye kesi chache zilizo wazi. Sehemu tupu zinalingana na chochote. Kanuni ikikosekana, afisa mwenye kazi chache zaidi hupewa kesi.",
+      "position": "Nafasi",
+      "category": "Aina",
+      "priority": "Kipaumbele",
+      "office": "Ofisi",
+      "officers": "Maafisa",
+      "any": "Yoyote",
+      "none": "Bado hakuna kanuni: kesi huenda kwa afisa mwenye kazi chache zaidi.",
+      "inactive": "(hayupo)",
+      "delete": "Futa",
+      "addTitle": "Ongeza kanuni",
+      "add": "Ongeza kanuni"
+    },
+    "audit": {
+      "title": "Kumbukumbu za ukaguzi",
+      "intro": "Kila uangaliaji, upakuaji na badiliko, na nani na lini.",
+      "caseNumber": "Nambari ya kesi",
+      "actor": "Kitambulisho cha mhusika",
+      "action": "Kitendo",
+      "from": "Kutoka",
+      "to": "Hadi",
+      "filter": "Chuja",
+      "export": "Hamisha CSV",
+      "count": "Rekodi {count}",
+      "when": "Lini",
+      "channel": "Njia",
+      "entity": "Rekodi",
+      "details": "Maelezo",
+      "previous": "Iliyotangulia",
+      "next": "Inayofuata",
+      "pageOf": "Ukurasa {page} kati ya {pages}"
+    }
   }
 }
