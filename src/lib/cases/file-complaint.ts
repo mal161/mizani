@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generatePin, hashPin } from "@/lib/pin";
 import { getSmsProvider } from "@/lib/sms";
@@ -11,6 +10,7 @@ import {
   type EvidenceError,
 } from "./schema";
 import { smsText } from "./messages";
+import { uploadEvidence } from "./evidence";
 
 export class ComplaintValidationError extends Error {
   constructor(
@@ -33,10 +33,6 @@ export interface FiledCase {
   caseId: string;
   caseNumber: string;
   pin: string;
-}
-
-function safeName(name: string): string {
-  return name.replace(/[^\w.\-]+/g, "_").slice(-100) || "file";
 }
 
 /**
@@ -86,26 +82,8 @@ export async function fileComplaint(
   if (insErr) throw new Error(`create case: ${insErr.message}`);
   const caseId = created.id as string;
 
-  const uploaded: string[] = [];
   try {
-    for (const f of evidence) {
-      const path = `${caseId}/${randomUUID()}-${safeName(f.name)}`;
-      const up = await admin.storage
-        .from("evidence")
-        .upload(path, f, { contentType: f.type, upsert: false });
-      if (up.error) throw new Error(`upload ${f.name}: ${up.error.message}`);
-      uploaded.push(path);
-      const { error } = await admin.from("documents").insert({
-        case_id: caseId,
-        storage_path: path,
-        file_name: f.name,
-        mime: f.type,
-        size_bytes: f.size,
-        uploaded_by: ctx.filedBy,
-        visibility: "parties",
-      });
-      if (error) throw new Error(`document row: ${error.message}`);
-    }
+    await uploadEvidence(caseId, evidence, ctx.filedBy);
     const { error: evErr } = await admin.from("case_events").insert({
       case_id: caseId,
       type: "filed",
@@ -115,7 +93,9 @@ export async function fileComplaint(
     });
     if (evErr) throw new Error(`filed event: ${evErr.message}`);
   } catch (e) {
-    if (uploaded.length) await admin.storage.from("evidence").remove(uploaded);
+    // Documents cascade with the case; remove stored files too.
+    const { data: left } = await admin.storage.from("evidence").list(caseId);
+    if (left?.length) await admin.storage.from("evidence").remove(left.map((o) => `${caseId}/${o.name}`));
     await admin.from("cases").delete().eq("id", caseId);
     throw e;
   }

@@ -9,6 +9,9 @@ import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
 import { isStage } from "@/lib/cases/stages";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
+import { openInfoRequest } from "@/lib/cases/respond";
+import { caseSlug } from "@/lib/cases/case-number";
+import { RespondForm } from "./RespondForm";
 
 export default async function CaseDetailPage({
   params,
@@ -42,6 +45,8 @@ export default async function CaseDetailPage({
   const t = await getTranslations("caseDetail");
   const stageOverrides = (await loadWorkflowConfig()).stageLabels[locale] ?? {};
   const tStages = await getTranslations("stages");
+  const tr = await getTranslations("respond");
+  const request = await openInfoRequest(c.id);
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <Link href="/my/cases" className="text-sm underline">
@@ -51,6 +56,14 @@ export default async function CaseDetailPage({
         <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
         <StageBadge stage={c.stage} label={isStage(c.stage) ? stageOverrides[c.stage] : undefined} />
       </div>
+
+      {request && (
+        <section className="flex flex-col gap-3 rounded-lg border-2 border-amber-300 bg-amber-50 p-4">
+          <h2 className="text-lg font-semibold">{tr("title")}</h2>
+          <p className="whitespace-pre-wrap">{request.message}</p>
+          <RespondForm caseId={c.id} path={`/${locale}/my/cases/${caseSlug(c.case_number)}`} />
+        </section>
+      )}
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">{t("complaint")}</h2>

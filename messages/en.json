@@ -291,5 +291,20 @@
       "print": "Print slip",
       "another": "Register another complaint"
     }
+  },
+  "respond": {
+    "title": "The Commission needs more information",
+    "answer": "Your answer",
+    "attach": "Attach documents (optional)",
+    "send": "Send answer",
+    "sent": "Thank you. Your answer was sent.",
+    "errors": {
+      "invalid_input": "Write an answer (up to 5,000 characters).",
+      "too_many_files": "You can attach at most 5 files.",
+      "file_too_large": "Each file must be 10 MB or smaller.",
+      "file_type": "Only PDF, JPG and PNG files are accepted.",
+      "not_signed_in": "Your session has ended. Please sign in again.",
+      "server": "Your answer could not be sent. Please try again."
+    }
   }
 }

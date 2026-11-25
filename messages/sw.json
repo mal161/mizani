@@ -291,5 +291,20 @@
       "print": "Chapisha risiti",
       "another": "Sajili lalamiko jingine"
     }
+  },
+  "respond": {
+    "title": "Tume inahitaji maelezo zaidi",
+    "answer": "Jibu lako",
+    "attach": "Ambatisha nyaraka (si lazima)",
+    "send": "Tuma jibu",
+    "sent": "Asante. Jibu lako limetumwa.",
+    "errors": {
+      "invalid_input": "Andika jibu (hadi herufi 5,000).",
+      "too_many_files": "Unaweza kuambatisha faili 5 tu.",
+      "file_too_large": "Kila faili lisizidi MB 10.",
+      "file_type": "Faili za PDF, JPG na PNG pekee zinakubaliwa.",
+      "not_signed_in": "Muda wako umeisha. Tafadhali ingia tena.",
+      "server": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena."
+    }
   }
 }
