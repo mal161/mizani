@@ -9,5 +9,22 @@
     "label": "Lugha",
     "en": "English",
     "sw": "Kiswahili"
+  },
+  "login": {
+    "title": "Ingia",
+    "intro": "Weka nambari yako ya simu. Tutakutumia nambari ya tarakimu 6 kwa SMS.",
+    "phone": "Nambari ya simu",
+    "code": "Nambari ya tarakimu 6",
+    "codeSent": "Tumetuma nambari kwenye simu yako. Inaisha baada ya dakika 10.",
+    "sendCode": "Tuma nambari",
+    "signIn": "Ingia",
+    "errors": {
+      "invalid_phone": "Weka nambari sahihi ya simu ya Kenya, k.m. 0712 345 678.",
+      "rate_limited": "Umeomba nambari nyingi mno. Tafadhali subiri dakika 10 ujaribu tena.",
+      "invalid_code": "Nambari hiyo si sahihi au imeisha muda. Angalia SMS au omba nambari mpya."
+    }
+  },
+  "myCases": {
+    "title": "Kesi zangu"
   }
 }

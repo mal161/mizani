@@ -9,5 +9,22 @@
     "label": "Language",
     "en": "English",
     "sw": "Kiswahili"
+  },
+  "login": {
+    "title": "Sign in",
+    "intro": "Enter your mobile number. We will send you a 6-digit code by SMS.",
+    "phone": "Phone number",
+    "code": "6-digit code",
+    "codeSent": "We sent a code to your phone. It expires in 10 minutes.",
+    "sendCode": "Send code",
+    "signIn": "Sign in",
+    "errors": {
+      "invalid_phone": "Enter a valid Kenyan mobile number, e.g. 0712 345 678.",
+      "rate_limited": "Too many codes requested. Please wait 10 minutes and try again.",
+      "invalid_code": "That code is wrong or has expired. Check the SMS or request a new code."
+    }
+  },
+  "myCases": {
+    "title": "My cases"
   }
 }
