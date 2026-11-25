@@ -89,8 +89,14 @@
       "advocate_responded": "Advocate responded",
       "hearing_scheduled": "Hearing scheduled",
       "decision_issued": "Decision issued",
-      "other": "Update"
-    }
+      "other": "Update",
+      "note": "Internal note",
+      "assigned": "Case assigned",
+      "triaged": "Category and priority set",
+      "sms_failed": "SMS could not be sent",
+      "routing_failed": "Automatic assignment failed"
+    },
+    "internal": "Internal"
   },
   "caseDetail": {
     "back": "My cases",
@@ -137,6 +143,116 @@
     }
   },
   "staffHome": {
-    "title": "Workspace"
+    "title": "Workspace",
+    "tabs": {
+      "mine": "My cases",
+      "unassigned": "Unassigned",
+      "overdue": "Overdue",
+      "all": "All cases"
+    },
+    "search": "Search",
+    "searchPlaceholder": "Case number, advocate or complainant",
+    "pagination": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}"
+  },
+  "staffNav": {
+    "workspace": "Workspace",
+    "intake": "Walk-in intake",
+    "admin": "Administration",
+    "notifications": "Alerts",
+    "notificationsCount": "Alerts, {count} unread",
+    "signOut": "Sign out",
+    "roles": {
+      "staff": "Officer",
+      "admin": "Administrator",
+      "commissioner": "Commissioner"
+    }
+  },
+  "staffCases": {
+    "empty": "No cases here.",
+    "caseNumber": "Case",
+    "summary": "Summary",
+    "stage": "Stage",
+    "priority": "Priority",
+    "officer": "Officer",
+    "due": "Next deadline",
+    "unassigned": "Unassigned",
+    "overdue": "Overdue",
+    "priorities": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    }
+  },
+  "staffCase": {
+    "back": "Workspace",
+    "category": "Category",
+    "priority": "Priority",
+    "officer": "Officer",
+    "nextDeadline": "Next deadline",
+    "channel": "Filed",
+    "channels": {
+      "online": "Online",
+      "walk_in": "Walk-in"
+    },
+    "complaint": "Complaint",
+    "against": "Against: {name}",
+    "complainant": "Complainant",
+    "noPhone": "No phone on record",
+    "documents": "Documents",
+    "noDocuments": "No documents.",
+    "timeline": "Timeline",
+    "unassigned": "Unassigned",
+    "noCategory": "Not set",
+    "priorities": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "readOnly": "You can view this case. Changes are made by officers and administrators.",
+    "stageTitle": "Stage",
+    "moveTo": "Move to",
+    "closeReason": "Reason for closing",
+    "changeStage": "Change stage",
+    "triageTitle": "Triage",
+    "saveTriage": "Save triage",
+    "assignTitle": "Assignment",
+    "assign": "Assign",
+    "note": "Internal note",
+    "addNote": "Add note",
+    "infoTitle": "Request information from complainant",
+    "infoMessage": "What do you need?",
+    "infoDays": "Days to respond",
+    "requestInfo": "Send request",
+    "errors": {
+      "stale": "This case was changed by someone else. Reload the page and try again.",
+      "not_allowed": "That stage change is not allowed from the current stage.",
+      "reason_required": "Give a reason for closing the case.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid": "That could not be saved. Check the form and try again."
+    }
+  },
+  "categories": {
+    "withheld_funds": "Withheld client funds",
+    "negligence": "Negligence",
+    "delay": "Delay",
+    "misconduct": "Professional misconduct",
+    "overcharging": "Overcharging",
+    "conflict_of_interest": "Conflict of interest",
+    "other": "Other"
+  },
+  "notifications": {
+    "title": "Alerts",
+    "empty": "No alerts.",
+    "kinds": {
+      "due_soon": "Deadline within 48 hours",
+      "overdue": "Deadline passed",
+      "assigned": "Case assigned to you",
+      "info_provided": "Complainant sent information"
+    }
   }
 }

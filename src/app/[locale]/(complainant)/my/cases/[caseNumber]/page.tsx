@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { requireComplainant } from "@/lib/auth/session";
 import { createServerClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { caseNumberFromSlug } from "@/lib/cases/case-number";
 import { logAudit } from "@/lib/audit";
 import { StageBadge } from "@/components/case/StageBadge";
@@ -34,20 +33,15 @@ export default async function CaseDetailPage({
 
   const [{ data: events }, { data: docs }] = await Promise.all([
     supabase.from("case_events").select("id,type,created_at,body").eq("case_id", c.id).order("created_at"),
-    supabase.from("documents").select("id,file_name,storage_path").eq("case_id", c.id).order("created_at"),
+    supabase.from("documents").select("id,file_name").eq("case_id", c.id).order("created_at"),
   ]);
 
-  // Documents already passed RLS; sign short-lived links server-side.
-  const admin = createAdminClient();
-  const links = await Promise.all(
-    (docs ?? []).map(async (d) => {
-      const { data } = await admin.storage.from("evidence").createSignedUrl(d.storage_path, 60, { download: d.file_name });
-      return { id: d.id, name: d.file_name, url: data?.signedUrl };
-    }),
-  );
+  // Downloads go through /api/documents/[id], which re-checks access and audits the download.
+  const links = (docs ?? []).map((d) => ({ id: d.id as string, name: d.file_name as string }));
 
   const t = await getTranslations("caseDetail");
   const stageOverrides = (await loadWorkflowConfig()).stageLabels[locale] ?? {};
+  const tStages = await getTranslations("stages");
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <Link href="/my/cases" className="text-sm underline">
@@ -72,7 +66,11 @@ export default async function CaseDetailPage({
         ) : (
           <ul className="list-disc pl-5 text-sm">
             {links.map((l) => (
-              <li key={l.id}>{l.url ? <a href={l.url} className="underline">{l.name}</a> : l.name}</li>
+              <li key={l.id}>
+                <a href={`/api/documents/${l.id}`} className="underline">
+                  {l.name}
+                </a>
+              </li>
             ))}
           </ul>
         )}
@@ -80,7 +78,10 @@ export default async function CaseDetailPage({
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">{t("timeline")}</h2>
-        <Timeline events={(events ?? []) as TimelineEvent[]} />
+        <Timeline
+          events={(events ?? []) as TimelineEvent[]}
+          stageName={(s) => (isStage(s) ? stageOverrides[s] ?? tStages(s) : s)}
+        />
       </section>
     </main>
   );

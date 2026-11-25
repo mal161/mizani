@@ -89,8 +89,14 @@
       "advocate_responded": "Wakili amejibu",
       "hearing_scheduled": "Usikilizaji umepangwa",
       "decision_issued": "Uamuzi umetolewa",
-      "other": "Taarifa"
-    }
+      "other": "Taarifa",
+      "note": "Dokezo la ndani",
+      "assigned": "Kesi imegawiwa",
+      "triaged": "Aina na kipaumbele vimewekwa",
+      "sms_failed": "SMS haikuweza kutumwa",
+      "routing_failed": "Ugawaji wa kiotomatiki umeshindwa"
+    },
+    "internal": "Ndani"
   },
   "caseDetail": {
     "back": "Kesi zangu",
@@ -137,6 +143,116 @@
     }
   },
   "staffHome": {
-    "title": "Eneo la kazi"
+    "title": "Eneo la kazi",
+    "tabs": {
+      "mine": "Kesi zangu",
+      "unassigned": "Hazijagawiwa",
+      "overdue": "Zilizopitwa na muda",
+      "all": "Kesi zote"
+    },
+    "search": "Tafuta",
+    "searchPlaceholder": "Nambari ya kesi, wakili au mlalamikaji",
+    "pagination": "Kurasa",
+    "previous": "Iliyotangulia",
+    "next": "Inayofuata",
+    "pageOf": "Ukurasa {page} kati ya {pages}"
+  },
+  "staffNav": {
+    "workspace": "Eneo la kazi",
+    "intake": "Usajili wa ana kwa ana",
+    "admin": "Utawala",
+    "notifications": "Arifa",
+    "notificationsCount": "Arifa, {count} hazijasomwa",
+    "signOut": "Toka",
+    "roles": {
+      "staff": "Afisa",
+      "admin": "Msimamizi",
+      "commissioner": "Kamishna"
+    }
+  },
+  "staffCases": {
+    "empty": "Hakuna kesi hapa.",
+    "caseNumber": "Kesi",
+    "summary": "Muhtasari",
+    "stage": "Hatua",
+    "priority": "Kipaumbele",
+    "officer": "Afisa",
+    "due": "Tarehe ya mwisho ijayo",
+    "unassigned": "Haijagawiwa",
+    "overdue": "Imepitwa na muda",
+    "priorities": {
+      "low": "Chini",
+      "normal": "Kawaida",
+      "high": "Juu",
+      "urgent": "Dharura"
+    }
+  },
+  "staffCase": {
+    "back": "Eneo la kazi",
+    "category": "Aina",
+    "priority": "Kipaumbele",
+    "officer": "Afisa",
+    "nextDeadline": "Tarehe ya mwisho ijayo",
+    "channel": "Imewasilishwa",
+    "channels": {
+      "online": "Mtandaoni",
+      "walk_in": "Ana kwa ana"
+    },
+    "complaint": "Lalamiko",
+    "against": "Dhidi ya: {name}",
+    "complainant": "Mlalamikaji",
+    "noPhone": "Hakuna nambari ya simu",
+    "documents": "Nyaraka",
+    "noDocuments": "Hakuna nyaraka.",
+    "timeline": "Mfuatano wa matukio",
+    "unassigned": "Haijagawiwa",
+    "noCategory": "Haijawekwa",
+    "priorities": {
+      "low": "Chini",
+      "normal": "Kawaida",
+      "high": "Juu",
+      "urgent": "Dharura"
+    },
+    "readOnly": "Unaweza kuona kesi hii. Mabadiliko hufanywa na maafisa na wasimamizi.",
+    "stageTitle": "Hatua",
+    "moveTo": "Hamishia",
+    "closeReason": "Sababu ya kufunga",
+    "changeStage": "Badilisha hatua",
+    "triageTitle": "Upangaji",
+    "saveTriage": "Hifadhi upangaji",
+    "assignTitle": "Ugawaji",
+    "assign": "Gawa",
+    "note": "Dokezo la ndani",
+    "addNote": "Ongeza dokezo",
+    "infoTitle": "Omba maelezo kutoka kwa mlalamikaji",
+    "infoMessage": "Unahitaji nini?",
+    "infoDays": "Siku za kujibu",
+    "requestInfo": "Tuma ombi",
+    "errors": {
+      "stale": "Kesi hii imebadilishwa na mtu mwingine. Pakia upya ukurasa ujaribu tena.",
+      "not_allowed": "Mabadiliko hayo ya hatua hayaruhusiwi kutoka hatua ya sasa.",
+      "reason_required": "Toa sababu ya kufunga kesi.",
+      "forbidden": "Huna ruhusa ya kufanya hivyo.",
+      "invalid": "Haikuweza kuhifadhiwa. Angalia fomu ujaribu tena."
+    }
+  },
+  "categories": {
+    "withheld_funds": "Pesa za mteja zilizozuiliwa",
+    "negligence": "Uzembe",
+    "delay": "Ucheleweshaji",
+    "misconduct": "Utovu wa maadili ya kitaaluma",
+    "overcharging": "Kutoza zaidi",
+    "conflict_of_interest": "Mgongano wa maslahi",
+    "other": "Nyingine"
+  },
+  "notifications": {
+    "title": "Arifa",
+    "empty": "Hakuna arifa.",
+    "kinds": {
+      "due_soon": "Tarehe ya mwisho ndani ya saa 48",
+      "overdue": "Tarehe ya mwisho imepita",
+      "assigned": "Umegawiwa kesi",
+      "info_provided": "Mlalamikaji ametuma maelezo"
+    }
   }
 }

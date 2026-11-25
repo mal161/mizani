@@ -1,0 +1,126 @@
+import { notFound } from "next/navigation";
+import { getFormatter, getTranslations } from "next-intl/server";
+import { requireStaff } from "@/lib/auth/staff";
+import { createServerClient } from "@/lib/supabase/server";
+import { caseNumberFromSlug, caseSlug } from "@/lib/cases/case-number";
+import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
+import { allowedNextStages, labelFor } from "@/lib/cases/workflow-config";
+import { isStage } from "@/lib/cases/stages";
+import { logAudit } from "@/lib/audit";
+import { StageBadge } from "@/components/case/StageBadge";
+import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
+import { Link, type Locale } from "@/i18n/routing";
+import { CaseActions } from "./CaseActions";
+
+export default async function StaffCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
+  const { locale, caseNumber: slug } = await params;
+  const user = await requireStaff(locale);
+  const caseNumber = caseNumberFromSlug(slug);
+  if (!caseNumber) notFound();
+
+  const supabase = await createServerClient();
+  const { data: c } = await supabase.from("staff_cases").select("*").eq("case_number", caseNumber).maybeSingle();
+  if (!c) notFound();
+  await logAudit({ actorId: user.id, channel: "web", action: "view", entity: "cases", entityId: c.id });
+
+  const [{ data: events }, { data: docs }, { data: officers }, cfg] = await Promise.all([
+    supabase.from("case_events").select("id,type,visibility,created_at,body").eq("case_id", c.id).order("created_at"),
+    supabase.from("documents").select("id,file_name,visibility,created_at").eq("case_id", c.id).order("created_at"),
+    supabase.from("profiles").select("id,full_name,office").in("role", ["staff", "admin"]).eq("active", true).order("full_name"),
+    loadWorkflowConfig(),
+  ]);
+
+  const t = await getTranslations("staffCase");
+  const tStages = await getTranslations("stages");
+  const tCat = await getTranslations("categories");
+  const format = await getFormatter();
+  const stageName = (s: string) => labelFor(s, locale, cfg, (k) => tStages(k));
+  const categoryName = (k: string) => (tCat.has(k) ? tCat(k) : k);
+  const stage = isStage(c.stage) ? c.stage : "received";
+  const due = c.open_deadline_due ? new Date(c.open_deadline_due) : null;
+
+  return (
+    <main className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_360px]">
+      <div className="flex min-w-0 flex-col gap-6">
+        <Link href="/staff" className="text-sm underline">
+          ← {t("back")}
+        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
+          <StageBadge stage={c.stage} label={stageName(c.stage)} />
+        </div>
+
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+          <dt className="text-slate-500">{t("category")}</dt>
+          <dd data-testid="case-category">{c.category ? categoryName(c.category) : "—"}</dd>
+          <dt className="text-slate-500">{t("priority")}</dt>
+          <dd>{t(`priorities.${c.priority}`)}</dd>
+          <dt className="text-slate-500">{t("officer")}</dt>
+          <dd>{c.assigned_officer_name ?? t("unassigned")}</dd>
+          <dt className="text-slate-500">{t("nextDeadline")}</dt>
+          <dd className={due && due.getTime() < Date.now() ? "font-semibold text-red-700" : ""}>
+            {due ? format.dateTime(due, { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" }) : "—"}
+          </dd>
+          <dt className="text-slate-500">{t("channel")}</dt>
+          <dd>
+            {t(`channels.${c.channel}`)}
+            {c.office ? ` · ${c.office}` : ""}
+          </dd>
+        </dl>
+
+        <section className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold">{t("complaint")}</h2>
+          <p className="text-sm text-slate-500">{t("against", { name: c.advocate_name_given })}</p>
+          <p className="font-medium">{c.summary}</p>
+          <p className="whitespace-pre-wrap text-slate-700">{c.description}</p>
+        </section>
+
+        <section className="flex flex-col gap-1 text-sm">
+          <h2 className="text-lg font-semibold">{t("complainant")}</h2>
+          <p>{c.complainant_name ?? "—"}</p>
+          <p>{c.complainant_phone ?? t("noPhone")}</p>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold">{t("documents")}</h2>
+          {!docs?.length ? (
+            <p className="text-sm text-slate-500">{t("noDocuments")}</p>
+          ) : (
+            <ul className="list-disc pl-5 text-sm">
+              {docs.map((d) => (
+                <li key={d.id}>
+                  <a href={`/api/documents/${d.id}`} className="underline">
+                    {d.file_name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold">{t("timeline")}</h2>
+          <Timeline events={(events ?? []) as TimelineEvent[]} showInternal stageName={stageName} />
+        </section>
+      </div>
+
+      <aside>
+        <CaseActions
+          caseId={c.id}
+          path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}
+          stage={stage}
+          nextStages={allowedNextStages(stage, cfg).map((s) => ({ value: s, label: stageName(s) }))}
+          officers={(officers ?? []).map((o) => ({
+            value: o.id,
+            label: `${o.full_name ?? o.id.slice(0, 8)}${o.office ? ` (${o.office})` : ""}`,
+          }))}
+          assignedOfficerId={c.assigned_officer_id}
+          categories={cfg.categories.map((k) => ({ value: k, label: categoryName(k) }))}
+          category={c.category}
+          priority={c.priority}
+          canWrite={user.role !== "commissioner"}
+        />
+      </aside>
+    </main>
+  );
+}
