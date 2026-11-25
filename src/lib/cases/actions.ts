@@ -110,6 +110,12 @@ export async function setCategoryPriorityAs(
   const { error } = await createAdminClient().from("cases").update({ category, priority }).eq("id", caseId);
   if (error) throw new Error(`triage: ${error.message}`);
   await event(caseId, actor, "triaged", "internal", { category, priority });
+  // Triage can change which rule applies: route again if nobody has the case yet.
+  const { data } = await createAdminClient().from("cases").select("assigned_officer_id").eq("id", caseId).single();
+  if (!data?.assigned_officer_id) {
+    const { routeCase } = await import("./routing");
+    await routeCase(caseId);
+  }
 }
 
 export async function requestInfoAs(actor: StaffUser, caseId: string, message: string, dueDays: number): Promise<void> {

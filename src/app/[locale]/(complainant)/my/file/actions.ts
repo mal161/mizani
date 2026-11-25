@@ -4,6 +4,7 @@ import { hasLocale } from "next-intl";
 import { getCurrentUser } from "@/lib/auth/session";
 import { createServerClient } from "@/lib/supabase/server";
 import { fileComplaint, ComplaintValidationError } from "@/lib/cases/file-complaint";
+import { afterFiling } from "@/lib/cases/after-filing";
 import { routing, type Locale } from "@/i18n/routing";
 
 export type AdvocateOption = { id: string; full_name: string; admission_no: string; firm: string | null };
@@ -55,6 +56,7 @@ export async function fileComplaintAction(_prev: FileState, formData: FormData):
       formData.getAll("evidence").filter((f): f is File => f instanceof File),
       { complainantId: user.id, filedBy: user.id, channel: "online", locale },
     );
+    await afterFiling(r.caseId);
     return { status: "filed", caseNumber: r.caseNumber, pin: r.pin };
   } catch (e) {
     if (e instanceof ComplaintValidationError) {
