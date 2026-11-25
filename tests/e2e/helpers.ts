@@ -15,9 +15,18 @@ export async function loginAsStaff(
   await page.locator('input[name="password"]').fill(STAFF_TEST_PASSWORD);
   await page.locator('form button[type="submit"]').click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/staff/mfa$`));
+  const target = new RegExp(`/${locale}/staff$`);
   await page.locator('input[name="code"]').fill(authenticator.generate(user.totpSecret));
   await page.locator('form button[type="submit"]').click();
-  await expect(page).toHaveURL(new RegExp(`/${locale}/staff$`));
+  try {
+    await expect(page).toHaveURL(target, { timeout: 20_000 });
+  } catch {
+    // The code may equal the one used at enrolment seconds earlier (same 30s window); retry with the next one.
+    await page.waitForTimeout((authenticator.timeRemaining() + 1) * 1000);
+    await page.locator('input[name="code"]').fill(authenticator.generate(user.totpSecret));
+    await page.locator('form button[type="submit"]').click();
+    await expect(page).toHaveURL(target);
+  }
   return user;
 }
 

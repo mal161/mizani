@@ -4,4 +4,5 @@ export interface CurrentUser {
   phone: string | null;
   full_name?: string | null;
   office?: string | null;
+  active?: boolean;
 }

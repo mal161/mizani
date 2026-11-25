@@ -6,6 +6,7 @@ import en from "../../../messages/en.json";
 import sw from "../../../messages/sw.json";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSmsProvider } from "@/lib/sms";
+import { logAudit } from "@/lib/audit";
 import { actorId, type StaffUser } from "@/lib/auth/staff-types";
 import type { Locale } from "@/i18n/routing";
 import { smsText } from "./messages";
@@ -26,6 +27,11 @@ async function event(caseId: string, actor: StaffUser, type: string, visibility:
     .from("case_events")
     .insert({ case_id: caseId, type, visibility, actor_id: actorId(actor), body });
   if (error) throw new Error(`${type} event: ${error.message}`);
+}
+
+/** Attributes a staff change to the officer in the immutable audit log (DB triggers only see the service role). */
+async function auditAction(actor: StaffUser, action: string, caseId: string, details: Record<string, unknown> = {}) {
+  await logAudit({ actorId: actorId(actor), channel: actor.id === "system" ? "system" : "web", action, entity: "cases", entityId: caseId, details });
 }
 
 async function caseForSms(caseId: string) {
@@ -73,6 +79,7 @@ export async function changeStageAs(
   });
   if (error) throw new Error(`transition: ${error.message}`);
   if (!applied) return { ok: false, reason: "stale" };
+  await auditAction(actor, "change_stage", caseId, { from, to, reason: why });
 
   await openStageDeadline(caseId, to);
   await notifyComplainant(caseId, (l, n) =>
@@ -85,6 +92,7 @@ export async function addNoteAs(actor: StaffUser, caseId: string, text: string):
   const t = text.trim();
   if (t.length < 1 || t.length > 5000) throw new Error("note must be 1-5000 characters");
   await event(caseId, actor, "note", "internal", { text: t });
+  await auditAction(actor, "add_note", caseId);
 }
 
 export async function assignCaseAs(actor: StaffUser, caseId: string, officerId: string | null): Promise<void> {
@@ -96,6 +104,7 @@ export async function assignCaseAs(actor: StaffUser, caseId: string, officerId: 
   const { error } = await admin.from("cases").update({ assigned_officer_id: officerId }).eq("id", caseId);
   if (error) throw new Error(`assign: ${error.message}`);
   await event(caseId, actor, "assigned", "internal", { officer_id: officerId, auto: actor.id === "system" });
+  await auditAction(actor, "assign_case", caseId, { officer_id: officerId });
 }
 
 export async function setCategoryPriorityAs(
@@ -110,6 +119,7 @@ export async function setCategoryPriorityAs(
   const { error } = await createAdminClient().from("cases").update({ category, priority }).eq("id", caseId);
   if (error) throw new Error(`triage: ${error.message}`);
   await event(caseId, actor, "triaged", "internal", { category, priority });
+  await auditAction(actor, "triage_case", caseId, { category, priority });
   // Triage can change which rule applies: route again if nobody has the case yet.
   const { data } = await createAdminClient().from("cases").select("assigned_officer_id").eq("id", caseId).single();
   if (!data?.assigned_officer_id) {
@@ -125,6 +135,7 @@ export async function requestInfoAs(actor: StaffUser, caseId: string, message: s
   const dueAt = new Date(Date.now() + dueDays * 86_400_000);
   await event(caseId, actor, "info_requested", "parties", { message: m, due_at: dueAt.toISOString() });
   await addDeadline(caseId, "info_request", dueAt);
+  await auditAction(actor, "request_info", caseId, { due_at: dueAt.toISOString() });
   await notifyComplainant(caseId, smsText.infoRequested);
 }
 

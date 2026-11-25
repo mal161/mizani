@@ -71,6 +71,10 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
           <span className="text-xs text-slate-500">{t("phoneHint")}</span>
         </label>
         <label className="flex flex-col gap-1">
+          <span className="text-sm font-medium">{t("phoneConfirm")}</span>
+          <input name="phoneConfirm" type="tel" autoComplete="off" defaultValue={v?.phoneConfirm} className={field} />
+        </label>
+        <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{t("language")}</span>
           <select name="language" defaultValue={v?.language ?? locale} aria-label={t("language")} className={field}>
             <option value="en">English</option>

@@ -269,7 +269,8 @@
     "submit": "Register complaint",
     "fieldErrors": {
       "fullName": "Complainant's name: 2 to 120 characters.",
-      "phone": "Enter a valid Kenyan mobile number, or leave it empty."
+      "phone": "Enter a valid Kenyan mobile number, or leave it empty.",
+      "phoneConfirm": "The two phone numbers do not match. Check with the complainant and type it again."
     },
     "errors": {
       "invalid_input": "Please fix the following and submit again:",
@@ -290,7 +291,8 @@
       "keepPin": "Keep this slip safe. Do not share your PIN.",
       "print": "Print slip",
       "another": "Register another complaint"
-    }
+    },
+    "phoneConfirm": "Repeat the mobile number"
   },
   "respond": {
     "title": "The Commission needs more information",

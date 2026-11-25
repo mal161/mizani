@@ -12,7 +12,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!data.user) return null;
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id,role,phone,full_name,office")
+    .select("id,role,phone,full_name,office,active")
     .eq("id", data.user.id)
     .maybeSingle();
   return profile as CurrentUser | null;

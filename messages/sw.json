@@ -269,7 +269,8 @@
     "submit": "Sajili lalamiko",
     "fieldErrors": {
       "fullName": "Jina la mlalamikaji: herufi 2 hadi 120.",
-      "phone": "Weka nambari sahihi ya simu ya Kenya, au iache tupu."
+      "phone": "Weka nambari sahihi ya simu ya Kenya, au iache tupu.",
+      "phoneConfirm": "Nambari mbili za simu hazilingani. Thibitisha na mlalamikaji uandike tena."
     },
     "errors": {
       "invalid_input": "Tafadhali rekebisha yafuatayo kisha uwasilishe tena:",
@@ -290,7 +291,8 @@
       "keepPin": "Hifadhi risiti hii vizuri. Usimpe mtu PIN yako.",
       "print": "Chapisha risiti",
       "another": "Sajili lalamiko jingine"
-    }
+    },
+    "phoneConfirm": "Rudia nambari ya simu"
   },
   "respond": {
     "title": "Tume inahitaji maelezo zaidi",

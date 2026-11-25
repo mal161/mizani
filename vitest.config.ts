@@ -10,5 +10,7 @@ export default defineConfig({
     include: ["tests/unit/**/*.test.ts", "tests/db/**/*.test.ts"],
     environment: "node",
     testTimeout: 30000,
+    // Setup creates real accounts (incl. MFA enrolment) on the hosted dev project.
+    hookTimeout: 60000,
   },
 });

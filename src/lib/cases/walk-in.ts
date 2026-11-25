@@ -6,10 +6,13 @@ import type { ComplaintInput } from "./schema";
 import { complaintSchema, validateEvidence } from "./schema";
 import { fileComplaint, ComplaintValidationError, type FiledCase } from "./file-complaint";
 import { afterFiling } from "./after-filing";
+import { logAudit } from "@/lib/audit";
 
 export interface WalkInForm extends ComplaintInput {
   fullName: string;
   phone?: string;
+  /** The phone typed a second time; must match `phone` (guards against texting a stranger the PIN). */
+  phoneConfirm?: string;
 }
 
 /**
@@ -33,6 +36,9 @@ export async function fileWalkInComplaintAs(actor: StaffUser, form: WalkInForm, 
   if (form.phone?.trim()) {
     const phone = normalizeKenyanPhone(form.phone);
     if (!phone) throw new ComplaintValidationError("invalid_input", ["phone"]);
+    if (normalizeKenyanPhone(form.phoneConfirm ?? "") !== phone) {
+      throw new ComplaintValidationError("invalid_input", ["phoneConfirm"]);
+    }
     complainantId = await ensureComplainantForPhone(phone, locale, fullName);
   } else {
     complainantId = await createWalkInComplainant(fullName, locale);
@@ -45,6 +51,7 @@ export async function fileWalkInComplaintAs(actor: StaffUser, form: WalkInForm, 
     locale,
     office: actor.office ?? undefined,
   });
+  await logAudit({ actorId: actor.id, channel: "web", action: "file_walk_in", entity: "cases", entityId: filed.caseId, details: { office: actor.office ?? null, with_phone: Boolean(form.phone?.trim()) } });
   await afterFiling(filed.caseId);
   return filed;
 }

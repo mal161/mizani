@@ -43,7 +43,7 @@ describe("walk-in intake", () => {
 
   it("reuses the existing complainant for a known phone and texts them", async () => {
     const { userId } = await signInAs("complainant", "+254700001501");
-    const r = await fileWalkInComplaintAs(officer, { ...complaint, fullName: "Known Person", phone: "0700001501" }, []);
+    const r = await fileWalkInComplaintAs(officer, { ...complaint, fullName: "Known Person", phone: "0700001501", phoneConfirm: "0700001501" }, []);
     const { data: c } = await adminClient().from("cases").select("complainant_id").eq("id", r.caseId).single();
     expect(c!.complainant_id).toBe(userId);
     expect(fake().sent).toHaveLength(1);

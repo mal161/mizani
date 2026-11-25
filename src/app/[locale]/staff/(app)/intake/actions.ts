@@ -17,6 +17,7 @@ export async function walkInAction(_prev: IntakeState, formData: FormData): Prom
   const values = {
     fullName: String(formData.get("fullName") ?? ""),
     phone: String(formData.get("phone") ?? ""),
+    phoneConfirm: String(formData.get("phoneConfirm") ?? ""),
     advocateId: String(formData.get("advocateId") ?? ""),
     advocateNameGiven: String(formData.get("advocateNameGiven") ?? ""),
     summary: String(formData.get("summary") ?? ""),
@@ -30,6 +31,7 @@ export async function walkInAction(_prev: IntakeState, formData: FormData): Prom
       {
         fullName: values.fullName,
         phone: values.phone || undefined,
+        phoneConfirm: values.phoneConfirm || undefined,
         advocateId: values.advocateId || undefined,
         advocateNameGiven: values.advocateNameGiven,
         summary: values.summary,
