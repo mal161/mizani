@@ -112,5 +112,31 @@
       "invalid": "Case number and PIN do not match. Please check and try again.",
       "locked": "Too many wrong attempts for this case. Try again in 1 hour."
     }
+  },
+  "staffLogin": {
+    "title": "Staff sign-in",
+    "intro": "For ACC staff and commissioners. You will also need your authenticator app.",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "errors": {
+      "invalid": "Email or password is incorrect."
+    }
+  },
+  "mfa": {
+    "title": "Enter your authenticator code",
+    "intro": "Open your authenticator app and enter the 6-digit code for Mizani.",
+    "enrolTitle": "Set up your authenticator app",
+    "enrolIntro": "Scan this QR code with an authenticator app (for example Google Authenticator or Microsoft Authenticator), then enter the 6-digit code it shows.",
+    "qrAlt": "QR code for your authenticator app",
+    "manualKey": "Can't scan? Enter this key manually:",
+    "code": "Authenticator code",
+    "verify": "Verify",
+    "errors": {
+      "invalid_code": "That code is not correct. Check the time on your phone and try the newest code."
+    }
+  },
+  "staffHome": {
+    "title": "Workspace"
   }
 }

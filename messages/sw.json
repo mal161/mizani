@@ -112,5 +112,31 @@
       "invalid": "Nambari ya kesi na PIN hazilingani. Tafadhali angalia ujaribu tena.",
       "locked": "Majaribio mengi yasiyo sahihi kwa kesi hii. Jaribu tena baada ya saa 1."
     }
+  },
+  "staffLogin": {
+    "title": "Kuingia kwa wafanyakazi",
+    "intro": "Kwa wafanyakazi na makamishna wa ACC. Utahitaji pia programu yako ya uthibitishaji.",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "signIn": "Ingia",
+    "errors": {
+      "invalid": "Barua pepe au nenosiri si sahihi."
+    }
+  },
+  "mfa": {
+    "title": "Weka nambari ya uthibitishaji",
+    "intro": "Fungua programu yako ya uthibitishaji na uweke nambari ya tarakimu 6 ya Mizani.",
+    "enrolTitle": "Weka programu yako ya uthibitishaji",
+    "enrolIntro": "Changanua msimbo huu wa QR kwa programu ya uthibitishaji (kwa mfano Google Authenticator au Microsoft Authenticator), kisha weka nambari ya tarakimu 6 inayoonyesha.",
+    "qrAlt": "Msimbo wa QR wa programu yako ya uthibitishaji",
+    "manualKey": "Huwezi kuchanganua? Weka ufunguo huu mwenyewe:",
+    "code": "Nambari ya uthibitishaji",
+    "verify": "Thibitisha",
+    "errors": {
+      "invalid_code": "Nambari hiyo si sahihi. Angalia saa ya simu yako na ujaribu nambari mpya zaidi."
+    }
+  },
+  "staffHome": {
+    "title": "Eneo la kazi"
   }
 }

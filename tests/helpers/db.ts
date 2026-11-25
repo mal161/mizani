@@ -41,6 +41,40 @@ export async function signInAs(
   return { client, userId };
 }
 
+export const STAFF_TEST_PASSWORD = "Staff-test-password-123!";
+
+/** Creates a staff-type user with an enrolled + verified TOTP factor; returns an aal2 client. */
+export async function signInStaff(
+  role: "staff" | "admin" | "commissioner",
+  email: string,
+  office = "Nairobi",
+): Promise<{ client: SupabaseClient; userId: string; totpSecret: string; email: string }> {
+  const { authenticator } = await import("otplib");
+  const admin = adminClient();
+  const created = await admin.auth.admin.createUser({ email, password: STAFF_TEST_PASSWORD, email_confirm: true });
+  if (created.error) throw created.error;
+  const userId = created.data.user!.id;
+  const { error: pErr } = await admin
+    .from("profiles")
+    .insert({ id: userId, role, full_name: `Test ${role} ${email.split("@")[0]}`, office });
+  if (pErr) throw pErr;
+
+  const client = createClient(SUPABASE_URL, ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error } = await client.auth.signInWithPassword({ email, password: STAFF_TEST_PASSWORD });
+  if (error) throw error;
+  const { data: enrol, error: eErr } = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: "test" });
+  if (eErr) throw eErr;
+  const totpSecret = enrol.totp.secret;
+  const { error: vErr } = await client.auth.mfa.challengeAndVerify({
+    factorId: enrol.id,
+    code: authenticator.generate(totpSecret),
+  });
+  if (vErr) throw vErr;
+  return { client, userId, totpSecret, email };
+}
+
 /** Inserts a case directly (service role) for test setup. */
 export async function makeCase(complainantId: string, overrides: Record<string, unknown> = {}) {
   const admin = adminClient();

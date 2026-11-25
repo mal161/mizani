@@ -2,12 +2,9 @@ import "server-only";
 import { createServerClient } from "@/lib/supabase/server";
 import { redirect } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
+import type { CurrentUser } from "./types";
 
-export interface CurrentUser {
-  id: string;
-  role: "complainant" | "advocate" | "staff" | "admin" | "commissioner";
-  phone: string | null;
-}
+export type { CurrentUser } from "./types";
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const supabase = await createServerClient();
@@ -15,7 +12,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!data.user) return null;
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id,role,phone")
+    .select("id,role,phone,full_name,office")
     .eq("id", data.user.id)
     .maybeSingle();
   return profile as CurrentUser | null;
