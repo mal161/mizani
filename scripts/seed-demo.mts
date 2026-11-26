@@ -32,6 +32,7 @@ const { ensureComplainantForPhone } = await import("../src/lib/auth/accounts");
 const admin = createAdminClient();
 const advocatesOnly = process.argv.includes("--advocates-only");
 const commissionOnly = process.argv.includes("--commission-only");
+const analyticsOnly = process.argv.includes("--analytics-only");
 const { notifyAdvocateAs } = await import("../src/lib/advocates/notify");
 const { submitAdvocateResponse } = await import("../src/lib/advocates/respond");
 const { phoneEmail } = await import("../src/lib/auth/accounts");
@@ -82,7 +83,7 @@ const officers = STAFF.filter((s) => s.role === "staff").map((s) => ({ id: ids[s
 
 const { data: advocates } = await admin.from("advocates").select("id,full_name").limit(20);
 let created = 0;
-for (let i = 0; i < (advocatesOnly || commissionOnly ? 0 : 25); i++) {
+for (let i = 0; i < (advocatesOnly || commissionOnly || analyticsOnly ? 0 : 25); i++) {
   const story = stories[i % stories.length];
   const officer = officers[i % officers.length];
   const phone = `+2547000090${String(i).padStart(2, "0")}`;
@@ -116,7 +117,7 @@ const DEMO_ADVOCATES = [
 ];
 const advocateLines: string[] = [];
 let notified = 0;
-for (const [k, a] of (commissionOnly ? [] : DEMO_ADVOCATES).entries()) {
+for (const [k, a] of (commissionOnly || analyticsOnly ? [] : DEMO_ADVOCATES).entries()) {
   let { data: roll } = await admin.from("advocates").select("id,profile_id").eq("admission_no", a.admission).maybeSingle();
   if (!roll) {
     ({ data: roll } = await admin
@@ -182,7 +183,7 @@ for (const s of COMMISSIONERS) {
 const { count: seededDecisions } = await admin.from("decisions").select("id", { count: "exact", head: true }).like("reasons", "Demo decision:%");
 let hearingsScheduled = 0;
 let decisionsRecorded = 0;
-if (!seededDecisions) {
+if (!seededDecisions && !analyticsOnly) {
   const officer = officers[0];
   /** A fresh case moved to investigation, ready for a hearing. */
   const investigationCase = async (n: number) => {
@@ -241,5 +242,164 @@ if (!seededDecisions) {
   }
 }
 for (const l of commissionLines) console.log("  " + l);
-console.log(seededDecisions ? "commission demo already seeded — skipped" : `${hearingsScheduled} hearings scheduled`);
-if (!seededDecisions) console.log(`${decisionsRecorded} decisions recorded`);
+if (!analyticsOnly) {
+  console.log(seededDecisions ? "commission demo already seeded — skipped" : `${hearingsScheduled} hearings scheduled`);
+  if (!seededDecisions) console.log(`${decisionsRecorded} decisions recorded`);
+}
+
+// --- Analytics history (Plan 6): 160 synthetic cases over the past 12 months, inserted with backdated timestamps.
+// Services stamp now(), so this writes rows directly. Deterministic (seeded PRNG); skipped if already present.
+if (analyticsOnly) {
+  const { count: historyCount } = await admin.from("cases").select("id", { count: "exact", head: true }).like("summary", "[History] %");
+  if (historyCount) {
+    console.log("analytics history already seeded");
+  } else {
+    let seed = 20261128;
+    const rand = () => {
+      // mulberry32
+      seed |= 0;
+      seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    const between = (lo: number, hi: number) => lo + rand() * (hi - lo);
+    const pick = <T,>(xs: readonly T[]) => xs[Math.floor(rand() * xs.length)];
+    const DAY = 86_400_000;
+    const now = Date.now();
+
+    const complainants: string[] = [];
+    for (let k = 0; k < 12; k++) {
+      const story = stories[k % stories.length];
+      complainants.push(await ensureComplainantForPhone(`+2547000096${String(k).padStart(2, "0")}`, story.lang, people[k % people.length]));
+    }
+    // Two advocates with repeated complaints (roll entries only; their portal accounts come from the advocates demo).
+    const repeat: { id: string; full_name: string }[] = [];
+    for (const a of DEMO_ADVOCATES) {
+      let { data: roll } = await admin.from("advocates").select("id,full_name").eq("admission_no", a.admission).maybeSingle();
+      if (!roll) ({ data: roll } = await admin.from("advocates").insert({ admission_no: a.admission, full_name: a.name, phone: a.phone, firm: a.firm }).select("id,full_name").single());
+      repeat.push(roll!);
+    }
+    const others = (advocates ?? []).filter((a) => !repeat.some((r) => r.id === a.id));
+    const offices = ["Nairobi", "Nairobi", "Nairobi", "Mombasa", "Kisumu"] as const;
+    const officerFor = (office: string) => officers.find((o) => o.office === office) ?? officers[0];
+    const categories = ["withheld_funds", "negligence", "overcharging", "conflict_of_interest", "delay", "misconduct"] as const;
+    const SLA: Record<string, number> = { received: 3, screening: 7, advocate_notified: 14, investigation: 30, conciliation: 21, hearing: 14, decision: 14 };
+    const outcomes = [
+      ["dismissed", 25],
+      ["settled", 15],
+      ["withdrawn", 10],
+      ["admonished", 20],
+      ["refund_ordered", 20],
+      ["referred_to_tribunal", 10],
+    ] as const;
+    const pickOutcome = () => {
+      let r = rand() * 100;
+      for (const [o, w] of outcomes) if ((r -= w) < 0) return o;
+      return "dismissed" as const;
+    };
+
+    let historyCreated = 0;
+    let historyDecisions = 0;
+    for (let i = 0; i < 160; i++) {
+      const created = now - between(5, 360) * DAY;
+      const recent = now - created < 120 * DAY;
+      const category = recent && rand() < 0.35 ? "withheld_funds" : pick(categories);
+      const story = stories.find((s) => s.category === category) ?? pick(stories);
+      const office = pick(offices);
+      const officer = officerFor(office);
+      const adv = i < 7 ? repeat[0] : i < 12 ? repeat[1] : pick(others);
+
+      // Walk the lifecycle until "now"; some cases stall or are closed at screening.
+      const moves: { from: string; to: string; at: number }[] = [];
+      let stage = "received";
+      let t = created;
+      const step = (to: string, days: number) => {
+        const next = t + days * DAY;
+        if (next > now || rand() < 0.05) return false;
+        moves.push({ from: stage, to, at: next });
+        stage = to;
+        t = next;
+        return true;
+      };
+      let ok = step("screening", between(0.5, 4));
+      if (ok && rand() < 0.1) {
+        step("closed", between(2, 9));
+      } else if (ok) {
+        ok = step("advocate_notified", between(2, 9)) && step("investigation", between(8, 18));
+        if (ok && rand() < 0.25) ok = step("conciliation", between(10, 35));
+        ok = ok && step("hearing", between(10, 45)) && step("decision", between(5, 18));
+        if (ok) step("closed", between(3, 12));
+      }
+
+      const { data: num } = await admin.rpc("next_case_number");
+      const { data: c, error } = await admin
+        .from("cases")
+        .insert({
+          case_number: num,
+          complainant_id: complainants[i % complainants.length],
+          filed_by: complainants[i % complainants.length],
+          advocate_id: adv?.id ?? null,
+          advocate_name_given: adv?.full_name ?? "Unlisted Advocate",
+          category,
+          stage,
+          priority: pick(["low", "normal", "normal", "high", "urgent"] as const),
+          summary: `[History] ${story.summary}`,
+          description: story.description,
+          language: story.lang,
+          channel: rand() < 0.25 ? "walk_in" : "online",
+          pin_hash: "history-no-pin",
+          assigned_officer_id: officer.id,
+          office,
+          created_at: new Date(created).toISOString(),
+        })
+        .select("id")
+        .single();
+      if (error) throw new Error(`history case: ${error.message}`);
+
+      if (moves.length) {
+        await admin.from("case_events").insert(
+          moves.map((m) => ({
+            case_id: c.id,
+            type: "stage_changed",
+            visibility: "parties",
+            actor_id: officer.id,
+            body: { from: m.from, to: m.to },
+            created_at: new Date(m.at).toISOString(),
+          })),
+        );
+      }
+      // Stage deadlines: entered + SLA, met when the case left the stage.
+      const stays = [{ stage: "received", at: created }, ...moves.map((m) => ({ stage: m.to, at: m.at }))];
+      const deadlines = stays
+        .filter((s) => s.stage !== "closed" && SLA[s.stage])
+        .map((s, k) => ({
+          case_id: c.id,
+          kind: "stage",
+          stage: s.stage,
+          due_at: new Date(s.at + SLA[s.stage] * DAY).toISOString(),
+          met_at: stays[k + 1] ? new Date(stays[k + 1].at).toISOString() : null,
+          created_at: new Date(s.at).toISOString(),
+        }));
+      if (deadlines.length) await admin.from("case_deadlines").insert(deadlines);
+
+      const decidedAt = moves.find((m) => m.to === "decision")?.at;
+      if (decidedAt) {
+        const outcome = pickOutcome();
+        await admin.from("decisions").insert({
+          case_id: c.id,
+          outcome,
+          amount_kes: outcome === "refund_ordered" ? Math.round(between(20, 300)) * 1000 : null,
+          reasons: "Demo history: the panel considered the complaint, the advocate's response and the documents on file before deciding.",
+          panel: [comm[i % comm.length].id],
+          decided_by: comm[i % comm.length].id,
+          decided_at: new Date(decidedAt).toISOString(),
+        });
+        historyDecisions++;
+      }
+      historyCreated++;
+    }
+    console.log(`${historyCreated} history cases created`);
+    console.log(`${historyDecisions} decisions recorded`);
+  }
+}

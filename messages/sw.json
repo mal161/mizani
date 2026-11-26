@@ -255,7 +255,8 @@
     "misconduct": "Utovu wa maadili ya kitaaluma",
     "overcharging": "Kutoza zaidi",
     "conflict_of_interest": "Mgongano wa maslahi",
-    "other": "Nyingine"
+    "other": "Nyingine",
+    "uncategorised": "Bado haijaainishwa"
   },
   "notifications": {
     "title": "Arifa",

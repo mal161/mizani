@@ -255,7 +255,8 @@
     "misconduct": "Professional misconduct",
     "overcharging": "Overcharging",
     "conflict_of_interest": "Conflict of interest",
-    "other": "Other"
+    "other": "Other",
+    "uncategorised": "Not yet categorised"
   },
   "notifications": {
     "title": "Alerts",
