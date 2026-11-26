@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { recordDecisionAs } from "@/lib/commission/decisions";
 import { updateReferralAs } from "@/lib/commission/referrals";
+import { recordHearingMinutesAs } from "@/lib/commission/hearings";
 import { buildDecisionLetter } from "@/lib/commission/decision-letter";
 import { extractPdfText } from "@/lib/ai/document-text";
 import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
@@ -18,12 +19,23 @@ let complainant: { client: SupabaseClient; userId: string };
 let advocate: { client: SupabaseClient; userId: string; advocateId: string };
 const advPhone = `+25470009${String(Date.now()).slice(-4)}`;
 
-async function hearingCase() {
+/** A case at stage "hearing" whose hearing (panel: comm) has been held, unless held=false. */
+async function hearingCase(opts: { held?: boolean; panel?: string[] } = {}) {
   const c = await makeCase(complainant.userId, {
     advocate_id: advocate.advocateId,
     advocate_notified_at: new Date().toISOString(),
     stage: "hearing",
   });
+  const { error } = await adminClient().from("hearings").insert({
+    case_id: c.id,
+    starts_at: new Date(Date.now() - 86_400_000).toISOString(),
+    mode: "in_person",
+    venue: "Room 1",
+    panel: opts.panel ?? [comm.id],
+    status: opts.held === false ? "scheduled" : "held",
+    minutes: opts.held === false ? null : "Both parties attended.",
+  });
+  if (error) throw error;
   fake().sent.length = 0;
   return c;
 }
@@ -92,6 +104,46 @@ describe("recordDecisionAs", () => {
     await updateReferralAs(officer, r.referralId!, { status: "lodged", tribunalReference: "DT/2026/0042" });
     const { data } = await adminClient().from("referrals").select("status,tribunal_reference").eq("id", r.referralId!).single();
     expect(data).toEqual({ status: "lodged", tribunal_reference: "DT/2026/0042" });
+  });
+});
+
+describe("recordDecisionAs — panel, hearing and concurrency rules", () => {
+  it("a commissioner who did not sit on the hearing cannot decide, even by naming themselves on the panel", async () => {
+    const c = await hearingCase();
+    await expect(recordDecisionAs(otherComm, c.id, { outcome: "dismissed", reasons, panel: [otherComm.id] })).rejects.toThrow(/panel/);
+    const { count } = await adminClient().from("decisions").select("id", { count: "exact", head: true }).eq("case_id", c.id);
+    expect(count).toBe(0);
+  });
+
+  it("refuses a first decision before the hearing has been held", async () => {
+    const c = await hearingCase({ held: false });
+    await expect(recordDecisionAs(comm, c.id, { outcome: "dismissed", reasons, panel: [comm.id] })).rejects.toThrow(/held/);
+  });
+
+  it("closes any still-scheduled hearing when the decision is recorded", async () => {
+    const c = await hearingCase();
+    const admin = adminClient();
+    await admin.from("hearings").insert({ case_id: c.id, starts_at: new Date(Date.now() + 5 * 86_400_000).toISOString(), mode: "in_person", venue: "Room 3", panel: [comm.id] });
+    await recordDecisionAs(comm, c.id, { outcome: "settled", reasons, panel: [comm.id] });
+    const { data } = await admin.from("hearings").select("status").eq("case_id", c.id).order("starts_at");
+    expect(data!.map((h) => h.status)).toEqual(["held", "cancelled"]);
+  });
+
+  it("minutes cannot be recorded on an adjourned hearing", async () => {
+    const c = await hearingCase({ held: false });
+    const { data: h } = await adminClient().from("hearings").update({ status: "adjourned" }).eq("case_id", c.id).select("id").single();
+    await expect(recordHearingMinutesAs(comm, h!.id, "Both parties attended the hearing.")).rejects.toThrow(/adjourned/);
+  });
+
+  it("two decisions submitted together leave exactly one active decision", async () => {
+    const c = await hearingCase({ panel: [comm.id, otherComm.id] });
+    await Promise.allSettled([
+      recordDecisionAs(comm, c.id, { outcome: "admonished", reasons, panel: [comm.id, otherComm.id] }),
+      recordDecisionAs(otherComm, c.id, { outcome: "dismissed", reasons, panel: [comm.id, otherComm.id] }),
+    ]);
+    const { data } = await adminClient().from("decisions").select("id,superseded_by").eq("case_id", c.id);
+    expect(data!.length).toBeGreaterThanOrEqual(1);
+    expect(data!.filter((d) => d.superseded_by === null)).toHaveLength(1);
   });
 });
 

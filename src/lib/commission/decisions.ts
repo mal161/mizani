@@ -39,8 +39,8 @@ export async function recordDecisionAs(
   if (actor.role === "commissioner" && !panel.includes(actor.id)) throw new Error("only a commissioner on the panel can record the decision");
 
   const admin = createAdminClient();
-  const { data: members } = await admin.from("profiles").select("id").in("id", panel).in("role", ["commissioner", "admin"]);
-  if ((members ?? []).length !== panel.length) throw new Error("every panel member must be a commissioner");
+  const { data: members } = await admin.from("profiles").select("id").in("id", panel).in("role", ["commissioner", "admin"]).eq("active", true);
+  if ((members ?? []).length !== panel.length) throw new Error("every panel member must be an active commissioner");
 
   const { data: c, error } = await admin
     .from("cases")
@@ -50,60 +50,34 @@ export async function recordDecisionAs(
   if (error) throw new Error(`load case: ${error.message}`);
   if (c.stage !== "hearing" && c.stage !== "decision") throw new Error(`cannot record a decision at stage ${c.stage}`);
 
-  const { data: previous } = await admin
-    .from("decisions")
-    .select("id,outcome,reasons,orders,amount_kes")
-    .eq("case_id", caseId)
-    .is("superseded_by", null)
-    .order("decided_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  const correcting = c.stage === "decision" && Boolean(previous);
-
-  const { data: d, error: dErr } = await admin
-    .from("decisions")
-    .insert({ case_id: caseId, outcome: input.outcome, reasons, orders, amount_kes: amount ?? null, panel, decided_by: actorId(actor) })
-    .select("id,decided_at")
-    .single();
-  if (dErr) throw new Error(`record decision: ${dErr.message}`);
-  if (correcting) await admin.from("decisions").update({ superseded_by: d.id }).eq("id", previous!.id);
-
-  if (c.stage === "hearing") {
-    const { data: moved } = await admin.rpc("transition_case_stage", {
-      p_case_id: caseId,
-      p_from: "hearing",
-      p_to: "decision",
-      p_actor: actorId(actor),
-      p_reason: null,
-    });
-    if (moved) await openStageDeadline(caseId, "decision");
+  // Only a commissioner who sat on the case (the held hearing's panel, or the panel of the decision being
+  // corrected) may decide it. Admins may record for any panel.
+  const [{ data: held }, { data: current }] = await Promise.all([
+    admin.from("hearings").select("panel").eq("case_id", caseId).eq("status", "held").order("starts_at", { ascending: false }).limit(1).maybeSingle(),
+    admin.from("decisions").select("panel").eq("case_id", caseId).is("superseded_by", null).order("decided_at", { ascending: false }).limit(1).maybeSingle(),
+  ]);
+  // Re-checked inside record_decision under the case lock.
+  if (c.stage === "hearing" && !held) throw new Error("the hearing must be held (minutes recorded) before a decision");
+  if (actor.role === "commissioner") {
+    const sat = [...((held?.panel as string[] | undefined) ?? []), ...((current?.panel as string[] | undefined) ?? [])];
+    if (!sat.includes(actor.id)) throw new Error("only a commissioner on the hearing panel can record the decision");
   }
+
+  const { data: r, error: rErr } = await admin.rpc("record_decision", {
+    p_case_id: caseId,
+    p_outcome: input.outcome,
+    p_reasons: reasons,
+    p_orders: orders,
+    p_amount: amount ?? null,
+    p_panel: panel,
+    p_actor: actorId(actor),
+  });
+  if (rErr) throw new Error(`record decision: ${rErr.message}`);
+  const res = r as { decision_id: string; referral_id: string | null; moved: boolean; previous_outcome: string | null; previous_amount: number | null };
+  const correcting = res.previous_outcome !== null;
+  if (res.moved) await openStageDeadline(caseId, "decision");
 
   const notified = Boolean(c.advocate_notified_at);
-  await admin.from("case_events").insert({
-    case_id: caseId,
-    type: "decision_issued",
-    visibility: "parties",
-    advocate_visible: notified,
-    actor_id: actorId(actor),
-    body: {
-      decision_id: d.id,
-      outcome: input.outcome,
-      reasons,
-      orders,
-      amount_kes: amount ?? null,
-      decided_at: d.decided_at,
-      ...(correcting ? { corrected: true } : {}),
-    },
-  });
-
-  let referralId: string | null = null;
-  if (input.outcome === "referred_to_tribunal") {
-    const { data: ref, error: rErr } = await admin.from("referrals").insert({ case_id: caseId, decision_id: d.id, updated_by: actorId(actor) }).select("id").single();
-    if (rErr) throw new Error(`create referral: ${rErr.message}`);
-    referralId = ref.id as string;
-  }
-
   const sms = getSmsProvider();
   const lang = c.language as Locale;
   const complainantPhone = (c.complainant as unknown as { phone: string | null } | null)?.phone;
@@ -120,14 +94,14 @@ export async function recordDecisionAs(
     entity: "cases",
     entityId: caseId,
     details: {
-      decision_id: d.id,
+      decision_id: res.decision_id,
       corrected: correcting,
-      before: correcting ? { outcome: previous!.outcome, amount_kes: previous!.amount_kes } : null,
+      before: correcting ? { outcome: res.previous_outcome, amount_kes: res.previous_amount } : null,
       after: { outcome: input.outcome, amount_kes: amount ?? null },
       panel,
     },
   });
-  return { decisionId: d.id as string, referralId };
+  return { decisionId: res.decision_id, referralId: res.referral_id };
 }
 
 export interface DecisionRow {

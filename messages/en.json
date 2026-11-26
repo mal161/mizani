@@ -264,7 +264,9 @@
       "due_soon": "Deadline within 48 hours",
       "overdue": "Deadline passed",
       "assigned": "Case assigned to you",
-      "info_provided": "Complainant sent information"
+      "info_provided": "Complainant sent information",
+      "hearing_scheduled": "You are on the panel for a hearing",
+      "advocate_responded": "The advocate responded"
     }
   },
   "intake": {
@@ -615,7 +617,10 @@
       "panel": "Choose 1 to 5 commissioners, including yourself.",
       "stage": "A decision can only be recorded once the case is at the hearing stage.",
       "minutes": "Minutes must be at least 10 characters.",
-      "cancelled": "This hearing was cancelled."
+      "cancelled": "This hearing was cancelled.",
+      "held": "Record the hearing minutes before the decision.",
+      "not_on_panel": "Only commissioners who sat on this hearing can do this.",
+      "adjourned": "This hearing was adjourned. Minutes go on the hearing that took place."
     }
   },
   "partyCase": {
@@ -674,6 +679,7 @@
       "reason": "Give a reason.",
       "already_scheduled": "This case already has a scheduled hearing. Reschedule it instead.",
       "not_scheduled": "Only a scheduled hearing can be changed."
-    }
+    },
+    "reasonHint": "The reason is shown to the complainant and the advocate."
   }
 }

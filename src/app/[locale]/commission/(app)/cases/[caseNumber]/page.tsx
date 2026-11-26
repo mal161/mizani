@@ -58,7 +58,11 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
 
   const live = hearings.find((h) => h.status === "scheduled" || h.status === "held");
   const onPanel = (panel: string[]) => user.role === "admin" || panel.includes(user.id);
-  const canDecide = c.stage === "hearing" || c.stage === "decision";
+  // A first decision needs a held hearing; only commissioners who sat on it (or on the decision being corrected) decide.
+  const held = hearings.find((h) => h.status === "held");
+  const sat = [...(held?.panel ?? []), ...(decision?.panel ?? [])];
+  const canDecide =
+    ((c.stage === "hearing" && Boolean(held)) || c.stage === "decision") && (user.role === "admin" || sat.includes(user.id));
   const defaultPanel = live?.panel ?? decision?.panel ?? [user.id];
 
   return (

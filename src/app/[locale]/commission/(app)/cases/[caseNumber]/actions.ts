@@ -13,6 +13,9 @@ export type CommissionState = { ok?: boolean; error?: string; at?: number; value
 function errorKey(e: unknown): string {
   if (e instanceof ForbiddenError) return "forbidden";
   const m = e instanceof Error ? e.message : "";
+  if (m.includes("must be held")) return "held";
+  if (m.includes("on the panel") || m.includes("on the hearing panel")) return "not_on_panel";
+  if (m.includes("adjourned")) return "adjourned";
   for (const k of ["amount", "reasons", "panel", "stage", "minutes", "cancelled"]) if (m.includes(k)) return k;
   console.error("commission action failed", e);
   return "invalid";

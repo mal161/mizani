@@ -211,10 +211,18 @@ export async function recordHearingMinutesAs(actor: StaffUser, hearingId: string
   const h = await loadScheduled(hearingId);
   if (actor.role === "commissioner" && !h.panel.includes(actor.id)) throw new Error("only a commissioner on the panel can record minutes");
   if (h.status === "cancelled") throw new Error("the hearing was cancelled");
+  if (h.status === "adjourned") throw new Error("the hearing was adjourned");
   const text = minutes.trim();
   if (text.length < 10 || text.length > 50000) throw new Error("minutes must be 10-50000 characters");
-  const { error } = await createAdminClient().from("hearings").update({ minutes: text, status: "held" }).eq("id", hearingId);
+  // Guarded on status so a cancel or adjournment at the same moment is not overwritten.
+  const { data: saved, error } = await createAdminClient()
+    .from("hearings")
+    .update({ minutes: text, status: "held" })
+    .eq("id", hearingId)
+    .in("status", ["scheduled", "held"])
+    .select("id");
   if (error) throw new Error(`record minutes: ${error.message}`);
+  if (!saved?.length) throw new Error("the hearing was cancelled or adjourned meanwhile");
   const ctx = await caseContext(h.case_id);
   await event(h.case_id, actor, "hearing_held", ctx.notified, {});
   await logAudit({ actorId: actorId(actor), channel: "web", action: "record_minutes", entity: "cases", entityId: h.case_id, details: { hearing_id: hearingId } });

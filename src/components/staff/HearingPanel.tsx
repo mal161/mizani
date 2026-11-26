@@ -166,6 +166,7 @@ export function HearingPanel(props: {
             {t("reason")}
             <input name="reason" required minLength={3} defaultValue={typeof end.values?.reason === "string" ? end.values.reason : ""} className={field} />
           </label>
+          <p className="text-xs text-slate-500">{t("reasonHint")}</p>
           <Err state={end} />
           <div className="flex gap-2">
             <button type="submit" name="kind" value="adjourn" disabled={endPending} className={btn}>
