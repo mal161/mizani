@@ -484,5 +484,36 @@
         "server": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena."
       }
     }
+  },
+  "advocatePanel": {
+    "panel": "Wakili",
+    "notLinked": "Hajalinganishwa na orodha. Mtafute wakili uunganishe kesi hii kabla ya kumwarifu.",
+    "link": "Unganisha wakili",
+    "served": "Ilikabidhiwa {date} kwa {method}",
+    "due": "Jibu kabla ya {date}",
+    "sharing": "Nyaraka alizoshirikishwa wakili",
+    "shareLabel": "Mshirikishe wakili {name}",
+    "method": "Ilani ilikabidhiwa vipi?",
+    "servedOn": "Tarehe ya kukabidhi",
+    "notify": "Mwarifu wakili na pakua ilani",
+    "renotify": "Arifu tena (nambari mpya) na pakua ilani",
+    "notifyHint": "Inapakua barua ya ilani yenye nambari ya uanzishaji. Nambari haihifadhiwi na haiwezi kuonyeshwa tena.",
+    "responses": "Majibu ya wakili",
+    "late": "limechelewa",
+    "methods": {
+      "hand": "mkononi",
+      "courier": "msafirishaji",
+      "post": "posta",
+      "email": "barua pepe",
+      "sms": "SMS"
+    },
+    "errors": {
+      "pick_from_roll": "Mchague wakili kutoka kwenye matokeo ya utafutaji.",
+      "forbidden": "Huna ruhusa ya kufanya hivyo.",
+      "invalid": "Haikufanikiwa. Jaribu tena.",
+      "stale": "Kesi imebadilika. Pakia upya ukurasa.",
+      "not_allowed": "Hairuhusiwi.",
+      "reason_required": "Sababu inahitajika."
+    }
   }
 }

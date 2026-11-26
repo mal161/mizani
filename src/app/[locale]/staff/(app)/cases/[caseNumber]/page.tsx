@@ -16,6 +16,8 @@ import { getAiProvider } from "@/lib/ai";
 import { caseFlags } from "@/lib/cases/flags";
 import { AiPanel, type AiTriageView, type AiSummaryView } from "@/components/staff/AiPanel";
 import { FlagsPanel } from "@/components/staff/FlagsPanel";
+import { AdvocatePanel } from "@/components/staff/AdvocatePanel";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export default async function StaffCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
   const { locale, caseNumber: slug } = await params;
@@ -37,6 +39,15 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
   // Staff-only extras (page already passed requireStaff): AI output and database flags.
   const [triageRow, summaryRow, flags] = await Promise.all([latestAi(c.id, "triage"), latestAi(c.id, "case_summary"), caseFlags(c.id)]);
   const aiOn = cfg.aiEnabled && getAiProvider() !== null;
+  // Advocate notification state (server-side; this page already passed requireStaff).
+  const admin = createAdminClient();
+  const [{ data: advCase }, { data: advDeadline }, { data: advResponses }, { data: shareDocs }] = await Promise.all([
+    admin.from("cases").select("advocate_served_on,advocate_service_method,advocate_notified_at,advocates(full_name,admission_no,firm)").eq("id", c.id).single(),
+    admin.from("case_deadlines").select("due_at").eq("case_id", c.id).eq("kind", "advocate_response").order("created_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("advocate_responses").select("id,text,late,created_at").eq("case_id", c.id).order("created_at"),
+    admin.from("documents").select("id,file_name,shared_with_advocate").eq("case_id", c.id).eq("visibility", "parties").order("created_at"),
+  ]);
+  const roll = advCase?.advocates as unknown as { full_name: string; admission_no: string; firm: string | null } | null;
 
   const t = await getTranslations("staffCase");
   const tStages = await getTranslations("stages");
@@ -133,6 +144,20 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
           summary={summaryRow ? ({ ...(summaryRow.output ?? {}), status: summaryRow.status, created_at: summaryRow.created_at } as AiSummaryView) : null}
         />
         <FlagsPanel flags={flags} />
+        <AdvocatePanel
+          caseId={c.id}
+          path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}
+          canWrite={user.role !== "commissioner"}
+          stage={c.stage}
+          linked={roll ? { name: roll.full_name, admissionNo: roll.admission_no, firm: roll.firm } : null}
+          served={
+            advCase?.advocate_notified_at && advCase.advocate_served_on
+              ? { on: advCase.advocate_served_on, method: advCase.advocate_service_method ?? "hand", due: advDeadline?.due_at ?? null }
+              : null
+          }
+          documents={(shareDocs ?? []).map((d) => ({ id: d.id, fileName: d.file_name, shared: d.shared_with_advocate }))}
+          responses={(advResponses ?? []).map((r) => ({ id: r.id, text: r.text, late: r.late, createdAt: r.created_at }))}
+        />
         <CaseActions
           caseId={c.id}
           path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}

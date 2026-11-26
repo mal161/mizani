@@ -104,3 +104,20 @@ export async function summarizeAction(_p: ActionState, formData: FormData): Prom
     if (r.status === "rate_limited") return { error: "ai_rate_limited" };
   });
 }
+
+export async function linkAdvocateAction(_p: ActionState, formData: FormData): Promise<ActionState> {
+  return run(formData, async (caseId) => {
+    const actor = await assertStaff(WRITERS);
+    const advocateId = String(formData.get("advocateId") ?? "");
+    if (!advocateId) return { error: "pick_from_roll" };
+    const { linkAdvocateAs } = await import("@/lib/cases/actions");
+    await linkAdvocateAs(actor, caseId, advocateId);
+  });
+}
+
+/** Immediate share/unshare of one document (checkbox). */
+export async function setShareAction(formData: FormData): Promise<void> {
+  const actor = await assertStaff(WRITERS);
+  const { setDocumentSharedAs } = await import("@/lib/cases/actions");
+  await setDocumentSharedAs(actor, String(formData.get("documentId")), formData.get("shared") === "true");
+}

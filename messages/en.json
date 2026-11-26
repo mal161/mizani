@@ -484,5 +484,36 @@
         "server": "Your response could not be sent. Please try again."
       }
     }
+  },
+  "advocatePanel": {
+    "panel": "Advocate",
+    "notLinked": "Not matched to the roll. Find the advocate to link this case before notifying.",
+    "link": "Link advocate",
+    "served": "Served {date} by {method}",
+    "due": "Response due {date}",
+    "sharing": "Documents shared with the advocate",
+    "shareLabel": "Share {name} with the advocate",
+    "method": "How was the notice served?",
+    "servedOn": "Date served",
+    "notify": "Notify advocate and download notice",
+    "renotify": "Notify again (new code) and download notice",
+    "notifyHint": "Downloads the notice letter with the activation code. The code is not stored and cannot be shown again.",
+    "responses": "Advocate's responses",
+    "late": "late",
+    "methods": {
+      "hand": "hand delivery",
+      "courier": "courier",
+      "post": "post",
+      "email": "email",
+      "sms": "SMS"
+    },
+    "errors": {
+      "pick_from_roll": "Choose the advocate from the roll search results.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid": "That did not work. Try again.",
+      "stale": "The case changed. Reload the page.",
+      "not_allowed": "Not allowed.",
+      "reason_required": "A reason is required."
+    }
   }
 }

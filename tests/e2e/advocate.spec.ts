@@ -115,3 +115,45 @@ test("advocate activates from the notice letter, sees only what they should, and
   const r = await ap.goto(`/sw/advocate/cases/${otherCase.data!.case_number.replaceAll("/", "-")}`);
   expect(r!.status()).toBe(404);
 });
+
+test("officer links the roll advocate, shares a document, notifies from the case page and sees the response", async ({ browser }) => {
+  test.setTimeout(400_000);
+  const adv = await rollAdvocate();
+  const { caseNumber, slug } = await fileCase(browser, randomPhone());
+  const { data: c } = await db().from("cases").select("id").eq("case_number", caseNumber).single();
+
+  const sp = await (await browser.newContext({ acceptDownloads: true })).newPage();
+  await loginAsStaff(sp, "staff");
+  await sp.goto(`/en/staff/cases/${slug}`);
+  const panel = sp.getByRole("region", { name: "Advocate" });
+  await expect(panel.getByText("Not matched to the roll")).toBeVisible();
+
+  // Link via roll search.
+  await panel.getByLabel("Advocate's name").fill(adv.full_name.split(" ").pop()!);
+  await panel.getByRole("option", { name: new RegExp(adv.admission_no.replace(/[./]/g, ".")) }).click();
+  await panel.getByRole("button", { name: "Link advocate" }).click();
+  await expect(panel.getByText(adv.full_name)).toBeVisible();
+
+  // Move to screening, then share one document and notify.
+  await sp.getByLabel("Move to").selectOption("screening");
+  await sp.getByRole("button", { name: "Change stage" }).click();
+  await expect(sp.getByTestId("stage")).toHaveText("Screening");
+  await panel.getByLabel("Share sale-agreement.pdf with the advocate").check();
+  await panel.getByLabel("How was the notice served?").selectOption("courier");
+  const [download] = await Promise.all([
+    sp.waitForEvent("download"),
+    panel.getByRole("button", { name: "Notify advocate and download notice" }).click(),
+  ]);
+  expect(download.suggestedFilename()).toMatch(/^notice-ACC-\d{4}-\d{6}\.pdf$/);
+  await expect(panel.getByTestId("advocate-served")).toContainText("Response due");
+  const { data: shared } = await db().from("documents").select("file_name,shared_with_advocate").eq("case_id", c!.id);
+  expect(shared!.find((d) => d.file_name === "sale-agreement.pdf")!.shared_with_advocate).toBe(true);
+  expect(shared!.find((d) => d.file_name === "medical-report.pdf")!.shared_with_advocate).toBe(false);
+
+  // A response arrives (recorded directly; the advocate flow is covered above) and shows in the panel.
+  const { data: prof } = await db().auth.admin.createUser({ email: `adv-${Date.now()}@test.mizani.local`, email_confirm: true });
+  await db().from("profiles").insert({ id: prof.user!.id, role: "advocate", full_name: adv.full_name });
+  await db().from("advocate_responses").insert({ case_id: c!.id, advocate_profile_id: prof.user!.id, text: "Response text visible to staff only.", late: false });
+  await sp.reload();
+  await expect(panel.getByText("Response text visible to staff only.")).toBeVisible();
+});
