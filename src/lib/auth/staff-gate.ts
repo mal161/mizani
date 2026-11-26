@@ -23,3 +23,8 @@ export function staffGate(
   if (!roles.includes(user.role)) return "forbidden";
   return "ok";
 }
+
+/** Where a staff user lands after MFA: commissioners have their own portal. */
+export function staffHome(role: string): "/commission" | "/staff" {
+  return role === "commissioner" ? "/commission" : "/staff";
+}

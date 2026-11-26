@@ -14,7 +14,7 @@ Mizani tracks each complaint against an advocate from intake to closure: one cas
 | Plan 2 — staff workspace (MFA sign-in, queues, walk-in intake, routing, deadlines, admin, audit viewer) | done |
 | Plan 3 — AI triage (swappable provider, PII redaction, on/off switch) | done |
 | Plan 4 — advocate portal (formal notice + letter, activation, response) | done |
-| Plan 5 — commissioner portal (hearings, decisions, tribunal referrals) | planned |
+| Plan 5 — commissioner portal (hearings, decisions, tribunal referrals) | done |
 | Plan 6 — analytics + ACC handover pack | planned |
 
 Design: [`docs/superpowers/specs/2026-11-25-mizani-design.md`](docs/superpowers/specs/2026-11-25-mizani-design.md)
@@ -72,6 +72,12 @@ Database tests create test users and cases in the configured project. Use a deve
 | `/[locale]/advocate/activate` | advocates | claim an account with the admission number + activation code from the notice |
 | `/[locale]/advocate` | advocates | complaints served on them, allegations, shared evidence, response form |
 | `POST /api/cases/[id]/notice` | officers | record service, issue activation code, return the notice letter PDF |
+| `/[locale]/commission` | commissioners, admins | my upcoming hearings, cases awaiting decision, recent decisions |
+| `/[locale]/commission/hearings` | commissioners, admins | week-by-week agenda of every panel (own panels highlighted) |
+| `/[locale]/commission/cases/[case]` | commissioners, admins | case record, bundle download, hearing minutes, decision form |
+| `GET /api/cases/[id]/bundle` | staff roles | audited case bundle PDF (cover, contents, complaint, responses, history, hearings, exhibits) |
+| `GET /api/decisions/[id]/letter` | staff roles, the complainant, the notified advocate | audited decision letter PDF (English + Kiswahili) |
+| `GET /api/referrals/[id]/pack` | staff roles | audited tribunal referral pack (decision letter + case bundle) |
 
 ## Advocate portal
 
@@ -81,6 +87,16 @@ Database tests create test users and cases in the configured project. Use a deve
 - **What advocates see:** the allegations, the complainant's name, the documents the officer shared, their own responses and uploads, and the parts of the timeline marked for them. Never the complainant's phone or other contact details, internal notes, AI output, flags or unshared evidence.
 - **What complainants see:** that the advocate responded, never the response text or the advocate's documents.
 - **Demo:** `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --advocates-only` adds two demo advocates (phones `+254700009901`, `+254700009902`) with six notified cases.
+
+## Commissioner portal
+
+- **Roles:** officers schedule, reschedule, adjourn and cancel hearings from the staff case page and track tribunal referrals. Commissioners sign in like staff (password + authenticator) and land on `/commission`; they record minutes and decisions for hearings on their panel. Admins can do both. Commissioners can still read the staff workspace but cannot change cases there.
+- **Hearings:** date and time (Nairobi), length, in person (venue) or online (https link), and a panel of 1–5 commissioners. Mizani warns when a panel member is already booked at an overlapping time; the officer can schedule anyway. Scheduling moves the case to the hearing stage, alerts the panel in Mizani and texts both parties (the online link is shown only in their portals, not in the SMS).
+- **Minutes** are internal: they appear in the case bundle and the commission portal, never on the complainant's or advocate's pages.
+- **Decisions:** outcome (dismissed, withdrawn, settled, advocate admonished, refund ordered with an amount in KES, referred to the Disciplinary Tribunal), reasons (at least 50 characters), optional orders, and the panel. Recording a decision moves the case to the decision stage, publishes the outcome, reasons, orders and amount to both parties and texts them. A correction replaces the published decision and keeps the earlier one on record (`superseded_by`); both parties are told it was corrected.
+- **Documents:** the case bundle (confidential, includes internal notes and minutes, never AI output), the decision letter, and for tribunal referrals a referral pack (letter + bundle). Every download is audited.
+- **Referrals:** a tribunal decision opens a referral (prepared → lodged → acknowledged → concluded) with the tribunal's reference number, kept by officers.
+- **Demo:** `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --commission-only > private-logins.txt` adds two demo commissioners (authenticator apps pre-enrolled), four upcoming hearings (one online) and three decided cases (a KES 65,000 refund, a tribunal referral and an admonishment). Keep the output file private: it holds passwords and TOTP secrets.
 
 ## AI assistance
 

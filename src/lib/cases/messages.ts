@@ -10,6 +10,17 @@ export const smsText = {
     l === "sw"
       ? `ACC: Kesi ${caseNumber} sasa iko hatua: ${stageLabel}.`
       : `ACC: Case ${caseNumber} is now at stage: ${stageLabel}.`,
+  decisionIssued: (l: Locale, caseNumber: string, outcome: string) =>
+    l === "sw"
+      ? `ACC: Uamuzi umetolewa kwa kesi ${caseNumber}: ${outcome}. Soma sababu na pakua barua kwenye Mizani.`
+      : `ACC: A decision was issued on case ${caseNumber}: ${outcome}. Read the reasons and download the letter on Mizani.`,
+  /** Hearing notice: date/time in Nairobi, venue or "online" (the link is only shown in the portals). */
+  hearingScheduled: (l: Locale, caseNumber: string, when: string, place: string | null) =>
+    l === "sw"
+      ? `ACC: Usikilizaji wa kesi ${caseNumber} ni ${when}, ${place ?? "mtandaoni (kiungo kiko Mizani)"}.`
+      : `ACC: Hearing for case ${caseNumber} on ${when}, ${place ?? "online (link on Mizani)"}.`,
+  hearingChanged: (l: Locale, caseNumber: string, what: string) =>
+    l === "sw" ? `ACC: Usikilizaji wa kesi ${caseNumber}: ${what}. Angalia Mizani.` : `ACC: Hearing for case ${caseNumber}: ${what}. See Mizani.`,
   /** To the advocate (roll phone). No complainant details. */
   advocateNotified: (l: Locale, caseNumber: string, due: string) =>
     l === "sw"

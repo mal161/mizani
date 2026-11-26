@@ -2,7 +2,7 @@
 import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/session";
-import { isStaffRole } from "@/lib/auth/staff-gate";
+import { isStaffRole, staffHome } from "@/lib/auth/staff-gate";
 import { redirect, type Locale } from "@/i18n/routing";
 import { MfaForm } from "./MfaForm";
 
@@ -13,7 +13,7 @@ export default async function MfaPage({ params }: { params: Promise<{ locale: Lo
 
   const supabase = await createServerClient();
   const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (aal?.currentLevel === "aal2") return redirect({ href: "/staff", locale });
+  if (aal?.currentLevel === "aal2") return redirect({ href: staffHome(user.role), locale });
 
   const t = await getTranslations("mfa");
   const { data: factors } = await supabase.auth.mfa.listFactors();

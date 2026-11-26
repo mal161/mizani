@@ -42,6 +42,13 @@ Do **not** set `OTP_TEST_CODE` on a public deployment.
 
 Mizani does not send email. Officers download the notice letter PDF from the case page and serve it by hand, courier or post (or attach it to an email from the ACC's own mail system), then record the method and date of service, which starts the advocate's response deadline. The advocate's roll phone also receives an SMS. Each new notice for a case replaces the earlier activation code. Keep the advocates roll (`advocates` table) current: the roll phone receives the SMS and the admission number is part of activation.
 
+### Hearings, decisions and referral packs
+
+- **Hearing notices** go out by SMS to both parties (complainant in their language, advocate in English) and as in-app alerts to the panel. Mizani does not send calendar invitations; for online hearings, officers paste the link from the ACC's own video service, and parties see it in their portals.
+- **Decision letters** (English + Kiswahili) are generated on demand from the stored decision and can be downloaded by staff, the complainant and the notified advocate. Print and serve them through the ACC's usual channels if a signed copy is needed.
+- **Referral packs** (decision letter + full case bundle) are for lodging with the Disciplinary Tribunal. Bundles contain internal notes and hearing minutes: share them only with the Tribunal.
+- **Retention:** hearings, minutes, decisions (including superseded ones) and referrals are part of the case record and follow the same retention period as the case (see *Data protection*). Generated PDFs are not stored; each download is rebuilt from the record and logged in the audit log.
+
 ### 3. Africa's Talking (sandbox)
 
 1. Create an account at africastalking.com and open the Sandbox app; copy the API key.

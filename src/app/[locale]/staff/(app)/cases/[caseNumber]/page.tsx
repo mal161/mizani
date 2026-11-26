@@ -18,6 +18,10 @@ import { AiPanel, type AiTriageView, type AiSummaryView } from "@/components/sta
 import { FlagsPanel } from "@/components/staff/FlagsPanel";
 import { AdvocatePanel } from "@/components/staff/AdvocatePanel";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { HearingPanel } from "@/components/staff/HearingPanel";
+import { caseHearings, nairobiWhen } from "@/lib/commission/hearings";
+import { currentDecision } from "@/lib/commission/decisions";
+import { panelMembers } from "@/lib/commission/portal";
 
 export default async function StaffCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
   const { locale, caseNumber: slug } = await params;
@@ -48,8 +52,14 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
     admin.from("documents").select("id,file_name,shared_with_advocate").eq("case_id", c.id).eq("visibility", "parties").order("created_at"),
   ]);
   const roll = advCase?.advocates as unknown as { full_name: string; admission_no: string; firm: string | null } | null;
+  const [hearings, members, decision] = await Promise.all([caseHearings(c.id), panelMembers(), currentDecision(c.id)]);
+  const { data: referral } = decision
+    ? await admin.from("referrals").select("id,status,tribunal_reference").eq("decision_id", decision.id).maybeSingle()
+    : { data: null };
+  const scheduled = hearings.find((h) => h.status === "scheduled") ?? null;
 
   const t = await getTranslations("staffCase");
+  const tOutcome = await getTranslations("commission.outcomes");
   const tStages = await getTranslations("stages");
   const tCat = await getTranslations("categories");
   const format = await getFormatter();
@@ -144,6 +154,37 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
           summary={summaryRow ? ({ ...(summaryRow.output ?? {}), status: summaryRow.status, created_at: summaryRow.created_at } as AiSummaryView) : null}
         />
         <FlagsPanel flags={flags} />
+        <HearingPanel
+          caseId={c.id}
+          path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}
+          canWrite={user.role !== "commissioner"}
+          canSchedule={["investigation", "conciliation", "hearing"].includes(c.stage)}
+          scheduled={
+            scheduled
+              ? {
+                  id: scheduled.id,
+                  whenLocal: nairobiWhen(scheduled.starts_at).replace(" ", "T"),
+                  whenLabel: format.dateTime(new Date(scheduled.starts_at), { dateStyle: "full", timeStyle: "short", timeZone: "Africa/Nairobi" }),
+                  duration: scheduled.duration_minutes,
+                  mode: scheduled.mode,
+                  venue: scheduled.venue,
+                  link: scheduled.online_link,
+                  panel: scheduled.panel,
+                }
+              : null
+          }
+          history={hearings
+            .filter((h) => h.id !== scheduled?.id)
+            .map((h) => ({ id: h.id, status: h.status, whenLabel: format.dateTime(new Date(h.starts_at), { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" }) }))}
+          members={members}
+          bundleHref={`/api/cases/${c.id}/bundle`}
+          decision={decision ? { outcomeLabel: tOutcome(decision.outcome), letterHref: `/api/decisions/${decision.id}/letter` } : null}
+          referral={
+            referral
+              ? { id: referral.id, status: referral.status, reference: referral.tribunal_reference, packHref: `/api/referrals/${referral.id}/pack` }
+              : null
+          }
+        />
         <AdvocatePanel
           caseId={c.id}
           path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}

@@ -15,7 +15,8 @@ export async function loginAsStaff(
   await page.locator('input[name="password"]').fill(STAFF_TEST_PASSWORD);
   await page.locator('form button[type="submit"]').click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/staff/mfa$`));
-  const target = new RegExp(`/${locale}/staff$`);
+  // Commissioners land on their own portal; officers and admins on the staff workspace.
+  const target = new RegExp(`/${locale}/${role === "commissioner" ? "commission" : "staff"}$`);
   await page.locator('input[name="code"]').fill(authenticator.generate(user.totpSecret));
   await page.locator('form button[type="submit"]').click();
   try {
@@ -32,6 +33,17 @@ export async function loginAsStaff(
 
 export function randomPhone() {
   return `07${Math.floor(10_000_000 + Math.random() * 89_999_999)}`;
+}
+
+/** Phone sign-in (test OTP 123456) for an existing complainant or advocate; waits for the landing page. */
+export async function loginByPhone(page: Page, phone: string, landing: RegExp, locale: "en" | "sw" = "en") {
+  await page.goto(`/${locale}/login`);
+  await page.locator('input[name="phone"]').fill(phone);
+  await page.locator('button[name="intent"]').click();
+  // The first sign-in of a run compiles the login action in dev; allow for it.
+  await page.locator('input[name="code"]').fill("123456", { timeout: 90_000 });
+  await page.locator('button[name="intent"]').click();
+  await expect(page).toHaveURL(landing, { timeout: 90_000 });
 }
 
 /** Signs in as a fresh complainant (test OTP 123456) and returns the phone used. */
