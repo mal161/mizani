@@ -15,7 +15,7 @@ Mizani tracks each complaint against an advocate from intake to closure: one cas
 | Plan 3 — AI triage (swappable provider, PII redaction, on/off switch) | done |
 | Plan 4 — advocate portal (formal notice + letter, activation, response) | done |
 | Plan 5 — commissioner portal (hearings, decisions, tribunal referrals) | done |
-| Plan 6 — analytics + ACC handover pack | planned |
+| Plan 6 — analytics + ACC handover pack | done |
 
 Design: [`docs/superpowers/specs/2026-11-25-mizani-design.md`](docs/superpowers/specs/2026-11-25-mizani-design.md)
 
@@ -78,6 +78,9 @@ Database tests create test users and cases in the configured project. Use a deve
 | `GET /api/cases/[id]/bundle` | staff roles | audited case bundle PDF (cover, contents, complaint, responses, history, hearings, exhibits) |
 | `GET /api/decisions/[id]/letter` | staff roles, the complainant, the notified advocate | audited decision letter PDF (English + Kiswahili) |
 | `GET /api/referrals/[id]/pack` | staff roles | audited tribunal referral pack (decision letter + case bundle) |
+| `/[locale]/commission/analytics` | commissioners, admins | resolution times, where cases wait, trends, officer workload, repeat advocates, outcomes; period + office filters |
+| `GET /api/analytics/export?section=…` | commissioners, admins | audited CSV of one analytics section (aggregates only) |
+| `GET /api/health` | monitoring | database reachable + provider names (no secrets, no data) |
 
 ## Advocate portal
 
@@ -97,6 +100,14 @@ Database tests create test users and cases in the configured project. Use a deve
 - **Documents:** the case bundle (confidential, includes internal notes and minutes, never AI output), the decision letter, and for tribunal referrals a referral pack (letter + bundle). Every download is audited.
 - **Referrals:** a tribunal decision opens a referral (prepared → lodged → acknowledged → concluded) with the tribunal's reference number, kept by officers.
 - **Demo:** `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --commission-only > private-logins.txt` adds two demo commissioners (authenticator apps pre-enrolled), four upcoming hearings (one online) and three decided cases (a KES 65,000 refund, a tribunal referral and an admonishment). Keep the output file private: it holds passwords and TOTP secrets.
+
+## Analytics
+
+`/commission/analytics` (commissioners and admins): complaints filed, closed and open; median days to resolve; deadlines met on time; where cases wait (median and 90th-percentile days per stage, open and overdue now); monthly complaint trends by category; officer workload; advocates with repeated complaints (and how many were upheld or referred); decision outcomes and refunds ordered. Filter by period (30/90/365 days or custom dates, Africa/Nairobi) and office; each section downloads as CSV. Figures are computed in the database (`analytics_*` functions) and only aggregates leave it: no complainant details. Views and exports are audited. Demo history: `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --analytics-only > private-logins.txt` adds 160 synthetic cases over the past 12 months.
+
+## Handover to the ACC
+
+The handover pack is in [`docs/handover/`](docs/handover/README.md): [self-hosting in Kenya](docs/handover/self-hosting.md) (Docker image, migrations, env vars, cron, USSD), [operations runbook](docs/handover/operations.md), [data protection pack](docs/handover/data-protection.md) (data inventory, DPIA checklist, ODPC, AI provider decision), [security model](docs/handover/security.md) and [user guides](docs/handover/user-guide.md) (complainant and advocate guides in English and Kiswahili). Build the production image with `docker build --build-arg NEXT_PUBLIC_SUPABASE_URL=… --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=… -t mizani .`.
 
 ## AI assistance
 

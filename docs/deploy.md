@@ -58,10 +58,10 @@ Mizani does not send email. Officers download the notice letter PDF from the cas
 
 ## Handover to the ACC (production)
 
-Mizani is built so the ACC can run it on its own infrastructure in Kenya.
+Mizani is built so the ACC can run it on its own infrastructure in Kenya. The full handover pack is in [handover/](handover/README.md): [self-hosting](handover/self-hosting.md) (Docker image, migrations, environment variables, cron, USSD), [operations](handover/operations.md), [data protection](handover/data-protection.md), [security](handover/security.md) and [user guides](handover/user-guide.md). In short:
 
 - **Database/auth/storage:** Supabase is open source; self-host it (Docker) on ACC servers or a Kenyan data centre, then apply the same migrations.
-- **App:** `npm run build && npm start` on any Node 24 host, or a container behind the ACC's reverse proxy.
+- **App:** the repository's `Dockerfile` builds a self-contained image (Next.js standalone output) to run behind the ACC's reverse proxy.
 - **SMS/USSD:** an ACC-owned Africa's Talking account with a dedicated short code.
 
 ### Data protection (before any real data)
