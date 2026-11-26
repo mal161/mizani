@@ -15,7 +15,8 @@ export async function loginAsStaff(
   await page.locator('input[name="password"]').fill(STAFF_TEST_PASSWORD);
   await page.locator('form button[type="submit"]').click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/staff/mfa$`));
-  const target = new RegExp(`/${locale}/staff$`);
+  // Commissioners land on their own portal; officers and admins on the staff workspace.
+  const target = new RegExp(`/${locale}/${role === "commissioner" ? "commission" : "staff"}$`);
   await page.locator('input[name="code"]').fill(authenticator.generate(user.totpSecret));
   await page.locator('form button[type="submit"]').click();
   try {

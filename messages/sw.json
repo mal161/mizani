@@ -174,7 +174,8 @@
       "staff": "Afisa",
       "admin": "Msimamizi",
       "commissioner": "Kamishna"
-    }
+    },
+    "commission": "Tume"
   },
   "staffCases": {
     "empty": "Hakuna kesi hapa.",
@@ -516,6 +517,100 @@
       "stale": "Kesi imebadilika. Pakia upya ukurasa.",
       "not_allowed": "Hairuhusiwi.",
       "reason_required": "Sababu inahitajika."
+    }
+  },
+  "commission": {
+    "nav": {
+      "brand": "Tume",
+      "dashboard": "Dashibodi",
+      "hearings": "Usikilizaji",
+      "workspace": "Eneo la kesi",
+      "signOut": "Toka"
+    },
+    "home": {
+      "title": "Tume",
+      "upcoming": "Usikilizaji wangu ujao",
+      "noUpcoming": "Hakuna usikilizaji katika siku 30 zijazo.",
+      "awaiting": "Zinasubiri uamuzi",
+      "noAwaiting": "Hakuna kesi zilizosikilizwa zinazosubiri uamuzi.",
+      "decided": "Zilizoamuliwa karibuni",
+      "noDecided": "Bado hakuna maamuzi."
+    },
+    "agenda": {
+      "title": "Usikilizaji",
+      "previous": "Wiki iliyopita",
+      "next": "Wiki ijayo",
+      "thisWeek": "Wiki hii",
+      "none": "Hakuna usikilizaji.",
+      "yourPanel": "Jopo lako"
+    },
+    "hearing": {
+      "online": "Mtandaoni",
+      "status": {
+        "scheduled": "Imepangwa",
+        "held": "Imefanyika",
+        "adjourned": "Imeahirishwa",
+        "cancelled": "Imefutwa"
+      }
+    },
+    "back": "Rudi kwenye dashibodi ya Tume",
+    "downloadBundle": "Pakua jalada la kesi",
+    "downloadLetter": "Pakua barua ya uamuzi",
+    "downloadPack": "Pakua kifurushi cha rufaa",
+    "advocate": "Wakili",
+    "responses": "Jibu la wakili",
+    "noResponses": "Wakili hajajibu.",
+    "late": "kwa kuchelewa",
+    "hearings": "Usikilizaji",
+    "noHearings": "Hakuna usikilizaji uliopangwa.",
+    "minutes": {
+      "label": "Kumbukumbu za usikilizaji",
+      "hint": "Kumbukumbu ni za ndani ya Tume na zimo kwenye jalada la kesi. Kuhifadhi kunaonyesha usikilizaji umefanyika.",
+      "save": "Hifadhi kumbukumbu",
+      "internal": "Kumbukumbu (za ndani)"
+    },
+    "decision": {
+      "title": "Rekodi uamuzi",
+      "correctTitle": "Sahihisha uamuzi",
+      "correctHint": "Marekebisho yanachukua nafasi ya uamuzi uliochapishwa. Pande zote zinaarifiwa na uamuzi wa awali unahifadhiwa.",
+      "issued": "Uamuzi",
+      "outcome": "Matokeo",
+      "choose": "Chagua matokeo",
+      "amount": "Kiasi (KES)",
+      "reasons": "Sababu",
+      "reasonsHint": "Angalau herufi 50. Sababu zinachapishwa kwa pande zote mbili.",
+      "orders": "Amri",
+      "panel": "Jopo",
+      "publishedNote": "Kurekodi uamuzi kunahamisha kesi kwenye hatua ya uamuzi na kuarifu pande zote kwa SMS.",
+      "record": "Rekodi uamuzi",
+      "correct": "Hifadhi marekebisho"
+    },
+    "outcomes": {
+      "dismissed": "Lalamiko limetupiliwa mbali",
+      "withdrawn": "Lalamiko limeondolewa",
+      "settled": "Limetatuliwa kwa makubaliano",
+      "admonished": "Wakili ameonywa",
+      "refund_ordered": "Amri ya kurejesha pesa",
+      "referred_to_tribunal": "Limepelekwa kwa Mahakama ya Nidhamu"
+    },
+    "referral": {
+      "status": "Rufaa kwa Mahakama",
+      "statuses": {
+        "prepared": "Imeandaliwa",
+        "lodged": "Imewasilishwa",
+        "acknowledged": "Imepokelewa",
+        "concluded": "Imekamilika"
+      }
+    },
+    "errors": {
+      "forbidden": "Huruhusiwi kufanya hivi.",
+      "invalid": "Haikuweza kuhifadhiwa. Angalia maelezo na ujaribu tena.",
+      "amount": "Amri ya kurejesha pesa inahitaji kiasi kwa KES.",
+      "reasons": "Sababu ziwe angalau herufi 50.",
+      "panel": "Chagua makamishna 1 hadi 5, ukiwemo wewe.",
+      "stage": "Uamuzi unarekodiwa tu kesi ikiwa kwenye hatua ya usikilizaji.",
+      "minutes": "Kumbukumbu ziwe angalau herufi 10.",
+      "cancelled": "Usikilizaji huu ulifutwa."
     }
   }
 }

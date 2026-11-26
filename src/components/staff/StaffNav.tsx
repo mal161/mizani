@@ -15,6 +15,7 @@ export async function StaffNav({ user, locale, unread }: { user: StaffUser; loca
         <Link href="/staff">{t("workspace")}</Link>
         {user.role !== "commissioner" && <Link href="/staff/intake">{t("intake")}</Link>}
         {user.role === "admin" && <Link href="/staff/admin">{t("admin")}</Link>}
+        {(user.role === "admin" || user.role === "commissioner") && <Link href="/commission">{t("commission")}</Link>}
         <Link href="/staff/notifications" aria-label={t("notificationsCount", { count: unread })} className="relative">
           {t("notifications")}
           {unread > 0 && (

@@ -174,7 +174,8 @@
       "staff": "Officer",
       "admin": "Administrator",
       "commissioner": "Commissioner"
-    }
+    },
+    "commission": "Commission"
   },
   "staffCases": {
     "empty": "No cases here.",
@@ -516,6 +517,100 @@
       "stale": "The case changed. Reload the page.",
       "not_allowed": "Not allowed.",
       "reason_required": "A reason is required."
+    }
+  },
+  "commission": {
+    "nav": {
+      "brand": "Commission",
+      "dashboard": "Dashboard",
+      "hearings": "Hearings",
+      "workspace": "Case workspace",
+      "signOut": "Sign out"
+    },
+    "home": {
+      "title": "Commission",
+      "upcoming": "My upcoming hearings",
+      "noUpcoming": "No hearings in the next 30 days.",
+      "awaiting": "Awaiting decision",
+      "noAwaiting": "No heard cases are waiting for a decision.",
+      "decided": "Recently decided",
+      "noDecided": "No decisions yet."
+    },
+    "agenda": {
+      "title": "Hearings",
+      "previous": "Previous week",
+      "next": "Next week",
+      "thisWeek": "This week",
+      "none": "No hearings.",
+      "yourPanel": "Your panel"
+    },
+    "hearing": {
+      "online": "Online",
+      "status": {
+        "scheduled": "Scheduled",
+        "held": "Held",
+        "adjourned": "Adjourned",
+        "cancelled": "Cancelled"
+      }
+    },
+    "back": "Back to the Commission dashboard",
+    "downloadBundle": "Download case bundle",
+    "downloadLetter": "Download decision letter",
+    "downloadPack": "Download referral pack",
+    "advocate": "Advocate",
+    "responses": "Advocate's response",
+    "noResponses": "The advocate has not responded.",
+    "late": "late",
+    "hearings": "Hearings",
+    "noHearings": "No hearing has been scheduled.",
+    "minutes": {
+      "label": "Hearing minutes",
+      "hint": "Minutes are internal to the Commission and are included in the case bundle. Saving marks the hearing as held.",
+      "save": "Save minutes",
+      "internal": "Minutes (internal)"
+    },
+    "decision": {
+      "title": "Record decision",
+      "correctTitle": "Correct the decision",
+      "correctHint": "A correction replaces the published decision. Both parties are told and the earlier decision is kept on record.",
+      "issued": "Decision",
+      "outcome": "Outcome",
+      "choose": "Choose an outcome",
+      "amount": "Amount (KES)",
+      "reasons": "Reasons",
+      "reasonsHint": "At least 50 characters. The reasons are published to both parties.",
+      "orders": "Orders",
+      "panel": "Panel",
+      "publishedNote": "Recording the decision moves the case to the decision stage and notifies both parties by SMS.",
+      "record": "Record decision",
+      "correct": "Save correction"
+    },
+    "outcomes": {
+      "dismissed": "Complaint dismissed",
+      "withdrawn": "Complaint withdrawn",
+      "settled": "Resolved by agreement",
+      "admonished": "Advocate admonished",
+      "refund_ordered": "Refund ordered",
+      "referred_to_tribunal": "Referred to the Disciplinary Tribunal"
+    },
+    "referral": {
+      "status": "Tribunal referral",
+      "statuses": {
+        "prepared": "Prepared",
+        "lodged": "Lodged",
+        "acknowledged": "Acknowledged",
+        "concluded": "Concluded"
+      }
+    },
+    "errors": {
+      "forbidden": "You are not allowed to do this.",
+      "invalid": "That could not be saved. Check the details and try again.",
+      "amount": "A refund order needs an amount in KES.",
+      "reasons": "Reasons must be at least 50 characters.",
+      "panel": "Choose 1 to 5 commissioners, including yourself.",
+      "stage": "A decision can only be recorded once the case is at the hearing stage.",
+      "minutes": "Minutes must be at least 10 characters.",
+      "cancelled": "This hearing was cancelled."
     }
   }
 }

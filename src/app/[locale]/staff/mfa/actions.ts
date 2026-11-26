@@ -4,6 +4,8 @@ import { hasLocale } from "next-intl";
 import { createServerClient } from "@/lib/supabase/server";
 import { logAudit } from "@/lib/audit";
 import { redirect, routing, type Locale } from "@/i18n/routing";
+import { getCurrentUser } from "@/lib/auth/session";
+import { staffHome } from "@/lib/auth/staff-gate";
 
 export type MfaState = { error?: "invalid_code" };
 
@@ -25,5 +27,6 @@ export async function verifyMfaAction(_prev: MfaState, formData: FormData): Prom
   const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code });
   if (error) return { error: "invalid_code" };
   await logAudit({ actorId: userData.user.id, channel: "web", action: "login_mfa", entity: "profiles", entityId: userData.user.id });
-  return redirect({ href: "/staff", locale });
+  const me = await getCurrentUser();
+  return redirect({ href: staffHome(me?.role ?? ""), locale });
 }
