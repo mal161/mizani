@@ -13,6 +13,8 @@ import { openInfoRequest } from "@/lib/cases/respond";
 import { caseSlug } from "@/lib/cases/case-number";
 import { RespondForm } from "./RespondForm";
 import { HearingAndDecision } from "@/components/case/HearingAndDecision";
+import { CaseStamp } from "@/components/case/CaseStamp";
+import { StageTrack } from "@/components/case/StageTrack";
 
 export default async function CaseDetailPage({
   params,
@@ -48,15 +50,28 @@ export default async function CaseDetailPage({
   const tStages = await getTranslations("stages");
   const tr = await getTranslations("respond");
   const request = await openInfoRequest(c.id);
+  const tTrack = await getTranslations("caseTrack");
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <Link href="/my/cases" className="text-sm underline">
         ← {t("back")}
       </Link>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-mono text-2xl font-medium">{c.case_number}</h1>
+        <h1>
+          <CaseStamp number={c.case_number} size="lg" />
+        </h1>
         <StageBadge stage={c.stage} label={isStage(c.stage) ? stageOverrides[c.stage] : undefined} />
       </div>
+
+      <section className="rounded-lg border bg-white p-5">
+        <h2 className="mb-4 text-sm text-slate-600">{tTrack("title")}</h2>
+        <StageTrack
+          current={c.stage}
+          title={tTrack("title")}
+          nowLabel={tTrack("now")}
+          label={(s) => (isStage(s) ? stageOverrides[s] ?? tStages(s) : s)}
+        />
+      </section>
 
       <HearingAndDecision caseId={c.id} />
 

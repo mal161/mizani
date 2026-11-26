@@ -39,7 +39,9 @@ export function StatusForm() {
 
       {state.status === "found" && (
         <section className="rounded-lg border bg-slate-50 p-4" aria-live="polite">
-          <p className="font-mono text-sm">{state.caseNumber}</p>
+          <p>
+            <span className="case-stamp text-sm">{state.caseNumber}</span>
+          </p>
           <p className="text-lg">
             {t("currentStage")}: <strong data-testid="status-stage">{state.label ?? ts(state.stage)}</strong>
           </p>

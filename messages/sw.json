@@ -5,7 +5,15 @@
     "fileComplaint": "Wasilisha lalamiko",
     "trackCase": "Fuatilia kesi",
     "advocatePrompt": "Je, wewe ni wakili uliyepokea ilani ya lalamiko?",
-    "advocateActivate": "Anzisha akaunti yako"
+    "advocateActivate": "Anzisha akaunti yako",
+    "org": "Tume ya Malalamiko dhidi ya Mawakili",
+    "headline": "Lalamika kuhusu wakili na ufuatilie kesi yako hadi uamuzi",
+    "preview": {
+      "label": "Mfano wa kesi",
+      "summary": "Wakili alishikilia hati ya shamba baada ya mauzo",
+      "update": "Wakili amejibu · 12 Nov",
+      "note": "Kila lalamiko hupata nambari ya kesi na PIN. Unaweza kuangalia hali yake mtandaoni, kwa SMS au USSD."
+    }
   },
   "language": {
     "label": "Lugha",
@@ -772,5 +780,9 @@
         "count": "Maamuzi"
       }
     }
+  },
+  "caseTrack": {
+    "title": "Kesi yako iko wapi",
+    "now": "Sasa"
   }
 }

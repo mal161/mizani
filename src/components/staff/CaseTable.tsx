@@ -50,8 +50,8 @@ export async function CaseTable({
             const overdue = due !== null && due.getTime() < now;
             return (
               <tr key={r.id} className="align-top">
-                <td className="px-3 py-2 font-mono">
-                  <Link href={`/staff/cases/${caseSlug(r.case_number)}`} className="underline">
+                <td className="px-3 py-2">
+                  <Link href={`/staff/cases/${caseSlug(r.case_number)}`} className="case-stamp text-sm">
                     {r.case_number}
                   </Link>
                 </td>

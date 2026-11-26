@@ -12,6 +12,7 @@ import { caseHearings } from "@/lib/commission/hearings";
 import { currentDecision } from "@/lib/commission/decisions";
 import { panelMembers } from "@/lib/commission/portal";
 import { StageBadge } from "@/components/case/StageBadge";
+import { CaseStamp } from "@/components/case/CaseStamp";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { MinutesForm } from "./MinutesForm";
@@ -72,7 +73,9 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
           ← {t("back")}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-2xl font-medium">{c.case_number}</h1>
+          <h1>
+          <CaseStamp number={c.case_number} size="lg" />
+        </h1>
           <StageBadge stage={c.stage} label={stageName(c.stage)} />
           <a href={`/api/cases/${c.id}/bundle`} className="ml-auto rounded-md border px-3 py-1.5 text-sm underline">
             {t("downloadBundle")}
@@ -140,7 +143,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
 
       <aside className="flex flex-col gap-4">
         {decision && (
-          <section className="flex flex-col gap-2 rounded-lg border-2 border-emerald-800 p-4 text-sm" data-testid="decision">
+          <section className="flex flex-col gap-2 rounded-lg border border-accent/40 bg-accent-soft p-4 text-sm" data-testid="decision">
             <h2 className={h2}>{t("decision.issued")}</h2>
             <p className="text-base font-medium" data-testid="decision-outcome">
               {t(`outcomes.${decision.outcome}`)}

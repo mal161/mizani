@@ -64,11 +64,11 @@ export default async function HearingsAgenda({
                   {today.map((h) => {
                     const mine = h.panel.includes(user.id);
                     return (
-                      <li key={h.id} data-mine={mine} className={`rounded-md px-3 py-2 ${mine ? "border-l-4 border-emerald-700 bg-emerald-50" : "bg-slate-50"}`}>
+                      <li key={h.id} data-mine={mine} className={`rounded-md px-3 py-2 ${mine ? "border-l-4 border-accent bg-accent-soft" : "bg-slate-50"}`}>
                         <span className="mr-3 font-medium">
                           {format.dateTime(new Date(h.starts_at), { timeStyle: "short", timeZone: "Africa/Nairobi" })}
                         </span>
-                        <Link href={`/commission/cases/${caseSlug(h.case_number!)}`} className="font-mono underline">
+                        <Link href={`/commission/cases/${caseSlug(h.case_number!)}`} className="case-stamp text-sm">
                           {h.case_number}
                         </Link>
                         <span className="text-slate-600">

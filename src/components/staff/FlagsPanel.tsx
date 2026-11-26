@@ -17,7 +17,7 @@ export async function FlagsPanel({ flags }: { flags: CaseFlags }) {
           <ul className="list-disc pl-5">
             {flags.possible_duplicates.map((d) => (
               <li key={d.case_number}>
-                <Link href={`/staff/cases/${caseSlug(d.case_number)}`} className="font-mono underline">
+                <Link href={`/staff/cases/${caseSlug(d.case_number)}`} className="case-stamp text-sm">
                   {d.case_number}
                 </Link>{" "}
                 · {format.dateTime(new Date(d.created_at), { dateStyle: "medium", timeZone: "Africa/Nairobi" })}

@@ -74,7 +74,7 @@ export function HearingPanel(props: {
       </a>
 
       {s && (
-        <div data-testid="scheduled-hearing" className="rounded-md bg-sky-50 p-3 text-sm">
+        <div data-testid="scheduled-hearing" className="rounded-md border bg-white p-3 text-sm">
           <p className="font-medium">{s.whenLabel}</p>
           <p>
             {s.mode === "online" ? `${t("online")} · ${s.link ?? ""}` : s.venue} · {t("minutesLong", { minutes: s.duration })}
@@ -149,7 +149,7 @@ export function HearingPanel(props: {
             </div>
           )}
           <Err state={sched} />
-          {sched.ok && <p className="text-sm text-emerald-700">{t("saved")}</p>}
+          {sched.ok && <p className="text-sm text-accent">{t("saved")}</p>}
           <button type="submit" disabled={schedPending} className={btn}>
             {s ? t("saveReschedule") : t("schedule")}
           </button>
@@ -180,7 +180,7 @@ export function HearingPanel(props: {
       )}
 
       {props.decision && (
-        <div className="flex flex-col gap-1 rounded-md bg-emerald-50 p-3 text-sm">
+        <div className="flex flex-col gap-1 rounded-md bg-accent-soft p-3 text-sm">
           <p className="font-medium">
             {t("decision")}: {props.decision.outcomeLabel}
           </p>

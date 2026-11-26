@@ -8,6 +8,7 @@ import { allowedNextStages, labelFor } from "@/lib/cases/workflow-config";
 import { isStage } from "@/lib/cases/stages";
 import { logAudit } from "@/lib/audit";
 import { StageBadge } from "@/components/case/StageBadge";
+import { CaseStamp } from "@/components/case/CaseStamp";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { CaseActions } from "./CaseActions";
@@ -75,7 +76,9 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
           ← {t("back")}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-2xl font-medium">{c.case_number}</h1>
+          <h1>
+          <CaseStamp number={c.case_number} size="lg" />
+        </h1>
           <StageBadge stage={c.stage} label={stageName(c.stage)} />
         </div>
 

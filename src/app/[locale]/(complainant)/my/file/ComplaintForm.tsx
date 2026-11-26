@@ -20,7 +20,9 @@ export function ComplaintForm() {
         <p>{t("success.body")}</p>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
           <dt className="font-medium">{t("success.caseNumber")}</dt>
-          <dd data-testid="case-number" className="font-mono">{state.caseNumber}</dd>
+          <dd>
+            <span data-testid="case-number" className="case-stamp">{state.caseNumber}</span>
+          </dd>
           <dt className="font-medium">{t("success.pin")}</dt>
           <dd data-testid="case-pin" className="font-mono text-lg">{state.pin}</dd>
         </dl>

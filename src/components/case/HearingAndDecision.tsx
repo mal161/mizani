@@ -12,7 +12,7 @@ export async function HearingAndDecision({ caseId }: { caseId: string }) {
   return (
     <>
       {decision && (
-        <section data-testid="decision-card" className="flex flex-col gap-2 rounded-lg border-2 border-emerald-800 bg-emerald-50 p-4">
+        <section data-testid="decision-card" className="flex flex-col gap-2 rounded-lg border border-accent/40 bg-accent-soft p-5">
           <h2 className="text-lg font-medium">{t("decisionTitle")}</h2>
           <p className="text-base font-medium">{tOut(decision.outcome)}</p>
           {decision.amount_kes != null && (
@@ -37,7 +37,7 @@ export async function HearingAndDecision({ caseId }: { caseId: string }) {
         </section>
       )}
       {hearing && (
-        <section data-testid="next-hearing" className="flex flex-col gap-1 rounded-lg border-2 border-sky-700 bg-sky-50 p-4">
+        <section data-testid="next-hearing" className="flex flex-col gap-1 rounded-lg border bg-white p-5">
           <h2 className="text-lg font-medium">{t("hearingTitle")}</h2>
           <p className="font-medium">
             {format.dateTime(new Date(hearing.starts_at), { dateStyle: "full", timeStyle: "short", hourCycle: "h23", timeZone: "Africa/Nairobi" })}

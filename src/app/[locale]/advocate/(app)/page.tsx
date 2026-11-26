@@ -33,7 +33,7 @@ export default async function AdvocateHome({ params }: { params: Promise<{ local
             return (
               <li key={c.id} className="flex flex-col gap-1 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
-                  <Link href={`/advocate/cases/${caseSlug(c.case_number)}`} className="font-mono font-medium underline">
+                  <Link href={`/advocate/cases/${caseSlug(c.case_number)}`} className="case-stamp text-sm">
                     {c.case_number}
                   </Link>
                   <p className="truncate text-sm text-slate-600">{c.summary}</p>

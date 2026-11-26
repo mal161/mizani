@@ -5,7 +5,15 @@
     "fileComplaint": "File a complaint",
     "trackCase": "Track a case",
     "advocatePrompt": "Are you an advocate who received a notice of complaint?",
-    "advocateActivate": "Activate your account"
+    "advocateActivate": "Activate your account",
+    "org": "Advocates Complaints Commission",
+    "headline": "Complain about an advocate and follow your case to a decision",
+    "preview": {
+      "label": "Example case",
+      "summary": "Advocate kept the title deed after a land sale",
+      "update": "Advocate responded · 12 Nov",
+      "note": "Every complaint gets a case number and a PIN. You can check where it is online, by SMS or on USSD."
+    }
   },
   "language": {
     "label": "Language",
@@ -772,5 +780,9 @@
         "count": "Decisions"
       }
     }
+  },
+  "caseTrack": {
+    "title": "Where your case is",
+    "now": "Now"
   }
 }

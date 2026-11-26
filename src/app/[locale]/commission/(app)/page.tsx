@@ -15,7 +15,7 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
   const format = await getFormatter();
   const when = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" });
   const caseLink = (n: string) => (
-    <Link href={`/commission/cases/${caseSlug(n)}`} className="font-mono font-medium underline">
+    <Link href={`/commission/cases/${caseSlug(n)}`} className="case-stamp self-start text-sm">
       {n}
     </Link>
   );
@@ -23,7 +23,7 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
       <h1 className="text-2xl font-medium">{t("home.title")}</h1>
-      <Link href="/commission/analytics" className="self-start rounded-md border border-emerald-800 px-3 py-2 text-sm text-emerald-900 underline">
+      <Link href="/commission/analytics" className="self-start rounded-md border bg-white px-3 py-2 text-sm text-accent transition-colors hover:bg-accent-soft">
         {t("home.analyticsLink")}
       </Link>
       <div className="grid gap-6 lg:grid-cols-3">
