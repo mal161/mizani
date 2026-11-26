@@ -37,7 +37,7 @@ export function AdvocatePicker({ defaultName = "", invalid = false }: { defaultN
         aria-invalid={invalid}
         autoComplete="off"
         required
-        className="rounded-md border px-3 py-2"
+        className="rounded-md border px-3 py-2.5"
       />
       <input type="hidden" name="advocateId" value={selected?.id ?? ""} />
       <p className="text-xs text-slate-500">{t("advocateHint")}</p>

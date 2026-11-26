@@ -80,11 +80,11 @@ export function Timeline({
                 : commissionDetail(e.type, b);
         return (
           <li key={e.id} className="relative">
-            <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-slate-400" />
+            <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary" />
             <p className="font-medium">
               {KNOWN.includes(e.type) ? t(`types.${e.type}`) : t("types.other")}
               {showInternal && e.visibility === "internal" && (
-                <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">{t("internal")}</span>
+                <span className="ml-2 rounded bg-accent-soft px-1.5 py-0.5 text-xs text-accent-ink">{t("internal")}</span>
               )}
             </p>
             {detail && <p className="whitespace-pre-wrap text-sm text-slate-700">{detail}</p>}

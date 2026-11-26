@@ -1,19 +1,23 @@
 {
   "home": {
     "title": "Mizani — Advocates Complaints Commission",
-    "tagline": "File a complaint against an advocate and follow it to resolution.",
+    "tagline": "Tell us what happened. You get a case number and a PIN, and you can follow every step online, by SMS or on USSD.",
     "fileComplaint": "File a complaint",
     "trackCase": "Track a case",
     "advocatePrompt": "Are you an advocate who received a notice of complaint?",
     "advocateActivate": "Activate your account",
-    "org": "Advocates Complaints Commission",
     "headline": "Complain about an advocate and follow your case to a decision",
-    "preview": {
-      "label": "Example case",
-      "summary": "Advocate kept the title deed after a land sale",
-      "update": "Advocate responded · 12 Nov",
-      "note": "Every complaint gets a case number and a PIN. You can check where it is online, by SMS or on USSD."
-    }
+    "services": "What do you want to do?",
+    "service": {
+      "file": "Tell us what the advocate did. You get a case number and a PIN by SMS.",
+      "track": "Check the stage of a case with its case number and PIN. No account needed.",
+      "mine": "Sign in with your phone number to see your cases and answer the Commission.",
+      "advocate": "Received a notice of complaint? Activate your account and send your response."
+    },
+    "process": "How a complaint is handled",
+    "processIntro": "Every case moves through the same stages. You are told by SMS each time it moves.",
+    "channelsTitle": "No internet? You can still complain",
+    "channels": "Visit any ACC office and staff will file the complaint for you and print a slip with your case number and PIN. You can then follow it by SMS or USSD."
   },
   "language": {
     "label": "Language",
@@ -188,7 +192,8 @@
       "admin": "Administrator",
       "commissioner": "Commissioner"
     },
-    "commission": "Commission"
+    "commission": "Commission",
+    "portal": "Staff workspace"
   },
   "staffCases": {
     "empty": "No cases here.",
@@ -784,5 +789,35 @@
   "caseTrack": {
     "title": "Where your case is",
     "now": "Now"
+  },
+  "shell": {
+    "skip": "Skip to main content",
+    "tagline": "Every complaint, fairly weighed",
+    "org": "Advocates Complaints Commission",
+    "descriptor": "Case management system",
+    "staffSignIn": "Staff sign in",
+    "nav": {
+      "label": "Main",
+      "home": "Home",
+      "file": "File a complaint",
+      "track": "Track a case",
+      "advocates": "For advocates",
+      "myCases": "My cases",
+      "signIn": "Sign in",
+      "signOut": "Sign out",
+      "advocatePortal": "Advocate portal"
+    },
+    "footer": {
+      "about": "Mizani is where the Advocates Complaints Commission receives, investigates and decides complaints against advocates.",
+      "dpa": "Personal data is handled under the Data Protection Act, 2019. Only the people working on a case can see it.",
+      "services": "Services",
+      "staff": "Commission staff",
+      "channels": "You can also follow a case by SMS, on USSD, or at an ACC office.",
+      "line": "Mizani — ACC Case Management System"
+    },
+    "logo": {
+      "advocate": "Advocate",
+      "complainant": "Complainant"
+    }
   }
 }

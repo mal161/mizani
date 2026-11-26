@@ -17,7 +17,7 @@ export function StatusForm() {
         <input type="hidden" name="locale" value={locale} />
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{t("caseNumber")}</span>
-          <input name="caseNumber" required placeholder="ACC/2026/000123" className="rounded-md border px-3 py-2 font-mono" />
+          <input name="caseNumber" required placeholder="ACC/2026/000123" className="rounded-md border px-3 py-2.5 font-mono" />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">PIN</span>
@@ -29,10 +29,10 @@ export function StatusForm() {
             maxLength={6}
             required
             autoComplete="off"
-            className="rounded-md border px-3 py-2 tracking-widest"
+            className="rounded-md border px-3 py-2.5 tracking-widest"
           />
         </label>
-        <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+        <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
           {t("check")}
         </button>
       </form>

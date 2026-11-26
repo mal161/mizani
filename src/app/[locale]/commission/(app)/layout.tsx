@@ -15,7 +15,7 @@ export default async function CommissionLayout({
   return (
     <>
       <CommissionNav user={user} locale={locale} />
-      {children}
+      <div id="main">{children}</div>
     </>
   );
 }

@@ -22,13 +22,13 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-medium">{t("home.title")}</h1>
-      <Link href="/commission/analytics" className="self-start rounded-md border bg-white px-3 py-2 text-sm text-accent transition-colors hover:bg-accent-soft">
+      <h1 className="text-3xl font-bold text-primary">{t("home.title")}</h1>
+      <Link href="/commission/analytics" className="self-start rounded-md border bg-white px-3 py-2 text-sm text-primary transition-colors hover:bg-primary-soft">
         {t("home.analyticsLink")}
       </Link>
       <div className="grid gap-6 lg:grid-cols-3">
         <section className={card} data-testid="upcoming-hearings">
-          <h2 className="text-lg font-medium">{t("home.upcoming")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("home.upcoming")}</h2>
           {upcoming.length === 0 ? (
             <p className="text-sm text-slate-500">{t("home.noUpcoming")}</p>
           ) : (
@@ -46,7 +46,7 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
         </section>
 
         <section className={card} data-testid="awaiting-decision">
-          <h2 className="text-lg font-medium">{t("home.awaiting")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("home.awaiting")}</h2>
           {awaiting.length === 0 ? (
             <p className="text-sm text-slate-500">{t("home.noAwaiting")}</p>
           ) : (
@@ -62,7 +62,7 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
         </section>
 
         <section className={card} data-testid="recently-decided">
-          <h2 className="text-lg font-medium">{t("home.decided")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("home.decided")}</h2>
           {decided.length === 0 ? (
             <p className="text-sm text-slate-500">{t("home.noDecided")}</p>
           ) : (

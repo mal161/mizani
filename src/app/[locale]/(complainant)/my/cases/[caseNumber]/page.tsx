@@ -76,22 +76,22 @@ export default async function CaseDetailPage({
       <HearingAndDecision caseId={c.id} />
 
       {request && (
-        <section className="flex flex-col gap-3 rounded-lg border-2 border-amber-300 bg-amber-50 p-4">
-          <h2 className="text-lg font-medium">{tr("title")}</h2>
+        <section className="flex flex-col gap-3 rounded-lg border border-accent bg-accent-soft p-5">
+          <h2 className="text-xl font-medium text-primary">{tr("title")}</h2>
           <p className="whitespace-pre-wrap">{request.message}</p>
           <RespondForm caseId={c.id} path={`/${locale}/my/cases/${caseSlug(c.case_number)}`} />
         </section>
       )}
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-medium">{t("complaint")}</h2>
+        <h2 className="text-xl font-medium text-primary">{t("complaint")}</h2>
         <p className="text-sm text-slate-500">{t("against", { name: c.advocate_name_given })}</p>
         <p className="font-medium">{c.summary}</p>
         <p className="whitespace-pre-wrap text-slate-700">{c.description}</p>
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-medium">{t("documents")}</h2>
+        <h2 className="text-xl font-medium text-primary">{t("documents")}</h2>
         {links.length === 0 ? (
           <p className="text-sm text-slate-500">{t("noDocuments")}</p>
         ) : (
@@ -108,7 +108,7 @@ export default async function CaseDetailPage({
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-medium">{t("timeline")}</h2>
+        <h2 className="text-xl font-medium text-primary">{t("timeline")}</h2>
         <Timeline
           events={(events ?? []) as TimelineEvent[]}
           stageName={(s) => (isStage(s) ? stageOverrides[s] ?? tStages(s) : s)}

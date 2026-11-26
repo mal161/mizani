@@ -21,7 +21,7 @@ export interface AdvocatePanelProps {
   responses: { id: string; text: string; late: boolean; createdAt: string }[];
 }
 
-const btn = "rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60";
+const btn = "rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 
 export function AdvocatePanel(p: AdvocatePanelProps) {
@@ -85,7 +85,7 @@ export function AdvocatePanel(p: AdvocatePanelProps) {
         </p>
       ) : (
         <>
-          <p className="text-amber-800">{t("notLinked")}</p>
+          <p className="text-accent-ink">{t("notLinked")}</p>
           {p.canWrite && (
             <form action={linkAct} className="flex flex-col gap-2">
               <input type="hidden" name="caseId" value={p.caseId} />

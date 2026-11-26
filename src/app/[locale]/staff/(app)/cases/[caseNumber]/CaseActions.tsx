@@ -32,7 +32,7 @@ function useResetOnSuccess(state: ActionState) {
 }
 
 const box = "flex flex-col gap-2 rounded-lg border p-4";
-const btn = "self-start rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60";
+const btn = "self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 
 export function CaseActions(props: {

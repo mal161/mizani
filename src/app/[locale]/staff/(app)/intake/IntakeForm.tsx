@@ -32,7 +32,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         <p className="text-sm">{t("slip.howToCheck", { url: statusUrl })}</p>
         <p className="text-sm font-medium">{t("slip.keepPin")}</p>
         <div className="no-print flex gap-3">
-          <button type="button" onClick={() => window.print()} className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover">
+          <button type="button" onClick={() => window.print()} className="rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover">
             {t("slip.print")}
           </button>
           <a href={`/${locale}/staff/intake`} className="rounded-md border px-4 py-2">
@@ -105,7 +105,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         <input name="consent" type="checkbox" required className="mt-1" />
         <span>{t("consent")}</span>
       </label>
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {pending ? tf("submitting") : t("submit")}
       </button>
     </form>

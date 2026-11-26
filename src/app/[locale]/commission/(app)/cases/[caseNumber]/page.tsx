@@ -19,7 +19,7 @@ import { MinutesForm } from "./MinutesForm";
 import { DecisionForm } from "./DecisionForm";
 
 const section = "flex flex-col gap-2";
-const h2 = "text-lg font-medium";
+const h2 = "text-xl font-medium text-primary";
 
 export default async function CommissionCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
   const { locale, caseNumber: slug } = await params;
@@ -143,7 +143,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
 
       <aside className="flex flex-col gap-4">
         {decision && (
-          <section className="flex flex-col gap-2 rounded-lg border border-accent/40 bg-accent-soft p-4 text-sm" data-testid="decision">
+          <section className="flex flex-col gap-2 rounded-lg border border-primary/40 bg-primary-soft p-4 text-sm" data-testid="decision">
             <h2 className={h2}>{t("decision.issued")}</h2>
             <p className="text-base font-medium" data-testid="decision-outcome">
               {t(`outcomes.${decision.outcome}`)}
@@ -191,8 +191,8 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
                   {t("decision.panel")}: {h.panel.map((p) => names.get(p) ?? "—").join(", ")}
                 </p>
                 {h.minutes && (
-                  <div className="mt-1 rounded bg-amber-50 p-2">
-                    <p className="text-xs font-medium text-amber-900">{t("minutes.internal")}</p>
+                  <div className="mt-1 rounded bg-accent-soft p-2">
+                    <p className="text-xs font-medium text-accent-ink">{t("minutes.internal")}</p>
                     <p className="whitespace-pre-wrap">{h.minutes}</p>
                   </div>
                 )}

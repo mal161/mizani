@@ -1,29 +1,34 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter, routing, type Locale } from "@/i18n/routing";
+import { Link, usePathname, routing } from "@/i18n/routing";
 
-export function LanguageSwitcher() {
+/** English | Kiswahili as two links (government-portal style), keeping the current page. */
+export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" }) {
   const t = useTranslations("language");
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
+  const light = tone === "light";
   return (
-    <label className="flex items-center gap-2 text-sm">
-      {t("label")}
-      <select
-        className="rounded border px-2 py-1"
-        value={locale}
-        onChange={(e) =>
-          router.replace(pathname, { locale: e.target.value as Locale })
-        }
-      >
-        {routing.locales.map((l) => (
-          <option key={l} value={l}>
+    <nav aria-label={t("label")} className="flex items-center gap-1 text-sm">
+      {routing.locales.map((l, i) => (
+        <span key={l} className="flex items-center gap-1">
+          {i > 0 && <span aria-hidden className={light ? "text-slate-400" : "text-slate-300"}>|</span>}
+          <Link
+            href={pathname}
+            locale={l}
+            lang={l}
+            aria-current={l === locale ? "true" : undefined}
+            className={`rounded px-1.5 py-1 ${
+              l === locale
+                ? `font-medium ${light ? "text-white" : "text-primary"}`
+                : `underline-offset-2 hover:underline ${light ? "text-slate-300" : "text-slate-600"}`
+            }`}
+          >
             {t(l)}
-          </option>
-        ))}
-      </select>
-    </label>
+          </Link>
+        </span>
+      ))}
+    </nav>
   );
 }

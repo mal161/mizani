@@ -25,7 +25,7 @@ export function LoginForm() {
           defaultValue={state.phone}
           readOnly={state.step === "code"}
           placeholder="07XX XXX XXX"
-          className="rounded-md border px-3 py-2"
+          className="rounded-md border px-3 py-2.5"
         />
       </label>
 
@@ -41,7 +41,7 @@ export function LoginForm() {
               pattern="\d{6}"
               maxLength={6}
               required
-              className="rounded-md border px-3 py-2 tracking-widest"
+              className="rounded-md border px-3 py-2.5 tracking-widest"
             />
           </label>
         </>
@@ -58,7 +58,7 @@ export function LoginForm() {
         name="intent"
         value={state.step === "phone" ? "send" : "verify"}
         disabled={pending}
-        className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60"
+        className="rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
       >
         {state.step === "phone" ? t("sendCode") : t("signIn")}
       </button>

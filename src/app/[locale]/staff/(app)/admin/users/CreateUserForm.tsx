@@ -36,7 +36,7 @@ export function CreateUserForm({ path }: { path: string }) {
         {t("office")}
         <input name="office" required minLength={2} className={field} />
       </label>
-      <button type="submit" disabled={pending} className="self-end rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-end rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("create")}
       </button>
       {state.tempPassword && (

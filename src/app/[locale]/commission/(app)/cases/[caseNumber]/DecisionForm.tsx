@@ -76,7 +76,7 @@ export function DecisionForm(props: {
           {t(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {props.correcting ? t("decision.correct") : t("decision.record")}
       </button>
     </form>

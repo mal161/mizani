@@ -27,7 +27,7 @@ export function ComplaintForm() {
           <dd data-testid="case-pin" className="font-mono text-lg">{state.pin}</dd>
         </dl>
         <p className="text-sm text-slate-700">{t("success.pinWarning")}</p>
-        <Link href="/my/cases" className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover">
+        <Link href="/my/cases" className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover">
           {t("success.viewCases")}
         </Link>
       </section>
@@ -65,7 +65,7 @@ export function ComplaintForm() {
           required
           maxLength={200}
           aria-invalid={bad("summary")}
-          className="rounded-md border px-3 py-2"
+          className="rounded-md border px-3 py-2.5"
         />
       </label>
 
@@ -78,7 +78,7 @@ export function ComplaintForm() {
           rows={7}
           maxLength={10000}
           aria-invalid={bad("description")}
-          className="rounded-md border px-3 py-2"
+          className="rounded-md border px-3 py-2.5"
         />
       </label>
 
@@ -102,7 +102,7 @@ export function ComplaintForm() {
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60"
+        className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
       >
         {pending ? t("submitting") : t("submit")}
       </button>

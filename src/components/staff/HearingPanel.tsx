@@ -10,7 +10,7 @@ import {
 } from "@/app/[locale]/staff/(app)/cases/[caseNumber]/hearing-actions";
 
 const box = "flex flex-col gap-2 rounded-lg border p-4";
-const btn = "self-start rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60";
+const btn = "self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 const REFERRAL_STATUSES = ["prepared", "lodged", "acknowledged", "concluded"] as const;
 
@@ -68,7 +68,7 @@ export function HearingPanel(props: {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-medium">{t("title")}</h2>
+      <h2 className="text-xl font-medium text-primary">{t("title")}</h2>
       <a href={props.bundleHref} className="text-sm underline">
         {t("downloadBundle")}
       </a>
@@ -141,7 +141,7 @@ export function HearingPanel(props: {
             ))}
           </fieldset>
           {sched.error === "clash" && (
-            <div data-testid="clash-alert" className="flex flex-col gap-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <div data-testid="clash-alert" className="flex flex-col gap-2 rounded-md bg-accent-soft px-3 py-2 text-sm text-accent-ink">
               <p>{t("clash", { cases: (sched.clashes ?? []).join(", ") })}</p>
               <button type="submit" name="confirmClash" value="1" disabled={schedPending} className={btn}>
                 {t("scheduleAnyway")}
@@ -149,7 +149,7 @@ export function HearingPanel(props: {
             </div>
           )}
           <Err state={sched} />
-          {sched.ok && <p className="text-sm text-accent">{t("saved")}</p>}
+          {sched.ok && <p className="text-sm text-primary">{t("saved")}</p>}
           <button type="submit" disabled={schedPending} className={btn}>
             {s ? t("saveReschedule") : t("schedule")}
           </button>
@@ -180,7 +180,7 @@ export function HearingPanel(props: {
       )}
 
       {props.decision && (
-        <div className="flex flex-col gap-1 rounded-md bg-accent-soft p-3 text-sm">
+        <div className="flex flex-col gap-1 rounded-md bg-primary-soft p-3 text-sm">
           <p className="font-medium">
             {t("decision")}: {props.decision.outcomeLabel}
           </p>

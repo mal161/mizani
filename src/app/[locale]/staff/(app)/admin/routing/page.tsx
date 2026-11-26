@@ -24,7 +24,7 @@ export default async function RoutingAdmin({ params }: { params: Promise<{ local
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-medium">{t("title")}</h1>
+      <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
       <p className="text-slate-600">{t("explain")}</p>
       <div className="overflow-x-auto rounded-lg border">
         <table className="w-full min-w-[720px] text-left text-sm">

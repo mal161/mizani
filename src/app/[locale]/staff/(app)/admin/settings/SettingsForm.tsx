@@ -115,7 +115,7 @@ export function SettingsForm({
           {ta(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("save")}
       </button>
     </form>

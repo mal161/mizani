@@ -28,7 +28,7 @@ export default async function AuditAdmin({
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-8">
-      <h1 className="text-2xl font-medium">{t("title")}</h1>
+      <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
       <form className="grid gap-3 rounded-lg border p-4 sm:grid-cols-3 lg:grid-cols-6" action={`/${locale}/staff/admin/audit`}>
         <label className="flex flex-col gap-1 text-sm">
           {t("caseNumber")}
@@ -51,7 +51,7 @@ export default async function AuditAdmin({
           <input name="to" type="date" defaultValue={filters.to} className={field} />
         </label>
         <div className="flex items-end gap-2">
-          <button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover">
+          <button type="submit" className="rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover">
             {t("filter")}
           </button>
           <a href={`/api/admin/audit?${qs.toString()}`} className="rounded-md border px-3 py-1.5 text-sm">

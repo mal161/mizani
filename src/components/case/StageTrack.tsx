@@ -12,20 +12,22 @@ export function StageTrack({
   title,
   vertical = false,
 }: {
-  current: string;
+  /** null = overview of the whole process (no current step). */
+  current: string | null;
   label: (stage: string) => string;
   nowLabel: string;
   title: string;
   vertical?: boolean;
 }) {
+  const overview = current === null;
   const path: string[] = current === "conciliation" ? [...PATH.slice(0, 4), "conciliation", ...PATH.slice(4)] : [...PATH];
-  const at = Math.max(0, path.indexOf(current));
+  const at = overview ? path.length : Math.max(0, path.indexOf(current ?? ""));
   const row = !vertical;
   return (
     <ol className={`grid ${row ? "gap-y-3 sm:grid-flow-col sm:auto-cols-fr" : "gap-y-3"}`} aria-label={title}>
       {path.map((s, i) => {
         const state = i < at ? "done" : i === at ? "now" : "next";
-        const line = i < at ? "bg-accent" : "bg-slate-200";
+        const line = overview || i < at ? "bg-primary" : "bg-slate-200";
         return (
           <li
             key={s}
@@ -46,15 +48,15 @@ export function StageTrack({
               aria-hidden
               className={`relative z-10 inline-block h-4 w-4 shrink-0 rounded-full border-2 ${
                 state === "done"
-                  ? "border-accent bg-accent"
+                  ? "border-primary bg-primary"
                   : state === "now"
                     ? "border-accent bg-white ring-4 ring-accent-soft"
                     : "border-slate-300 bg-white"
               }`}
             />
-            <span className={`text-sm leading-5 ${state === "now" ? "font-medium text-slate-900" : state === "done" ? "text-slate-600" : "text-slate-500"}`}>
+            <span className={`text-sm leading-5 ${state === "now" ? "font-medium text-slate-900" : state === "done" ? (overview ? "text-slate-900" : "text-slate-600") : "text-slate-500"}`}>
               {label(s)}
-              {state === "now" && <span className={`ml-2 text-xs text-accent ${row ? "sm:ml-0 sm:block" : ""}`}>{nowLabel}</span>}
+              {state === "now" && <span className={`ml-2 text-xs text-accent-ink ${row ? "sm:ml-0 sm:block" : ""}`}>{nowLabel}</span>}
             </span>
           </li>
         );

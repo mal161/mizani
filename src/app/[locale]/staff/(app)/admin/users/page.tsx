@@ -15,7 +15,7 @@ export default async function UsersAdmin({ params }: { params: Promise<{ locale:
   const path = `/${locale}/staff/admin/users`;
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-medium">{t("title")}</h1>
+      <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
       <CreateUserForm path={path} />
       <div className="overflow-x-auto rounded-lg border">
         <table className="w-full min-w-[760px] text-left text-sm">

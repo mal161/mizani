@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { activateAction, type ActivateState } from "./actions";
 
-const field = "rounded-md border px-3 py-2";
+const field = "rounded-md border px-3 py-2.5";
 
 export function ActivateForm() {
   const t = useTranslations("advocatePortal.activate");
@@ -44,7 +44,7 @@ export function ActivateForm() {
           {t(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
+      <button type="submit" disabled={pending} className="rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {verifying ? t("finish") : t("continue")}
       </button>
     </form>

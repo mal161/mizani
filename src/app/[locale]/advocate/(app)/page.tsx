@@ -21,7 +21,7 @@ export default async function AdvocateHome({ params }: { params: Promise<{ local
 
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-5 px-4 py-8">
-      <h1 className="text-2xl font-medium">{t("title")}</h1>
+      <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
       <p className="text-slate-600">{t("intro")}</p>
       {!cases?.length ? (
         <p className="text-slate-500">{t("empty")}</p>

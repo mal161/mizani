@@ -1,19 +1,23 @@
 {
   "home": {
     "title": "Mizani — Tume ya Malalamiko dhidi ya Mawakili",
-    "tagline": "Wasilisha lalamiko dhidi ya wakili na ufuatilie hadi litatuliwe.",
+    "tagline": "Tueleze kilichotokea. Utapata nambari ya kesi na PIN, na unaweza kufuatilia kila hatua mtandaoni, kwa SMS au USSD.",
     "fileComplaint": "Wasilisha lalamiko",
     "trackCase": "Fuatilia kesi",
     "advocatePrompt": "Je, wewe ni wakili uliyepokea ilani ya lalamiko?",
     "advocateActivate": "Anzisha akaunti yako",
-    "org": "Tume ya Malalamiko dhidi ya Mawakili",
     "headline": "Lalamika kuhusu wakili na ufuatilie kesi yako hadi uamuzi",
-    "preview": {
-      "label": "Mfano wa kesi",
-      "summary": "Wakili alishikilia hati ya shamba baada ya mauzo",
-      "update": "Wakili amejibu · 12 Nov",
-      "note": "Kila lalamiko hupata nambari ya kesi na PIN. Unaweza kuangalia hali yake mtandaoni, kwa SMS au USSD."
-    }
+    "services": "Unataka kufanya nini?",
+    "service": {
+      "file": "Tueleze wakili alichofanya. Utapata nambari ya kesi na PIN kwa SMS.",
+      "track": "Angalia hatua ya kesi kwa nambari ya kesi na PIN. Huhitaji akaunti.",
+      "mine": "Ingia kwa nambari yako ya simu kuona kesi zako na kujibu Tume.",
+      "advocate": "Umepokea ilani ya lalamiko? Anzisha akaunti yako na utume jibu lako."
+    },
+    "process": "Jinsi lalamiko linavyoshughulikiwa",
+    "processIntro": "Kila kesi hupitia hatua zilezile. Unaarifiwa kwa SMS kila inaposonga.",
+    "channelsTitle": "Huna intaneti? Bado unaweza kulalamika",
+    "channels": "Tembelea ofisi yoyote ya ACC na wafanyakazi watawasilisha lalamiko kwa niaba yako na kukuchapishia risiti yenye nambari ya kesi na PIN. Kisha unaweza kuifuatilia kwa SMS au USSD."
   },
   "language": {
     "label": "Lugha",
@@ -188,7 +192,8 @@
       "admin": "Msimamizi",
       "commissioner": "Kamishna"
     },
-    "commission": "Tume"
+    "commission": "Tume",
+    "portal": "Eneo la wafanyakazi"
   },
   "staffCases": {
     "empty": "Hakuna kesi hapa.",
@@ -784,5 +789,35 @@
   "caseTrack": {
     "title": "Kesi yako iko wapi",
     "now": "Sasa"
+  },
+  "shell": {
+    "skip": "Ruka hadi maudhui",
+    "tagline": "Haki kwa wote, kupitia uwazi",
+    "org": "Tume ya Malalamiko dhidi ya Mawakili",
+    "descriptor": "Mfumo wa usimamizi wa kesi",
+    "staffSignIn": "Wafanyakazi: ingia",
+    "nav": {
+      "label": "Kuu",
+      "home": "Nyumbani",
+      "file": "Wasilisha lalamiko",
+      "track": "Fuatilia kesi",
+      "advocates": "Kwa mawakili",
+      "myCases": "Kesi zangu",
+      "signIn": "Ingia",
+      "signOut": "Toka",
+      "advocatePortal": "Tovuti ya wakili"
+    },
+    "footer": {
+      "about": "Mizani ni mahali Tume ya Malalamiko dhidi ya Mawakili inapopokea, kuchunguza na kuamua malalamiko dhidi ya mawakili.",
+      "dpa": "Data binafsi inashughulikiwa chini ya Sheria ya Ulinzi wa Data, 2019. Ni wanaoshughulikia kesi pekee wanaoweza kuiona.",
+      "services": "Huduma",
+      "staff": "Wafanyakazi wa Tume",
+      "channels": "Unaweza pia kufuatilia kesi kwa SMS, USSD, au katika ofisi ya ACC.",
+      "line": "Mizani — Mfumo wa Usimamizi wa Kesi wa ACC"
+    },
+    "logo": {
+      "advocate": "Wakili",
+      "complainant": "Mlalamikaji"
+    }
   }
 }

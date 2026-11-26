@@ -13,7 +13,7 @@ export async function FlagsPanel({ flags }: { flags: CaseFlags }) {
       <h3 className="font-medium">{t("panel")}</h3>
       {flags.possible_duplicates.length > 0 ? (
         <div>
-          <p className="font-medium text-amber-800">{t("duplicates")}</p>
+          <p className="font-medium text-accent-ink">{t("duplicates")}</p>
           <ul className="list-disc pl-5">
             {flags.possible_duplicates.map((d) => (
               <li key={d.case_number}>
