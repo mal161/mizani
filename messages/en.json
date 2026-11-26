@@ -100,9 +100,14 @@
       "routing_failed": "Automatic assignment failed",
       "ai_failed": "AI suggestion failed",
       "advocate_notified": "Advocate formally notified",
-      "advocate_linked": "Advocate matched to the roll"
+      "advocate_linked": "Advocate matched to the roll",
+      "hearing_changed": "Hearing changed",
+      "hearing_held": "Hearing held",
+      "referral_updated": "Tribunal referral updated"
     },
-    "internal": "Internal"
+    "internal": "Internal",
+    "hearingRescheduled": "Rescheduled",
+    "corrected": "corrected"
   },
   "caseDetail": {
     "back": "My cases",
@@ -611,6 +616,64 @@
       "stage": "A decision can only be recorded once the case is at the hearing stage.",
       "minutes": "Minutes must be at least 10 characters.",
       "cancelled": "This hearing was cancelled."
+    }
+  },
+  "partyCase": {
+    "hearingTitle": "Your hearing",
+    "duration": "About {minutes} minutes",
+    "online": "Online",
+    "venue": "Venue",
+    "hearingHint": "Please be on time. Bring any documents you rely on. Contact the Commission if you cannot attend.",
+    "decisionTitle": "The Commission's decision",
+    "amount": "Amount",
+    "decidedOn": "Decided on {date}",
+    "reasons": "Reasons",
+    "orders": "Orders",
+    "downloadLetter": "Download decision letter"
+  },
+  "hearingPanel": {
+    "title": "Hearing",
+    "downloadBundle": "Download case bundle",
+    "online": "Online",
+    "inPerson": "In person",
+    "minutesLong": "{minutes} minutes",
+    "panel": "Panel",
+    "schedule": "Schedule hearing",
+    "reschedule": "Reschedule hearing",
+    "saveReschedule": "Save new time",
+    "when": "Date and time",
+    "duration": "Length",
+    "format": "Format",
+    "link": "Online link",
+    "venue": "Venue",
+    "clash": "A panel member is already booked at this time (case {cases}).",
+    "scheduleAnyway": "Schedule anyway",
+    "saved": "Saved. Both parties have been sent an SMS.",
+    "smsNote": "Both parties are told by SMS. The online link is shown only in their portals.",
+    "endTitle": "Adjourn or cancel",
+    "reason": "Reason",
+    "adjourn": "Adjourn",
+    "cancel": "Cancel hearing",
+    "decision": "Decision",
+    "downloadLetter": "Download decision letter",
+    "referralTitle": "Disciplinary Tribunal referral",
+    "downloadPack": "Download referral pack",
+    "referralStatus": "Referral status",
+    "tribunalReference": "Tribunal reference",
+    "saveReferral": "Save referral",
+    "errors": {
+      "forbidden": "You are not allowed to do this.",
+      "invalid": "That could not be saved. Check the details and try again.",
+      "past": "The hearing must be in the future.",
+      "when": "Enter a date and time.",
+      "duration": "Choose a length between 15 minutes and 8 hours.",
+      "panel": "Choose 1 to 5 active commissioners.",
+      "venue": "Enter the venue for an in-person hearing.",
+      "link": "Enter an https:// link for an online hearing.",
+      "stage": "Hearings can be scheduled from investigation, conciliation or hearing.",
+      "reason": "Give a reason.",
+      "already_scheduled": "This case already has a scheduled hearing. Reschedule it instead.",
+      "not_scheduled": "Only a scheduled hearing can be changed."
     }
   }
 }

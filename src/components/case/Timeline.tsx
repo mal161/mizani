@@ -24,6 +24,9 @@ const KNOWN = [
   "ai_failed",
   "advocate_notified",
   "advocate_linked",
+  "hearing_changed",
+  "hearing_held",
+  "referral_updated",
 ];
 
 const str = (v: unknown) => (typeof v === "string" ? v : null);
@@ -42,7 +45,26 @@ export function Timeline({
   stageName?: (stage: string) => string;
 }) {
   const t = useTranslations("timeline");
+  const tc = useTranslations("commission");
   const format = useFormatter();
+  const when = (v: unknown) =>
+    typeof v === "string" ? format.dateTime(new Date(v), { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" }) : "";
+  const place = (b: Record<string, unknown>) => (b.mode === "online" ? tc("hearing.online") : (str(b.venue) ?? ""));
+  const outcome = (v: unknown) => (typeof v === "string" && tc.has(`outcomes.${v}`) ? tc(`outcomes.${v}`) : "");
+  const commissionDetail = (type: string, b: Record<string, unknown>): string | null => {
+    if (type === "hearing_scheduled") return `${when(b.starts_at)} · ${place(b)}`;
+    if (type === "hearing_changed") {
+      if (b.change === "rescheduled") return `${t("hearingRescheduled")}: ${when(b.starts_at)} · ${place(b)}`;
+      const status = typeof b.change === "string" && tc.has(`hearing.status.${b.change}`) ? tc(`hearing.status.${b.change}`) : "";
+      return [status, str(b.reason)].filter(Boolean).join(" · ");
+    }
+    if (type === "decision_issued") return `${outcome(b.outcome)}${b.corrected ? ` (${t("corrected")})` : ""}`;
+    if (type === "referral_updated") {
+      const status = typeof b.status === "string" && tc.has(`referral.statuses.${b.status}`) ? tc(`referral.statuses.${b.status}`) : "";
+      return [status, str(b.tribunal_reference)].filter(Boolean).join(" · ");
+    }
+    return null;
+  };
   if (events.length === 0) return <p className="text-sm text-slate-500">{t("empty")}</p>;
   return (
     <ol aria-label={t("label")} className="flex flex-col gap-3 border-l pl-4">
@@ -55,7 +77,7 @@ export function Timeline({
               ? str(b.text)
               : e.type === "info_requested" || e.type === "info_provided"
                 ? str(b.message) ?? str(b.text)
-                : null;
+                : commissionDetail(e.type, b);
         return (
           <li key={e.id} className="relative">
             <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-slate-400" />

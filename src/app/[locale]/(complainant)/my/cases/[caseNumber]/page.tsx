@@ -12,6 +12,7 @@ import { Link, type Locale } from "@/i18n/routing";
 import { openInfoRequest } from "@/lib/cases/respond";
 import { caseSlug } from "@/lib/cases/case-number";
 import { RespondForm } from "./RespondForm";
+import { HearingAndDecision } from "@/components/case/HearingAndDecision";
 
 export default async function CaseDetailPage({
   params,
@@ -56,6 +57,8 @@ export default async function CaseDetailPage({
         <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
         <StageBadge stage={c.stage} label={isStage(c.stage) ? stageOverrides[c.stage] : undefined} />
       </div>
+
+      <HearingAndDecision caseId={c.id} />
 
       {request && (
         <section className="flex flex-col gap-3 rounded-lg border-2 border-amber-300 bg-amber-50 p-4">

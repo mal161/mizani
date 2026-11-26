@@ -100,9 +100,14 @@
       "routing_failed": "Ugawaji wa kiotomatiki umeshindwa",
       "ai_failed": "Pendekezo la AI limeshindwa",
       "advocate_notified": "Wakili amearifiwa rasmi",
-      "advocate_linked": "Wakili amelinganishwa na orodha"
+      "advocate_linked": "Wakili amelinganishwa na orodha",
+      "hearing_changed": "Usikilizaji umebadilishwa",
+      "hearing_held": "Usikilizaji umefanyika",
+      "referral_updated": "Rufaa kwa Mahakama imesasishwa"
     },
-    "internal": "Ndani"
+    "internal": "Ndani",
+    "hearingRescheduled": "Umepangwa upya",
+    "corrected": "umesahihishwa"
   },
   "caseDetail": {
     "back": "Kesi zangu",
@@ -611,6 +616,64 @@
       "stage": "Uamuzi unarekodiwa tu kesi ikiwa kwenye hatua ya usikilizaji.",
       "minutes": "Kumbukumbu ziwe angalau herufi 10.",
       "cancelled": "Usikilizaji huu ulifutwa."
+    }
+  },
+  "partyCase": {
+    "hearingTitle": "Usikilizaji wako",
+    "duration": "Takriban dakika {minutes}",
+    "online": "Mtandaoni",
+    "venue": "Mahali",
+    "hearingHint": "Tafadhali fika kwa wakati. Leta nyaraka unazotegemea. Wasiliana na Tume ikiwa huwezi kuhudhuria.",
+    "decisionTitle": "Uamuzi wa Tume",
+    "amount": "Kiasi",
+    "decidedOn": "Uliamuliwa tarehe {date}",
+    "reasons": "Sababu",
+    "orders": "Amri",
+    "downloadLetter": "Pakua barua ya uamuzi"
+  },
+  "hearingPanel": {
+    "title": "Usikilizaji",
+    "downloadBundle": "Pakua jalada la kesi",
+    "online": "Mtandaoni",
+    "inPerson": "Ana kwa ana",
+    "minutesLong": "Dakika {minutes}",
+    "panel": "Jopo",
+    "schedule": "Panga usikilizaji",
+    "reschedule": "Panga upya usikilizaji",
+    "saveReschedule": "Hifadhi muda mpya",
+    "when": "Tarehe na saa",
+    "duration": "Muda",
+    "format": "Namna",
+    "link": "Kiungo cha mtandaoni",
+    "venue": "Mahali",
+    "clash": "Mwanajopo tayari ana usikilizaji wakati huu (kesi {cases}).",
+    "scheduleAnyway": "Panga hata hivyo",
+    "saved": "Imehifadhiwa. Pande zote zimetumiwa SMS.",
+    "smsNote": "Pande zote zinaarifiwa kwa SMS. Kiungo cha mtandaoni kinaonyeshwa kwenye tovuti zao tu.",
+    "endTitle": "Ahirisha au futa",
+    "reason": "Sababu",
+    "adjourn": "Ahirisha",
+    "cancel": "Futa usikilizaji",
+    "decision": "Uamuzi",
+    "downloadLetter": "Pakua barua ya uamuzi",
+    "referralTitle": "Rufaa kwa Mahakama ya Nidhamu",
+    "downloadPack": "Pakua kifurushi cha rufaa",
+    "referralStatus": "Hali ya rufaa",
+    "tribunalReference": "Nambari ya Mahakama",
+    "saveReferral": "Hifadhi rufaa",
+    "errors": {
+      "forbidden": "Huruhusiwi kufanya hivi.",
+      "invalid": "Haikuweza kuhifadhiwa. Angalia maelezo na ujaribu tena.",
+      "past": "Usikilizaji lazima uwe wakati ujao.",
+      "when": "Weka tarehe na saa.",
+      "duration": "Chagua muda kati ya dakika 15 na saa 8.",
+      "panel": "Chagua makamishna 1 hadi 5 walio hai.",
+      "venue": "Weka mahali pa usikilizaji wa ana kwa ana.",
+      "link": "Weka kiungo cha https:// kwa usikilizaji wa mtandaoni.",
+      "stage": "Usikilizaji unapangwa kuanzia hatua ya uchunguzi, upatanisho au usikilizaji.",
+      "reason": "Toa sababu.",
+      "already_scheduled": "Kesi hii tayari ina usikilizaji uliopangwa. Upange upya badala yake.",
+      "not_scheduled": "Ni usikilizaji uliopangwa tu unaoweza kubadilishwa."
     }
   }
 }

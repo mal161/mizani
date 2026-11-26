@@ -115,3 +115,29 @@ export async function makeCase(complainantId: string, overrides: Record<string, 
   if (error) throw error;
   return data as { id: string; case_number: string };
 }
+
+/**
+ * A complainant or advocate account that can sign in through the real phone + SMS-code flow
+ * (same auth email shape as the app's phoneEmail). Advocates also get a linked roll entry.
+ */
+export async function createPhoneAccount(
+  role: "complainant" | "advocate",
+  e164: string,
+): Promise<{ userId: string; advocateId?: string }> {
+  const admin = adminClient();
+  const email = `${e164.replace(/\D/g, "")}@phone.mizani.local`;
+  const { data, error } = await admin.auth.admin.createUser({ email, email_confirm: true });
+  if (error || !data.user) throw error ?? new Error("createUser failed");
+  const userId = data.user.id;
+  const name = role === "advocate" ? `Advocate ${e164.slice(-4)}` : `Complainant ${e164.slice(-4)}`;
+  const { error: pErr } = await admin.from("profiles").upsert({ id: userId, role, full_name: name, phone: e164, active: true });
+  if (pErr) throw pErr;
+  if (role === "complainant") return { userId };
+  const { data: roll, error: rErr } = await admin
+    .from("advocates")
+    .insert({ admission_no: `P.105/PH${e164.slice(-4)}/${Date.now()}`, full_name: name, phone: e164, profile_id: userId })
+    .select("id")
+    .single();
+  if (rErr) throw rErr;
+  return { userId, advocateId: roll.id as string };
+}

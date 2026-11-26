@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { adminClient, makeCase, signInAs } from "../helpers/db";
-import { loginAsStaff } from "./helpers";
+import { adminClient, createPhoneAccount, makeCase, signInAs } from "../helpers/db";
+import { loginAsStaff, loginByPhone } from "./helpers";
+
+const digits = () => String(Math.floor(10_000_000 + Math.random() * 89_999_999));
+const MINUTES = "Private minutes: the advocate admitted keeping the deposit in the firm's office account.";
 
 const REASONS =
   "The advocate received KES 40,000 for a land transfer that never happened and did not account for the money despite repeated requests.";
@@ -65,4 +68,104 @@ test("commissioner hears a case, records minutes and a refund decision; officers
   await loginAsStaff(op, "staff");
   const res = await op.goto("/en/commission");
   expect(res?.status()).toBe(403);
+});
+
+test("officer schedules an online hearing past a clash; parties see the hearing and decision but never the minutes; referral is tracked", async ({ browser }) => {
+  test.setTimeout(420_000);
+  const db = adminClient();
+
+  // Commissioner (UI sign-in so their portal session is ready later)
+  const mCtx = await browser.newContext();
+  const mp = await mCtx.newPage();
+  const comm = await loginAsStaff(mp, "commissioner");
+
+  // Parties and a case at investigation with the advocate notified
+  const cDigits = digits();
+  const aDigits = digits();
+  // Accounts that sign in through the real phone + SMS-code flow
+  const { userId: complainantId } = await createPhoneAccount("complainant", `+2547${cDigits}`);
+  const adv = await createPhoneAccount("advocate", `+2547${aDigits}`);
+  const c = await makeCase(complainantId, {
+    stage: "investigation",
+    advocate_id: adv.advocateId,
+    advocate_notified_at: new Date().toISOString(),
+    summary: `Hearing e2e ${Date.now()}`,
+  });
+  const slug = c.case_number.replaceAll("/", "-");
+
+  // The commissioner is already booked at that time on another case
+  const day = new Date(Date.now() + 3 * 86400_000 + 3 * 3600_000).toISOString().slice(0, 10);
+  const other = await makeCase(complainantId, { stage: "hearing" });
+  await db.from("hearings").insert({ case_id: other.id, starts_at: `${day}T10:00:00+03:00`, mode: "in_person", venue: "Room 2", panel: [comm.userId] });
+
+  // Officer schedules an online hearing; the clash is flagged and confirmed
+  const sCtx = await browser.newContext();
+  const sp = await sCtx.newPage();
+  await loginAsStaff(sp, "staff");
+  await sp.goto(`/en/staff/cases/${slug}`);
+  await sp.getByLabel("Date and time").fill(`${day}T10:30`);
+  await sp.getByLabel("Format").selectOption("online");
+  await sp.getByLabel("Online link").fill("https://meet.example.org/acc-hearing");
+  await sp.locator(`input[name="panel"][value="${comm.userId}"]`).check();
+  await sp.getByRole("button", { name: "Schedule hearing" }).click();
+  await expect(sp.getByTestId("clash-alert")).toContainText(other.case_number);
+  await sp.getByRole("button", { name: "Schedule anyway" }).click();
+  await expect(sp.getByTestId("scheduled-hearing")).toContainText("https://meet.example.org/acc-hearing");
+  await expect(sp.getByTestId("stage")).toHaveText("Hearing");
+
+  // Complainant sees the hearing time and the link
+  const cCtx = await browser.newContext();
+  const cp = await cCtx.newPage();
+  await loginByPhone(cp, `07${cDigits}`, /\/en\/my\/cases$/);
+  await cp.goto(`/en/my/cases/${slug}`);
+  await expect(cp.getByTestId("next-hearing")).toContainText("https://meet.example.org/acc-hearing");
+  await expect(cp.getByTestId("next-hearing")).toContainText("10:30");
+
+  // Commissioner records minutes and a refund decision
+  await mp.goto(`/en/commission/cases/${slug}`);
+  await mp.getByLabel("Hearing minutes").fill(MINUTES);
+  await mp.getByRole("button", { name: "Save minutes" }).click();
+  await expect(mp.getByRole("article").getByText(MINUTES)).toBeVisible();
+  await mp.getByLabel("Outcome").selectOption("refund_ordered");
+  await mp.getByLabel("Amount (KES)").fill("40000");
+  await mp.getByLabel("Reasons").fill(REASONS);
+  await mp.getByRole("button", { name: "Record decision" }).click();
+  await expect(mp.getByTestId("decision-outcome")).toHaveText("Refund ordered");
+
+  // Complainant: outcome, reasons, amount, letter; no minutes
+  await cp.reload();
+  const card = cp.getByTestId("decision-card");
+  await expect(card).toContainText("Refund ordered");
+  await expect(card).toContainText("KES 40,000");
+  await expect(card).toContainText(REASONS.slice(0, 40));
+  const [letter] = await Promise.all([cp.waitForEvent("download"), card.getByRole("link", { name: "Download decision letter" }).click()]);
+  expect(letter.suggestedFilename()).toMatch(/^decision-.*\.pdf$/);
+  await expect(cp.getByText(MINUTES)).toHaveCount(0);
+
+  // Commissioner corrects the decision to a tribunal referral
+  await mp.reload();
+  await mp.getByLabel("Outcome").selectOption("referred_to_tribunal");
+  await mp.getByLabel("Reasons").fill(`${REASONS} The conduct is serious enough for the Disciplinary Tribunal.`);
+  await mp.getByRole("button", { name: "Save correction" }).click();
+  await expect(mp.getByTestId("decision-outcome")).toHaveText("Referred to the Disciplinary Tribunal");
+
+  // Advocate sees the corrected decision and can download the letter; no minutes
+  const aCtx = await browser.newContext();
+  const ap = await aCtx.newPage();
+  await loginByPhone(ap, `07${aDigits}`, /\/en\/advocate$/);
+  await ap.goto(`/en/advocate/cases/${slug}`);
+  const aCard = ap.getByTestId("decision-card");
+  await expect(aCard).toContainText("Referred to the Disciplinary Tribunal");
+  const [aLetter] = await Promise.all([ap.waitForEvent("download"), aCard.getByRole("link", { name: "Download decision letter" }).click()]);
+  expect(aLetter.suggestedFilename()).toMatch(/^decision-.*\.pdf$/);
+  await expect(ap.getByText(MINUTES)).toHaveCount(0);
+
+  // Officer lodges the referral with the Tribunal
+  await sp.reload();
+  await sp.getByLabel("Referral status").selectOption("lodged");
+  await sp.getByLabel("Tribunal reference").fill("DT/2026/0042");
+  await sp.getByRole("button", { name: "Save referral" }).click();
+  await expect(sp.getByTestId("referral")).toContainText("DT/2026/0042");
+  const { data: ref } = await db.from("referrals").select("status,tribunal_reference").eq("case_id", c.id).single();
+  expect(ref).toEqual({ status: "lodged", tribunal_reference: "DT/2026/0042" });
 });

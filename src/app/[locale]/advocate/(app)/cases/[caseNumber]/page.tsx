@@ -10,6 +10,7 @@ import { StageBadge } from "@/components/case/StageBadge";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { ResponseForm } from "./ResponseForm";
+import { HearingAndDecision } from "@/components/case/HearingAndDecision";
 
 export default async function AdvocateCasePage({ params }: { params: Promise<{ locale: string; caseNumber: string }> }) {
   const p = await params;
@@ -48,6 +49,7 @@ export default async function AdvocateCasePage({ params }: { params: Promise<{ l
         <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
         <StageBadge stage={c.stage} label={stageName(c.stage)} />
       </div>
+      <HearingAndDecision caseId={c.id} />
       {due && (
         <p className={`rounded-md px-3 py-2 text-sm ${due.getTime() < Date.now() && !responses?.length ? "bg-red-50 text-red-800" : "bg-amber-50 text-amber-900"}`}>
           {t("deadline", { date: fmt(due), served: c.advocate_served_on ? fmt(c.advocate_served_on) : "—" })}

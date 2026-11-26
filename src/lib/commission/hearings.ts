@@ -198,7 +198,7 @@ async function endHearing(actor: StaffUser, hearingId: string, status: "cancelle
   if (error) throw new Error(`${status}: ${error.message}`);
   const ctx = await caseContext(h.case_id);
   await event(h.case_id, actor, "hearing_changed", ctx.notified, { change: status, reason: why });
-  await textParties(ctx, (l) => smsText.hearingChanged(l, ctx.caseNumber, status === "cancelled" ? (l === "sw" ? "umeahirishwa/umefutwa" : "cancelled") : l === "sw" ? "umeahirishwa" : "adjourned"));
+  await textParties(ctx, (l) => smsText.hearingChanged(l, ctx.caseNumber, status === "cancelled" ? (l === "sw" ? "umefutwa" : "cancelled") : l === "sw" ? "umeahirishwa" : "adjourned"));
   await logAudit({ actorId: actorId(actor), channel: "web", action: `${status === "cancelled" ? "cancel" : "adjourn"}_hearing`, entity: "cases", entityId: h.case_id, details: { hearing_id: hearingId, reason: why } });
 }
 
