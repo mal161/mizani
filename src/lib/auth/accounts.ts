@@ -44,6 +44,27 @@ export async function ensureComplainantForPhone(phone: string, locale: Locale, f
   return id;
 }
 
+/**
+ * Who signs in with this phone: an existing complainant, an existing active advocate, or (no account yet)
+ * a new complainant. Staff, inactive advocates and other roles never sign in by phone → null.
+ */
+export async function resolveAccountForPhone(
+  phone: string,
+  locale: Locale,
+): Promise<{ id: string; role: "complainant" | "advocate" } | null> {
+  const { data: existing } = await createAdminClient()
+    .from("profiles")
+    .select("id,role,active")
+    .eq("phone", phone)
+    .maybeSingle();
+  if (existing) {
+    if (existing.role === "complainant") return { id: existing.id, role: "complainant" };
+    if (existing.role === "advocate" && existing.active) return { id: existing.id, role: "advocate" };
+    return null;
+  }
+  return { id: await ensureComplainantForPhone(phone, locale), role: "complainant" };
+}
+
 /** Creates a complainant with no phone (walk-in). They track the case with case number + PIN. */
 export async function createWalkInComplainant(fullName: string, locale: Locale): Promise<string> {
   const admin = createAdminClient();

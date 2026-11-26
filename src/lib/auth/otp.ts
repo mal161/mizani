@@ -3,7 +3,7 @@ import { normalizeKenyanPhone } from "@/lib/phone";
 import { generatePin, hashPin, verifyPin } from "@/lib/pin";
 import { getSmsProvider } from "@/lib/sms";
 import { logAudit } from "@/lib/audit";
-import { ensureComplainantForPhone, phoneEmail } from "./accounts";
+import { resolveAccountForPhone, phoneEmail } from "./accounts";
 import type { Locale } from "@/i18n/routing";
 
 const CODE_TTL_MS = 10 * 60 * 1000;
@@ -51,9 +51,39 @@ export async function requestLoginCode(
   return { ok: true };
 }
 
+export type PortalRole = "complainant" | "advocate";
+
 export type VerifyResult =
-  | { ok: true; email: string; tokenHash: string; userId: string }
+  | { ok: true; email: string; tokenHash: string; userId: string; role: PortalRole }
   | { ok: false; reason: "invalid_phone" | "invalid_code" };
+
+/**
+ * Checks and consumes an SMS login code for a normalised phone. An attempt is consumed atomically *before*
+ * comparing (parallel guesses cannot exceed the cap) and a code works once.
+ */
+export async function consumeLoginCode(phone: string, code: string): Promise<boolean> {
+  const admin = createAdminClient();
+  const { data: claimedRows, error: claimErr } = await admin.rpc("claim_login_attempt", { p_phone: phone });
+  if (claimErr) throw new Error(`could not check login code: ${claimErr.message}`);
+  const row = (claimedRows as { id: string; code_hash: string }[] | null)?.[0];
+  if (!row) return false;
+  if (!/^\d{6}$/.test(code) || !(await verifyPin(code, row.code_hash))) return false;
+  const { data: claimed } = await admin
+    .from("login_codes")
+    .update({ used_at: new Date().toISOString() })
+    .eq("id", row.id)
+    .is("used_at", null)
+    .select("id");
+  return Boolean(claimed?.length);
+}
+
+/** A one-time token the server action exchanges for a session cookie. */
+export async function sessionTokenFor(phone: string): Promise<{ email: string; tokenHash: string }> {
+  const email = phoneEmail(phone);
+  const { data: link, error } = await createAdminClient().auth.admin.generateLink({ type: "magiclink", email });
+  if (error || !link.properties?.hashed_token) throw new Error(`could not create session link: ${error?.message}`);
+  return { email, tokenHash: link.properties.hashed_token };
+}
 
 export async function verifyLoginCode(
   rawPhone: string,
@@ -62,31 +92,12 @@ export async function verifyLoginCode(
 ): Promise<VerifyResult> {
   const phone = normalizeKenyanPhone(rawPhone);
   if (!phone) return { ok: false, reason: "invalid_phone" };
-  const admin = createAdminClient();
+  if (!(await consumeLoginCode(phone, code))) return { ok: false, reason: "invalid_code" };
 
-  // Consume an attempt atomically *before* checking, so parallel guesses cannot exceed the cap.
-  const { data: claimedRows, error: claimErr } = await admin.rpc("claim_login_attempt", { p_phone: phone });
-  if (claimErr) throw new Error(`could not check login code: ${claimErr.message}`);
-  const row = (claimedRows as { id: string; code_hash: string }[] | null)?.[0];
-  if (!row) return { ok: false, reason: "invalid_code" };
-  if (!/^\d{6}$/.test(code) || !(await verifyPin(code, row.code_hash))) {
-    return { ok: false, reason: "invalid_code" };
-  }
-  // Single use: only succeeds if still unused (guards concurrent submits).
-  const { data: claimed } = await admin
-    .from("login_codes")
-    .update({ used_at: new Date().toISOString() })
-    .eq("id", row.id)
-    .is("used_at", null)
-    .select("id");
-  if (!claimed?.length) return { ok: false, reason: "invalid_code" };
-
-  const email = phoneEmail(phone);
-  const userId = await ensureComplainantForPhone(phone, locale);
-  const { data: link, error } = await admin.auth.admin.generateLink({ type: "magiclink", email });
-  if (error || !link.properties?.hashed_token) {
-    throw new Error(`could not create session link: ${error?.message}`);
-  }
-  await logAudit({ actorId: userId, channel: "web", action: "login", entity: "profiles", entityId: userId });
-  return { ok: true, email, tokenHash: link.properties.hashed_token, userId };
+  // Complainant or active advocate; staff phones never sign in here (same message as a wrong code).
+  const account = await resolveAccountForPhone(phone, locale);
+  if (!account) return { ok: false, reason: "invalid_code" };
+  const { email, tokenHash } = await sessionTokenFor(phone);
+  await logAudit({ actorId: account.id, channel: "web", action: "login", entity: "profiles", entityId: account.id });
+  return { ok: true, email, tokenHash, userId: account.id, role: account.role };
 }

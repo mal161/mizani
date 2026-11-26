@@ -32,5 +32,5 @@ export async function loginAction(prev: LoginState, formData: FormData): Promise
   const supabase = await createServerClient();
   const { error } = await supabase.auth.verifyOtp({ type: "magiclink", token_hash: r.tokenHash });
   if (error) return { step: "code", phone, error: "invalid_code" };
-  return redirect({ href: "/my/cases", locale });
+  return redirect({ href: r.role === "advocate" ? "/advocate" : "/my/cases", locale });
 }
