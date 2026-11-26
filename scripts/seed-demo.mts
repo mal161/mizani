@@ -5,8 +5,12 @@
  *
  * Plus 2 advocates with portal accounts (sign in by phone), 6 notified cases and 3 responses (1 late).
  *
- * Usage: SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts [--advocates-only]
+ * Plus (Plan 5) 2 commissioners with authenticator apps, 4 upcoming hearings (one online) and 3 heard cases with
+ * decisions (a refund order, a tribunal referral and an admonishment).
+ *
+ * Usage: SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts [--advocates-only | --commission-only]
  * Prints demo logins (email, password, TOTP secret) once. Re-running skips existing demo accounts.
+ * Redirect the output to a private file: it contains passwords and TOTP secrets.
  */
 import { randomBytes } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
@@ -27,10 +31,11 @@ const { ensureComplainantForPhone } = await import("../src/lib/auth/accounts");
 
 const admin = createAdminClient();
 const advocatesOnly = process.argv.includes("--advocates-only");
+const commissionOnly = process.argv.includes("--commission-only");
 const { notifyAdvocateAs } = await import("../src/lib/advocates/notify");
 const { submitAdvocateResponse } = await import("../src/lib/advocates/respond");
 const { phoneEmail } = await import("../src/lib/auth/accounts");
-type Role = "admin" | "staff";
+type Role = "admin" | "staff" | "commissioner";
 const STAFF: { email: string; name: string; role: Role; office: string }[] = [
   { email: "demo-admin@mizani.demo", name: "Wanjiru Kamau (Demo Admin)", role: "admin", office: "Nairobi" },
   { email: "demo-nairobi@mizani.demo", name: "Otieno Ochieng (Demo Officer)", role: "staff", office: "Nairobi" },
@@ -77,7 +82,7 @@ const officers = STAFF.filter((s) => s.role === "staff").map((s) => ({ id: ids[s
 
 const { data: advocates } = await admin.from("advocates").select("id,full_name").limit(20);
 let created = 0;
-for (let i = 0; i < (advocatesOnly ? 0 : 25); i++) {
+for (let i = 0; i < (advocatesOnly || commissionOnly ? 0 : 25); i++) {
   const story = stories[i % stories.length];
   const officer = officers[i % officers.length];
   const phone = `+2547000090${String(i).padStart(2, "0")}`;
@@ -111,7 +116,7 @@ const DEMO_ADVOCATES = [
 ];
 const advocateLines: string[] = [];
 let notified = 0;
-for (const [k, a] of DEMO_ADVOCATES.entries()) {
+for (const [k, a] of (commissionOnly ? [] : DEMO_ADVOCATES).entries()) {
   let { data: roll } = await admin.from("advocates").select("id,profile_id").eq("admission_no", a.admission).maybeSingle();
   if (!roll) {
     ({ data: roll } = await admin
@@ -158,3 +163,83 @@ for (const a of accounts) console.log("  " + a);
 console.log(`${created} cases created`);
 for (const l of advocateLines) console.log("  " + l);
 console.log(`${notified} advocates notified`);
+
+// --- Commission demo (Plan 5): two commissioners, four upcoming hearings, three decisions. ---
+const { scheduleHearingAs, recordHearingMinutesAs } = await import("../src/lib/commission/hearings");
+const { recordDecisionAs } = await import("../src/lib/commission/decisions");
+const COMMISSIONERS: (typeof STAFF)[number][] = [
+  { email: "demo-commissioner1@mizani.demo", name: "Hon. Ruth Chebet (Demo Commissioner)", role: "commissioner", office: "Nairobi" },
+  { email: "demo-commissioner2@mizani.demo", name: "Hon. Abdi Noor (Demo Commissioner)", role: "commissioner", office: "Nairobi" },
+];
+const commissionLines: string[] = [];
+const comm: { id: string; role: "commissioner"; phone: null; office: string }[] = [];
+for (const s of COMMISSIONERS) {
+  const r = await ensureStaff(s);
+  comm.push({ id: r.id, role: "commissioner", phone: null, office: s.office });
+  commissionLines.push(r.created ? `commissioner ${s.email}  password: ${r.password}  TOTP secret: ${r.secret}` : `commissioner ${s.email}  (already existed — password unchanged)`);
+}
+
+const { count: seededDecisions } = await admin.from("decisions").select("id", { count: "exact", head: true }).like("reasons", "Demo decision:%");
+let hearingsScheduled = 0;
+let decisionsRecorded = 0;
+if (!seededDecisions) {
+  const officer = officers[0];
+  /** A fresh case moved to investigation, ready for a hearing. */
+  const investigationCase = async (n: number) => {
+    const story = stories[n % stories.length];
+    const complainantId = await ensureComplainantForPhone(`+2547000097${String(n).padStart(2, "0")}`, story.lang, people[n % people.length]);
+    const adv = advocates![n % advocates!.length];
+    const filed = await fileComplaint(
+      { advocateId: adv.id, advocateNameGiven: adv.full_name, summary: story.summary, description: story.description, language: story.lang, consentDataProcessing: true },
+      [],
+      { complainantId, filedBy: complainantId, channel: "online", locale: story.lang, office: officer.office },
+    );
+    await assignCaseAs(officer, filed.caseId, officer.id);
+    await setCategoryPriorityAs(officer, filed.caseId, story.category, "high");
+    for (let s = 0; s < 3; s++) await changeStageAs(officer, filed.caseId, path[s] as never, path[s + 1] as never);
+    return filed.caseId;
+  };
+  /** 10:00 Nairobi, `days` from today. */
+  const at = (days: number, hour = 10) => {
+    const d = new Date(Date.now() + days * 86_400_000 + 3 * 3600_000).toISOString().slice(0, 10);
+    return `${d}T${String(hour).padStart(2, "0")}:00:00+03:00`;
+  };
+
+  const upcoming = [
+    { days: 2, panel: [comm[0].id], mode: "in_person" as const, venue: "ACC Boardroom, Nairobi" },
+    { days: 5, panel: [comm[1].id], mode: "online" as const, onlineLink: "https://meet.example.org/acc-demo-hearing" },
+    { days: 9, panel: [comm[0].id, comm[1].id], mode: "in_person" as const, venue: "ACC Mombasa Office, Hearing Room 1" },
+    { days: 12, panel: [comm[0].id], mode: "in_person" as const, venue: "ACC Boardroom, Nairobi" },
+  ];
+  for (const [i, h] of upcoming.entries()) {
+    const caseId = await investigationCase(i);
+    await scheduleHearingAs(officer, caseId, { startsAt: at(h.days), durationMinutes: 60, mode: h.mode, venue: h.venue, onlineLink: h.onlineLink, panel: h.panel, confirmClash: true });
+    hearingsScheduled++;
+  }
+
+  const decided = [
+    { outcome: "refund_ordered" as const, amountKes: 65000, orders: "The advocate shall refund KES 65,000 to the complainant within 30 days and file proof of payment with the Commission." },
+    { outcome: "referred_to_tribunal" as const, orders: "The complaint and record are referred to the Disciplinary Tribunal." },
+    { outcome: "admonished" as const, orders: "The advocate is admonished and shall complete the conveyancing within 14 days." },
+  ];
+  for (const [i, d] of decided.entries()) {
+    const caseId = await investigationCase(10 + i);
+    const panel = i === 1 ? [comm[0].id, comm[1].id] : [comm[i % 2].id];
+    const { hearingId } = await scheduleHearingAs(officer, caseId, { startsAt: at(1, 9 + i), durationMinutes: 60, mode: "in_person", venue: "ACC Boardroom, Nairobi", panel, confirmClash: true });
+    // Synthetic history: the hearing took place last week.
+    await admin.from("hearings").update({ starts_at: at(-7 + i, 10) }).eq("id", hearingId);
+    const chair = comm.find((c) => c.id === panel[0])!;
+    await recordHearingMinutesAs(chair, hearingId, "Demo minutes: both parties attended and made submissions. The advocate did not dispute receiving the client's money.");
+    await recordDecisionAs(chair, caseId, {
+      outcome: d.outcome,
+      amountKes: d.amountKes,
+      orders: d.orders,
+      panel,
+      reasons: "Demo decision: having heard both parties and reviewed the documents, the Commission finds that the advocate failed to account for client money and to keep the client informed, contrary to the Advocates Act.",
+    });
+    decisionsRecorded++;
+  }
+}
+for (const l of commissionLines) console.log("  " + l);
+console.log(seededDecisions ? "commission demo already seeded — skipped" : `${hearingsScheduled} hearings scheduled`);
+if (!seededDecisions) console.log(`${decisionsRecorded} decisions recorded`);
