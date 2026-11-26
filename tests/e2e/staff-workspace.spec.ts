@@ -28,7 +28,7 @@ test("staff works a case end to end; complainant sees the stage but never the no
   await sp.goto(`/en/staff?tab=all&q=${encodeURIComponent(caseNumber)}`);
   await sp.getByRole("link", { name: caseNumber }).click();
   await expect(sp).toHaveURL(new RegExp(`/en/staff/cases/${slug}$`));
-  await expect(sp.getByText(summary)).toBeVisible();
+  await expect(sp.getByText(summary, { exact: true })).toBeVisible();
 
   // Note
   await sp.getByLabel("Internal note").fill("Phoned the firm; partner promised a reply by Friday.");
