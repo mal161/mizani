@@ -6,12 +6,12 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 
 | Task | How |
 |---|---|
-| First administrator | `npx tsx scripts/create-staff.mts <email> admin <office> "<Full Name>"` (prints a one-time password) |
-| Create officer / commissioner / admin | **Administration → Staff accounts → Create**. The person gets a one-time password and sets up an authenticator app at first sign-in. |
+| First administrator | `npx tsx scripts/create-staff.mts <email> admin <office> "<Full Name>"` (prints the account's password once) |
+| Create officer / commissioner / admin | **Administration → Staff accounts → Create**. The app shows the new account's password once; give it to the person in person. It stays valid: the app has no password-change page, so whoever saw it knows it until an admin sets a new one in Supabase Studio. The person sets up an authenticator app at first sign-in, which protects the account even if the password is known. |
 | Change someone's role | **Administration → Staff accounts** (role list). Takes effect on their next page load. |
 | Someone leaves | **Administration → Staff accounts → Deactivate**. Deactivated staff are signed out of every staff page immediately (the database checks `active` on every query). Reassign their open cases from the workspace. |
 | Lost phone / authenticator | Remove their factor so they enrol again at next sign-in: in Supabase SQL, `delete from auth.mfa_factors where user_id = '<their id>';` Confirm identity in person first, and note it in the incident log. |
-| Forgotten staff password | Supabase Studio → Authentication → Users → send a recovery link, or create a new temporary password. |
+| Forgotten staff password | Supabase Studio → Authentication → Users → the user → set a new password, and hand it over in person. (E-mailed reset links have no page to land on in the app.) |
 | Complainant forgot their PIN | If the case has a phone number they can sign in with an SMS code at `/[locale]/login` and see the case without the PIN. An in-app PIN reset is not built yet (see [security.md](security.md#known-limits)). |
 | Advocate lost the activation code | Issue a fresh notice from the Advocate panel on the staff case page; a new notice replaces the old code. |
 
@@ -29,7 +29,7 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 ## Monitoring
 
 - `GET /api/health` every minute from the ACC's monitoring tool. Alert when the status is not 200 or `db` is not `"ok"`. The response holds no personal data.
-- Watch the app log for `sms_failed` timeline events (SMS not delivered) and for repeated 5xx errors.
+- Undelivered SMS appear as "SMS could not be sent" entries on the case timeline (`case_events` rows of type `sms_failed`); check for them weekly, e.g. `select count(*) from case_events where type = 'sms_failed' and created_at > now() - interval '7 days';`. Watch the app's own output for repeated 5xx errors.
 - The hourly deadline job writes alerts to staff; if officers stop receiving "deadline within 48 hours" alerts, check the cron entry and `CRON_SECRET`.
 
 ## Rotating secrets
@@ -49,7 +49,7 @@ Rotate at handover, then at least yearly and immediately after any suspected lea
 1. Back up the database.
 2. Apply any new files in `supabase/migrations/` (in filename order) — always **before** deploying the new app version.
 3. Build and deploy the new image; check `/api/health`.
-4. Run the smoke test from [self-hosting.md](self-hosting.md#6-check-the-installation).
+4. Run the smoke test from [self-hosting.md](self-hosting.md#7-check-the-installation).
 
 ## Incidents and personal-data breaches
 

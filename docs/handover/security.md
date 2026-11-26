@@ -42,6 +42,7 @@ All secrets are environment variables on the app server (listed in [self-hosting
 
 Deliberately left for the ACC to prioritise after handover:
 
+- No in-app password change or reset for staff. The password an administrator issues stays valid until an admin sets a new one in Supabase Studio; the authenticator-app step is what protects a staff account whose password others have seen.
 - No in-app reset of a complainant's status PIN (complainants with a phone can sign in by SMS instead).
 - No automatic deletion: retention periods must be set first ([data-protection.md](data-protection.md)).
 - Scanned evidence images are not read for AI summaries (no OCR).

@@ -32,7 +32,8 @@ export function parsePeriod(q: { period?: string; from?: string; to?: string }, 
     const to = new Date(nairobiMidnight(q.to).getTime() + DAY);
     if (from < to && to.getTime() - from.getTime() <= MAX_SPAN) return { key: "custom", from, to, fromDay: q.from, toDay: q.to };
   }
-  const key = q.period && q.period in PRESETS ? (q.period as Exclude<PeriodKey, "custom">) : "90d";
+  // Own keys only: "toString" or "__proto__" must not be read off the object prototype.
+  const key = q.period && Object.hasOwn(PRESETS, q.period) ? (q.period as Exclude<PeriodKey, "custom">) : "90d";
   const toDay = nairobiDay(now);
   const to = new Date(nairobiMidnight(toDay).getTime() + DAY);
   const from = new Date(to.getTime() - PRESETS[key] * DAY);

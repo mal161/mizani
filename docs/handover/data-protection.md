@@ -12,7 +12,7 @@ For the ACC's data protection officer. Mizani was built with the Data Protection
    - a model hosted in Kenya (`openai-compatible`);
    - an external provider (`claude`, or `openrouter` pinned with `OPENROUTER_PROVIDERS`) under a data-transfer agreement, treated as a cross-border transfer.
 5. **Retention periods** for each kind of record (table below). Mizani does **not** delete anything automatically yet; once the ACC sets periods, a scheduled deletion job can be added per table.
-6. **Lawful basis and notices:** confirm the lawful basis (statutory function under the Advocates Act) and publish a privacy notice; the filing form records the complainant's consent to data processing.
+6. **Lawful basis and notices:** confirm the lawful basis (statutory function under the Advocates Act) and publish a privacy notice. The filing form will not submit without the complainant ticking consent to data processing, but the consent itself is not stored as a separate record (the case existing is the evidence); if the ACC relies on consent, add a stored consent record with its wording and time.
 7. **Rotate every key** used during the hackathon and remove all demo data before go-live.
 
 ## What AI receives

@@ -42,3 +42,11 @@ describe("periodQuery", () => {
     expect(periodQuery(parsePeriod({ period: "custom", from: "2026-01-01", to: "2026-01-31" }, now))).toBe("period=custom&from=2026-01-01&to=2026-01-31");
   });
 });
+
+describe("parsePeriod with object-prototype names", () => {
+  it.each(["toString", "constructor", "__proto__", "hasOwnProperty"])("falls back to the default for period=%s", (period) => {
+    const p = parsePeriod({ period }, now);
+    expect(p.key).toBe("90d");
+    expect(Number.isNaN(p.from.getTime())).toBe(false);
+  });
+});

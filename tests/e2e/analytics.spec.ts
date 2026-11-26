@@ -13,8 +13,13 @@ test("commissioner reads analytics, filters, exports; officers are refused", asy
 
   // Three cases in a fresh office: one closed after 12 days, one at investigation, one at decision with a refund order.
   const { userId } = await signInAs("complainant", "+254700004004");
-  const closed = await makeCase(userId, { office, stage: "closed", created_at: at(100), category: "delay" });
-  const open = await makeCase(userId, { office, stage: "investigation", created_at: at(60), category: "negligence" });
+  const { data: adv } = await db
+    .from("advocates")
+    .insert({ admission_no: `P.105/E2EAN${stamp}/2014`, full_name: `Repeat Advocate ${stamp}`, phone: "+254700004105" })
+    .select("id,full_name")
+    .single();
+  const closed = await makeCase(userId, { office, stage: "closed", created_at: at(100), category: "delay", advocate_id: adv!.id });
+  const open = await makeCase(userId, { office, stage: "investigation", created_at: at(60), category: "negligence", advocate_id: adv!.id });
   const decided = await makeCase(userId, { office, stage: "decision", created_at: at(50), category: "withheld_funds" });
   await db.from("case_events").insert([
     { case_id: closed.id, type: "stage_changed", visibility: "parties", body: { from: "received", to: "closed" }, created_at: at(88) },
@@ -39,6 +44,13 @@ test("commissioner reads analytics, filters, exports; officers are refused", asy
   }
   await expect(cp.getByTestId("stat-filed")).toContainText("3");
   await expect(cp.getByTestId("stat-refunds")).toContainText("25,000");
+
+  // The repeat advocate's name opens that advocate's cases in the workspace
+  await cp.getByRole("link", { name: adv!.full_name }).click();
+  await expect(cp).toHaveURL(/\/en\/staff\?.*advocate=/, { timeout: 90_000 });
+  await expect(cp.getByRole("link", { name: closed.case_number })).toBeVisible();
+  await expect(cp.getByRole("link", { name: open.case_number })).toBeVisible();
+  await cp.goto(`/en/commission/analytics?period=365d&office=${encodeURIComponent(office)}`);
 
   // Filter: last 30 days, same office
   await cp.getByLabel("Period").selectOption("30d");

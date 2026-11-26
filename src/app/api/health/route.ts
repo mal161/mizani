@@ -11,7 +11,8 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   let db: "ok" | "error" = "ok";
   try {
-    const { error } = await createAdminClient().from("cases").select("id", { count: "exact", head: true }).limit(1);
+    // One row at most and no count: the endpoint is unauthenticated, so it must stay cheap.
+    const { error } = await createAdminClient().from("cases").select("id").limit(1);
     if (error) db = "error";
   } catch {
     db = "error";

@@ -169,7 +169,7 @@ export default async function AnalyticsPage({ params, searchParams }: { params: 
             t("advocates.head.last"),
           ]}
           rows={r.advocates.map((x) => [
-            <Link key={x.advocateId} href={`/staff?tab=all&q=${encodeURIComponent(x.admissionNo)}`} className="underline">
+            <Link key={x.advocateId} href={`/staff?tab=all&advocate=${x.advocateId}`} className="underline">
               {x.fullName}
             </Link>,
             x.admissionNo,
