@@ -41,6 +41,23 @@ export async function signInAs(
   return { client, userId };
 }
 
+/** An advocate account (phone sign-in) linked to a fresh synthetic roll entry. */
+export async function signInAdvocate(
+  phone: string,
+): Promise<{ client: SupabaseClient; userId: string; advocateId: string; admissionNo: string }> {
+  const { client, userId } = await signInAs("advocate", phone);
+  const admin = adminClient();
+  await admin.from("profiles").update({ full_name: `Advocate ${phone.slice(-4)}` }).eq("id", userId);
+  const admissionNo = `P.105/T${phone.slice(-4)}/${Date.now()}`;
+  const { data, error } = await admin
+    .from("advocates")
+    .insert({ admission_no: admissionNo, full_name: `Advocate ${phone.slice(-4)}`, phone, profile_id: userId })
+    .select("id")
+    .single();
+  if (error) throw error;
+  return { client, userId, advocateId: data.id as string, admissionNo };
+}
+
 export const STAFF_TEST_PASSWORD = "Staff-test-password-123!";
 
 /** Creates a staff-type user with an enrolled + verified TOTP factor; returns an aal2 client. */
