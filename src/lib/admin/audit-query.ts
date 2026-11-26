@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { parseCaseNumberInput } from "@/lib/cases/case-number";
+import { toCsv as csvTable } from "@/lib/csv";
 
 export interface AuditFilters {
   caseNumber?: string;
@@ -65,17 +66,9 @@ export async function auditQuery(
   return { rows: (data ?? []) as AuditRow[], count: count ?? 0 };
 }
 
-const csvCell = (v: unknown) => {
-  const s = v === null || v === undefined ? "" : typeof v === "string" ? v : JSON.stringify(v);
-  // Neutralise spreadsheet formulas and quote everything.
-  const safe = /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
-  return `"${safe.replace(/"/g, '""')}"`;
-};
-
 export function toCsv(rows: AuditRow[]): string {
-  const head = ["id", "at", "actor_id", "channel", "action", "entity", "entity_id", "details"];
-  const lines = rows.map((r) =>
-    [r.id, r.at, r.actor_id, r.actor_channel, r.action, r.entity, r.entity_id, r.details].map(csvCell).join(","),
+  return csvTable(
+    ["id", "at", "actor_id", "channel", "action", "entity", "entity_id", "details"],
+    rows.map((r) => [r.id, r.at, r.actor_id, r.actor_channel, r.action, r.entity, r.entity_id, r.details]),
   );
-  return [head.join(","), ...lines].join("\r\n") + "\r\n";
 }
