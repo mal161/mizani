@@ -13,7 +13,7 @@ export default async function SettingsAdmin({ params }: { params: Promise<{ loca
   const t = await getTranslations("admin.settings");
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       <SettingsForm
         path={`/${locale}/staff/admin/settings`}
         stages={STAGES.map((s) => ({ key: s, defaultName: tStages(s) }))}

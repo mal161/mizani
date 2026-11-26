@@ -44,7 +44,7 @@ export function ActivateForm() {
           {t(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
         {verifying ? t("finish") : t("continue")}
       </button>
     </form>

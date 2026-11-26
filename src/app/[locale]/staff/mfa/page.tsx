@@ -35,7 +35,7 @@ export default async function MfaPage({ params }: { params: Promise<{ locale: Lo
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-6 px-4 py-16">
-      <h1 className="text-2xl font-bold">{enrolment ? t("enrolTitle") : t("title")}</h1>
+      <h1 className="text-2xl font-medium">{enrolment ? t("enrolTitle") : t("title")}</h1>
       {enrolment ? (
         <section className="flex flex-col gap-3">
           <p className="text-slate-600">{t("enrolIntro")}</p>

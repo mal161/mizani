@@ -61,7 +61,7 @@ export function AiPanel(props: {
 
   return (
     <section aria-label={t("panel")} className="flex flex-col gap-3 rounded-lg border border-violet-200 bg-violet-50/50 p-4">
-      <h3 className="font-semibold">{t("panel")}</h3>
+      <h3 className="font-medium">{t("panel")}</h3>
       {!props.aiOn ? (
         <p className="text-sm text-slate-600">{t("off")}</p>
       ) : (

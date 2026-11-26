@@ -9,7 +9,7 @@ export async function StaffNav({ user, locale, unread }: { user: StaffUser; loca
   return (
     <header className="border-b bg-slate-900 text-white">
       <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-sm">
-        <Link href="/staff" className="font-semibold">
+        <Link href="/staff" className="font-medium">
           Mizani · ACC
         </Link>
         <Link href="/staff">{t("workspace")}</Link>
@@ -19,7 +19,7 @@ export async function StaffNav({ user, locale, unread }: { user: StaffUser; loca
         <Link href="/staff/notifications" aria-label={t("notificationsCount", { count: unread })} className="relative">
           {t("notifications")}
           {unread > 0 && (
-            <span data-testid="unread-count" className="ml-1 rounded-full bg-amber-400 px-1.5 text-xs font-bold text-slate-900">
+            <span data-testid="unread-count" className="ml-1 rounded-full bg-amber-400 px-1.5 text-xs font-medium text-slate-900">
               {unread}
             </span>
           )}

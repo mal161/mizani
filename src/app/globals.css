@@ -12,6 +12,57 @@
   --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
 }
 
+/*
+ * Mizani design tokens (unslop pass, direction: steady, fair, plain-spoken; the registry and the case file).
+ * Surfaces stay graphite. One ink-green accent, used for the primary action, the selection and the case stamp.
+ * White on --color-accent is 8:1.
+ */
+@theme {
+  --color-accent: #1d5a45;
+  --color-accent-hover: #164735;
+  --color-accent-soft: #e9f2ee;
+  --color-hairline: rgb(23 23 23 / 0.1);
+  --color-control: #8a8a8a;
+}
+
+@layer base {
+  /* Tailwind v4 borders default to currentColor; everything here is a quiet hairline unless a class says otherwise. */
+  *,
+  ::before,
+  ::after,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-hairline);
+  }
+  /* Form controls keep a visible edge (3:1 against white). */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea {
+    border-color: var(--color-control);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Signature: a case number set like a registry stamp. */
+.case-stamp {
+  display: inline-block;
+  border: 1px solid rgb(29 90 69 / 0.35);
+  border-radius: 4px;
+  padding: 0 6px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+a.case-stamp:hover {
+  background: var(--color-accent-soft);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

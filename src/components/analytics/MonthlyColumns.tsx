@@ -26,9 +26,9 @@ export function MonthlyColumns({ months, label }: { months: { month: string; lab
             <rect x={i * slot} y={top} width={slot} height={H - top - bottom} fill="transparent" />
             {m.value > 0 &&
               (h >= 4 ? (
-                <path d={`M${x},${H - bottom} v${-(h - 3)} q0,-3 3,-3 h${bar - 6} q3,0 3,3 v${h - 3} z`} fill="#065f46" />
+                <path d={`M${x},${H - bottom} v${-(h - 3)} q0,-3 3,-3 h${bar - 6} q3,0 3,3 v${h - 3} z`} fill="var(--color-accent)" />
               ) : (
-                <rect x={x} y={y} width={bar} height={h} fill="#065f46" />
+                <rect x={x} y={y} width={bar} height={h} fill="var(--color-accent)" />
               ))}
             {(i === peak || i === last) && m.value > 0 && (
               <text x={x + bar / 2} y={y - 4} textAnchor="middle" fontSize={11} fill="#1e293b">

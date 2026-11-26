@@ -8,16 +8,16 @@ export async function CommissionNav({ user, locale }: { user: StaffUser; locale:
   const t = await getTranslations("commission.nav");
   const tRoles = await getTranslations("staffNav.roles");
   return (
-    <header className="border-b bg-emerald-950 text-white">
+    <header className="border-b bg-slate-900 text-white">
       <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-sm">
-        <Link href="/commission" className="font-semibold">
+        <Link href="/commission" className="font-medium">
           Mizani · {t("brand")}
         </Link>
         <Link href="/commission">{t("dashboard")}</Link>
         <Link href="/commission/hearings">{t("hearings")}</Link>
         <Link href="/commission/analytics">{t("analytics")}</Link>
         <Link href="/staff">{t("workspace")}</Link>
-        <span className="ml-auto text-emerald-100">
+        <span className="ml-auto text-slate-300">
           {user.full_name ?? ""} · {tRoles(user.role)}
         </span>
         <div className="rounded bg-white px-1 text-slate-900">

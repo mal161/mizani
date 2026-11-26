@@ -55,14 +55,14 @@ export default async function StaffHomePage({
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-8">
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       <div className="flex flex-wrap items-center gap-2">
         {TABS.map((k) => (
           <Link
             key={k}
             href={href({ tab: k, q: "" })}
             aria-current={k === tab ? "page" : undefined}
-            className={`rounded-full px-3 py-1 text-sm ${k === tab ? "bg-slate-900 text-white" : "border"}`}
+            className={`rounded-full px-3 py-1 text-sm ${k === tab ? "border border-accent/30 bg-accent-soft text-accent" : "border hover:bg-slate-50"}`}
           >
             {t(`tabs.${k}`)}
           </Link>

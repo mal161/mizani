@@ -9,12 +9,12 @@ export default function HomePage() {
       <div className="flex justify-end">
         <LanguageSwitcher />
       </div>
-      <h1 className="text-3xl font-bold">{t("title")}</h1>
+      <h1 className="text-3xl font-medium">{t("title")}</h1>
       <p className="text-slate-600">{t("tagline")}</p>
       <div className="flex flex-wrap gap-3">
         <Link
           href="/my/file"
-          className="rounded-md bg-slate-900 px-4 py-2 text-white"
+          className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover"
         >
           {t("fileComplaint")}
         </Link>

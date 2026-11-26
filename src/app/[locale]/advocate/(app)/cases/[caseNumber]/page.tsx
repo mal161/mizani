@@ -46,7 +46,7 @@ export default async function AdvocateCasePage({ params }: { params: Promise<{ l
         ← {t("title")}
       </Link>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
+        <h1 className="font-mono text-2xl font-medium">{c.case_number}</h1>
         <StageBadge stage={c.stage} label={stageName(c.stage)} />
       </div>
       <HearingAndDecision caseId={c.id} />
@@ -57,14 +57,14 @@ export default async function AdvocateCasePage({ params }: { params: Promise<{ l
       )}
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">{t("allegations")}</h2>
+        <h2 className="text-lg font-medium">{t("allegations")}</h2>
         <p className="text-sm text-slate-500">{t("complainant", { name: c.complainant_name ?? "—" })}</p>
         <p className="font-medium">{c.summary}</p>
         <p className="whitespace-pre-wrap text-slate-700">{c.description}</p>
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">{t("documents")}</h2>
+        <h2 className="text-lg font-medium">{t("documents")}</h2>
         {evidence.length === 0 ? (
           <p className="text-sm text-slate-500">{t("noDocuments")}</p>
         ) : (
@@ -81,7 +81,7 @@ export default async function AdvocateCasePage({ params }: { params: Promise<{ l
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">{t("respond.title")}</h2>
+        <h2 className="text-lg font-medium">{t("respond.title")}</h2>
         {(responses ?? []).map((r) => (
           <div key={r.id} className="rounded-lg border bg-slate-50 p-3 text-sm">
             <p className="text-xs text-slate-500">
@@ -106,7 +106,7 @@ export default async function AdvocateCasePage({ params }: { params: Promise<{ l
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">{t("timeline")}</h2>
+        <h2 className="text-lg font-medium">{t("timeline")}</h2>
         <Timeline events={(events ?? []) as TimelineEvent[]} stageName={stageName} />
       </section>
     </main>

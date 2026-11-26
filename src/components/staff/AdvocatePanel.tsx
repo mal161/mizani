@@ -21,7 +21,7 @@ export interface AdvocatePanelProps {
   responses: { id: string; text: string; late: boolean; createdAt: string }[];
 }
 
-const btn = "rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-60";
+const btn = "rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 
 export function AdvocatePanel(p: AdvocatePanelProps) {
@@ -76,7 +76,7 @@ export function AdvocatePanel(p: AdvocatePanelProps) {
 
   return (
     <section aria-label={t("panel")} className="flex flex-col gap-3 rounded-lg border p-4 text-sm">
-      <h3 className="font-semibold">{t("panel")}</h3>
+      <h3 className="font-medium">{t("panel")}</h3>
 
       {p.linked ? (
         <p>

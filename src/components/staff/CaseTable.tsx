@@ -34,7 +34,7 @@ export async function CaseTable({
   return (
     <div className="overflow-x-auto rounded-lg border">
       <table className="w-full min-w-[720px] text-left text-sm">
-        <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+        <thead className="bg-slate-50 text-xs text-slate-600">
           <tr>
             <th className="px-3 py-2">{t("caseNumber")}</th>
             <th className="px-3 py-2">{t("summary")}</th>
@@ -66,7 +66,7 @@ export async function CaseTable({
                 </td>
                 <td className="px-3 py-2">{t(`priorities.${r.priority}`)}</td>
                 <td className="px-3 py-2">{r.assigned_officer_name ?? <span className="text-slate-400">{t("unassigned")}</span>}</td>
-                <td className={`px-3 py-2 ${overdue ? "font-semibold text-red-700" : ""}`}>
+                <td className={`px-3 py-2 ${overdue ? "font-medium text-red-700" : ""}`}>
                   {due
                     ? `${overdue ? `${t("overdue")} · ` : ""}${format.dateTime(due, { dateStyle: "medium", timeZone: "Africa/Nairobi" })}`
                     : "—"}

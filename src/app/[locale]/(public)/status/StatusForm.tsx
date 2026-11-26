@@ -32,7 +32,7 @@ export function StatusForm() {
             className="rounded-md border px-3 py-2 tracking-widest"
           />
         </label>
-        <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+        <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
           {t("check")}
         </button>
       </form>

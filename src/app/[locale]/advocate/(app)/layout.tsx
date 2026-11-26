@@ -18,7 +18,7 @@ export default async function AdvocateLayout({
     <>
       <header className="border-b bg-slate-800 text-white">
         <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-sm">
-          <Link href="/advocate" className="font-semibold">
+          <Link href="/advocate" className="font-medium">
             Mizani · {t("portal")}
           </Link>
           <span className="ml-auto text-slate-300">{user.full_name}</span>

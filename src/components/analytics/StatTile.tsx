@@ -3,7 +3,7 @@ export function StatTile({ label, value, sub, testId }: { label: string; value: 
   return (
     <div data-testid={testId} className="flex flex-col gap-1 rounded-lg border bg-white p-4">
       <span className="text-sm text-slate-600">{label}</span>
-      <span className="text-2xl font-bold tabular-nums text-slate-900">{value}</span>
+      <span className="text-2xl font-medium tabular-nums text-slate-900">{value}</span>
       {sub && <span className="text-xs text-slate-500">{sub}</span>}
     </div>
   );

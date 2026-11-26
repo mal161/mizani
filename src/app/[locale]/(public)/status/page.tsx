@@ -9,7 +9,7 @@ export default function StatusPage() {
       <div className="flex justify-end">
         <LanguageSwitcher />
       </div>
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       <p className="text-slate-600">{t("intro")}</p>
       <StatusForm />
     </main>

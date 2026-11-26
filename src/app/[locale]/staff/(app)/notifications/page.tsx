@@ -26,7 +26,7 @@ export default async function NotificationsPage({ params }: { params: Promise<{ 
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-4 px-4 py-8">
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       {!data?.length ? (
         <p className="text-slate-500">{t("empty")}</p>
       ) : (

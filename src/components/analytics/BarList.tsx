@@ -21,7 +21,7 @@ export function BarList({ items, unit, label, format }: { items: BarItem[]; unit
             <span className="truncate text-slate-700">{i.label}</span>
             <span className="flex items-center gap-2">
               <span className="h-3 flex-1 rounded-sm bg-slate-100">
-                <span className="block h-3 rounded-r bg-emerald-800" style={{ width: `${pct}%` }} />
+                <span className="block h-3 rounded-r bg-accent" style={{ width: `${pct}%` }} />
               </span>
               <span className="w-24 shrink-0 tabular-nums text-slate-800">{shown}</span>
               {i.note && <span className="rounded bg-amber-100 px-1.5 text-xs font-medium text-amber-900">{i.note}</span>}

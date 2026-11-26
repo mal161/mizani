@@ -45,7 +45,7 @@ export function Filters(props: { period: string; fromDay: string; toDay: string;
           ))}
         </select>
       </label>
-      <button type="submit" className="rounded-md bg-emerald-800 px-3 py-1.5 text-sm text-white">
+      <button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover">
         {t("apply")}
       </button>
     </form>

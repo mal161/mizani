@@ -30,7 +30,7 @@ export function ResponseForm({ caseId }: { caseId: string }) {
           {t(`errors.${state.reason ?? "server"}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
         {t("send")}
       </button>
     </form>

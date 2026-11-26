@@ -15,11 +15,11 @@ export default async function UsersAdmin({ params }: { params: Promise<{ locale:
   const path = `/${locale}/staff/admin/users`;
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       <CreateUserForm path={path} />
       <div className="overflow-x-auto rounded-lg border">
         <table className="w-full min-w-[760px] text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <thead className="bg-slate-50 text-xs text-slate-600">
             <tr>
               <th className="px-3 py-2">{t("name")}</th>
               <th className="px-3 py-2">{t("email")}</th>

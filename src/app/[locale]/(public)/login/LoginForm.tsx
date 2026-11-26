@@ -58,7 +58,7 @@ export function LoginForm() {
         name="intent"
         value={state.step === "phone" ? "send" : "verify"}
         disabled={pending}
-        className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60"
+        className="rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-accent-hover disabled:opacity-60"
       >
         {state.step === "phone" ? t("sendCode") : t("signIn")}
       </button>

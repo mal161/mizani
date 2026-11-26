@@ -36,12 +36,12 @@ export function CreateUserForm({ path }: { path: string }) {
         {t("office")}
         <input name="office" required minLength={2} className={field} />
       </label>
-      <button type="submit" disabled={pending} className="self-end rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-end rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60">
         {t("create")}
       </button>
       {state.tempPassword && (
         <p role="status" className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-800 sm:col-span-2 lg:col-span-5">
-          {t("created")} <code data-testid="temp-password" className="font-mono font-bold">{state.tempPassword}</code>
+          {t("created")} <code data-testid="temp-password" className="font-mono font-medium">{state.tempPassword}</code>
         </p>
       )}
       {state.error && (

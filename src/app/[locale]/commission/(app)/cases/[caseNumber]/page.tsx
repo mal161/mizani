@@ -18,7 +18,7 @@ import { MinutesForm } from "./MinutesForm";
 import { DecisionForm } from "./DecisionForm";
 
 const section = "flex flex-col gap-2";
-const h2 = "text-lg font-semibold";
+const h2 = "text-lg font-medium";
 
 export default async function CommissionCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
   const { locale, caseNumber: slug } = await params;
@@ -72,7 +72,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
           ← {t("back")}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
+          <h1 className="font-mono text-2xl font-medium">{c.case_number}</h1>
           <StageBadge stage={c.stage} label={stageName(c.stage)} />
           <a href={`/api/cases/${c.id}/bundle`} className="ml-auto rounded-md border px-3 py-1.5 text-sm underline">
             {t("downloadBundle")}
@@ -142,7 +142,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
         {decision && (
           <section className="flex flex-col gap-2 rounded-lg border-2 border-emerald-800 p-4 text-sm" data-testid="decision">
             <h2 className={h2}>{t("decision.issued")}</h2>
-            <p className="text-base font-semibold" data-testid="decision-outcome">
+            <p className="text-base font-medium" data-testid="decision-outcome">
               {t(`outcomes.${decision.outcome}`)}
             </p>
             {decision.amount_kes != null && <p className="font-medium">KES {format.number(Number(decision.amount_kes))}</p>}

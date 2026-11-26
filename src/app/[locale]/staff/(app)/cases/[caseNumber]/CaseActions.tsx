@@ -32,7 +32,7 @@ function useResetOnSuccess(state: ActionState) {
 }
 
 const box = "flex flex-col gap-2 rounded-lg border p-4";
-const btn = "self-start rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-60";
+const btn = "self-start rounded-md bg-accent px-3 py-1.5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 
 export function CaseActions(props: {
@@ -71,7 +71,7 @@ export function CaseActions(props: {
         <form action={stageAct} className={box}>
           {hidden}
           <input type="hidden" name="from" value={props.stage} />
-          <h3 className="font-semibold">{t("stageTitle")}</h3>
+          <h3 className="font-medium">{t("stageTitle")}</h3>
           <label className="flex flex-col gap-1 text-sm">
             {t("moveTo")}
             <select name="to" value={target} onChange={(e) => setTarget(e.target.value)} aria-label={t("moveTo")} className={field}>
@@ -97,7 +97,7 @@ export function CaseActions(props: {
 
       <form action={triageAct} className={box}>
         {hidden}
-        <h3 className="font-semibold">{t("triageTitle")}</h3>
+        <h3 className="font-medium">{t("triageTitle")}</h3>
         <label className="flex flex-col gap-1 text-sm">
           {t("category")}
           <select name="category" defaultValue={props.category ?? ""} aria-label={t("category")} className={field}>
@@ -127,7 +127,7 @@ export function CaseActions(props: {
 
       <form action={assignAct} className={box}>
         {hidden}
-        <h3 className="font-semibold">{t("assignTitle")}</h3>
+        <h3 className="font-medium">{t("assignTitle")}</h3>
         <label className="flex flex-col gap-1 text-sm">
           {t("officer")}
           <select name="officerId" defaultValue={props.assignedOfficerId ?? ""} aria-label={t("officer")} className={field}>
@@ -148,7 +148,7 @@ export function CaseActions(props: {
       <form action={noteAct} ref={noteRef} className={box}>
         {hidden}
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-semibold">{t("note")}</span>
+          <span className="font-medium">{t("note")}</span>
           <textarea name="text" required maxLength={5000} rows={3} className={field} />
         </label>
         <Feedback state={noteState} />
@@ -159,7 +159,7 @@ export function CaseActions(props: {
 
       <form action={infoAct} ref={infoRef} className={box}>
         {hidden}
-        <h3 className="font-semibold">{t("infoTitle")}</h3>
+        <h3 className="font-medium">{t("infoTitle")}</h3>
         <label className="flex flex-col gap-1 text-sm">
           {t("infoMessage")}
           <textarea name="message" required minLength={5} maxLength={2000} rows={3} className={field} />

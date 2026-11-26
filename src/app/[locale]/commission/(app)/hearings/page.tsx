@@ -32,7 +32,7 @@ export default async function HearingsAgenda({
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
       <div className="flex flex-wrap items-center gap-4">
-        <h1 className="text-2xl font-bold">{t("agenda.title")}</h1>
+        <h1 className="text-2xl font-medium">{t("agenda.title")}</h1>
         <span className="text-slate-600">
           {format.dateTime(start, { dateStyle: "medium", timeZone: "Africa/Nairobi" })} –{" "}
           {format.dateTime(new Date(end.getTime() - DAY), { dateStyle: "medium", timeZone: "Africa/Nairobi" })}
@@ -56,7 +56,7 @@ export default async function HearingsAgenda({
           const today = rows.filter((h) => nairobiDay(new Date(h.starts_at)) === key);
           return (
             <li key={key} className="flex flex-col gap-2 rounded-lg border p-4">
-              <h2 className="font-semibold">{format.dateTime(d, { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Nairobi" })}</h2>
+              <h2 className="font-medium">{format.dateTime(d, { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Nairobi" })}</h2>
               {today.length === 0 ? (
                 <p className="text-sm text-slate-400">{t("agenda.none")}</p>
               ) : (
@@ -79,7 +79,7 @@ export default async function HearingsAgenda({
                           {" · "}
                           {h.panel.map((p) => names.get(p) ?? "—").join(", ")}
                         </span>
-                        {mine && <span className="ml-2 rounded bg-emerald-700 px-1.5 text-xs text-white">{t("agenda.yourPanel")}</span>}
+                        {mine && <span className="ml-2 rounded border border-accent/40 px-1.5 text-xs text-accent">{t("agenda.yourPanel")}</span>}
                       </li>
                     );
                   })}

@@ -21,7 +21,7 @@ export default async function AdvocateHome({ params }: { params: Promise<{ local
 
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-5 px-4 py-8">
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <h1 className="text-2xl font-medium">{t("title")}</h1>
       <p className="text-slate-600">{t("intro")}</p>
       {!cases?.length ? (
         <p className="text-slate-500">{t("empty")}</p>
@@ -37,7 +37,7 @@ export default async function AdvocateHome({ params }: { params: Promise<{ local
                     {c.case_number}
                   </Link>
                   <p className="truncate text-sm text-slate-600">{c.summary}</p>
-                  <p className={`text-xs ${overdue ? "font-semibold text-red-700" : "text-slate-500"}`}>
+                  <p className={`text-xs ${overdue ? "font-medium text-red-700" : "text-slate-500"}`}>
                     {responded.has(c.id)
                       ? t("responded")
                       : due

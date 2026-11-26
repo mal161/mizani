@@ -10,7 +10,7 @@ export async function FlagsPanel({ flags }: { flags: CaseFlags }) {
   const h = flags.advocate_history;
   return (
     <section aria-label={t("panel")} className="flex flex-col gap-2 rounded-lg border p-4 text-sm">
-      <h3 className="font-semibold">{t("panel")}</h3>
+      <h3 className="font-medium">{t("panel")}</h3>
       {flags.possible_duplicates.length > 0 ? (
         <div>
           <p className="font-medium text-amber-800">{t("duplicates")}</p>
