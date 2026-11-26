@@ -40,9 +40,10 @@ export async function loginByPhone(page: Page, phone: string, landing: RegExp, l
   await page.goto(`/${locale}/login`);
   await page.locator('input[name="phone"]').fill(phone);
   await page.locator('button[name="intent"]').click();
-  await page.locator('input[name="code"]').fill("123456");
+  // The first sign-in of a run compiles the login action in dev; allow for it.
+  await page.locator('input[name="code"]').fill("123456", { timeout: 90_000 });
   await page.locator('button[name="intent"]').click();
-  await expect(page).toHaveURL(landing);
+  await expect(page).toHaveURL(landing, { timeout: 90_000 });
 }
 
 /** Signs in as a fresh complainant (test OTP 123456) and returns the phone used. */

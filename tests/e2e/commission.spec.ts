@@ -71,7 +71,7 @@ test("commissioner hears a case, records minutes and a refund decision; officers
 });
 
 test("officer schedules an online hearing past a clash; parties see the hearing and decision but never the minutes; referral is tracked", async ({ browser }) => {
-  test.setTimeout(420_000);
+  test.setTimeout(600_000);
   const db = adminClient();
 
   // Commissioner (UI sign-in so their portal session is ready later)
