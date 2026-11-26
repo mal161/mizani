@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { roboto, robotoMono } from "../fonts";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -25,8 +26,8 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   return (
-    <html lang={locale}>
-      <body className="min-h-screen bg-white text-slate-900 antialiased">
+    <html lang={locale} className={`${roboto.variable} ${robotoMono.variable}`}>
+      <body className="min-h-screen bg-white font-sans text-slate-900 antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
