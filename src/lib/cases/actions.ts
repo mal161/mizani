@@ -7,7 +7,7 @@ import sw from "../../../messages/sw.json";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSmsProvider } from "@/lib/sms";
 import { logAudit } from "@/lib/audit";
-import { actorId, type StaffUser } from "@/lib/auth/staff-types";
+import { actorId, ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 import type { Locale } from "@/i18n/routing";
 import { smsText } from "./messages";
 import { isStage, type Stage } from "./stages";
@@ -140,3 +140,28 @@ export async function requestInfoAs(actor: StaffUser, caseId: string, message: s
 }
 
 export { isStage, PRIORITIES };
+
+/** Links the case to a roll entry (when the complainant's advocate name was not matched at filing). */
+export async function linkAdvocateAs(actor: StaffUser, caseId: string, advocateId: string): Promise<void> {
+  if (actor.role !== "staff" && actor.role !== "admin") throw new ForbiddenError();
+  const admin = createAdminClient();
+  const { data: roll } = await admin.from("advocates").select("id,full_name").eq("id", advocateId).maybeSingle();
+  if (!roll) throw new Error("advocate not on the roll");
+  const { data: before } = await admin.from("cases").select("advocate_id").eq("id", caseId).single();
+  const { error } = await admin.from("cases").update({ advocate_id: advocateId }).eq("id", caseId);
+  if (error) throw new Error(`link advocate: ${error.message}`);
+  await event(caseId, actor, "advocate_linked", "internal", { advocate_id: advocateId, name: roll.full_name });
+  await auditAction(actor, "link_advocate", caseId, { before: before?.advocate_id ?? null, after: advocateId });
+}
+
+/** Shares (or stops sharing) a complainant-side document with the advocate. Internal documents can't be shared. */
+export async function setDocumentSharedAs(actor: StaffUser, documentId: string, shared: boolean): Promise<void> {
+  if (actor.role !== "staff" && actor.role !== "admin") throw new ForbiddenError();
+  const admin = createAdminClient();
+  const { data: doc } = await admin.from("documents").select("case_id,visibility").eq("id", documentId).maybeSingle();
+  if (!doc) throw new Error("document not found");
+  if (shared && doc.visibility === "internal") throw new Error("internal documents cannot be shared");
+  const { error } = await admin.from("documents").update({ shared_with_advocate: shared }).eq("id", documentId);
+  if (error) throw new Error(`share document: ${error.message}`);
+  await auditAction(actor, shared ? "share_document" : "unshare_document", doc.case_id, { document_id: documentId });
+}

@@ -10,6 +10,11 @@ export const smsText = {
     l === "sw"
       ? `ACC: Kesi ${caseNumber} sasa iko hatua: ${stageLabel}.`
       : `ACC: Case ${caseNumber} is now at stage: ${stageLabel}.`,
+  /** To the advocate (roll phone). No complainant details. */
+  advocateNotified: (l: Locale, caseNumber: string, due: string) =>
+    l === "sw"
+      ? `ACC: Lalamiko dhidi yako, kesi ${caseNumber}. Jibu kabla ya ${due}. Maelezo na nambari ya uanzishaji yako kwenye barua ya ilani.`
+      : `ACC: A complaint has been made against you, case ${caseNumber}. Respond by ${due}. See the notice letter for details and your activation code.`,
   infoRequested: (l: Locale, caseNumber: string) =>
     l === "sw"
       ? `ACC: Tunahitaji maelezo zaidi kuhusu kesi ${caseNumber}. Ingia kwenye Mizani kuona ombi na kujibu.`
