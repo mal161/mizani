@@ -147,7 +147,9 @@ export async function linkAdvocateAs(actor: StaffUser, caseId: string, advocateI
   const admin = createAdminClient();
   const { data: roll } = await admin.from("advocates").select("id,full_name").eq("id", advocateId).maybeSingle();
   if (!roll) throw new Error("advocate not on the roll");
-  const { data: before } = await admin.from("cases").select("advocate_id").eq("id", caseId).single();
+  const { data: before } = await admin.from("cases").select("advocate_id,advocate_notified_at").eq("id", caseId).single();
+  // Relinking after service would show the allegations to an advocate who was never served.
+  if (before?.advocate_notified_at) throw new Error("the advocate has already been notified; relinking is not allowed");
   const { error } = await admin.from("cases").update({ advocate_id: advocateId }).eq("id", caseId);
   if (error) throw new Error(`link advocate: ${error.message}`);
   await event(caseId, actor, "advocate_linked", "internal", { advocate_id: advocateId, name: roll.full_name });

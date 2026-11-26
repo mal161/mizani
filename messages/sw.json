@@ -464,7 +464,9 @@
         "locked": "Majaribio mengi yasiyo sahihi kwa nambari hii. Wasiliana na ofisi ya ACC kupata ilani mpya.",
         "phone_in_use": "Nambari hii ya simu tayari inatumiwa na akaunti nyingine ya Mizani. Tumia nambari nyingine.",
         "invalid_phone": "Weka nambari sahihi ya simu ya Kenya.",
-        "invalid_code": "Nambari hiyo si sahihi au imeisha muda."
+        "invalid_code": "Nambari hiyo si sahihi au imeisha muda.",
+        "rate_limited": "Majaribio mengi mno kutoka kwenye muunganisho huu. Tafadhali subiri saa moja ujaribu tena.",
+        "already_activated": "Akaunti hii ya wakili tayari imeanzishwa. Ingia kwenye ukurasa wa kuingia kwa nambari ya simu uliyosajili."
       }
     },
     "respond": {

@@ -25,6 +25,26 @@ describe("notice letter", () => {
     expect(text).toMatch(/Kiswahili|Ilani/);
   });
 
+  it("keeps Windows line breaks and tabs from turning into question marks", async () => {
+    const pdf = await buildNoticeLetter({
+      caseNumber: "ACC/2026/000125",
+      advocateName: "A",
+      admissionNo: "P.1",
+      complainantName: "B",
+      summary: "S",
+      description: "First line\r\nSecond\tline\r\nThird line",
+      servedOn: "2026-11-28",
+      responseDue: "2026-12-12",
+      activationCode: "ABCD2345",
+      portalUrl: "https://x/advocate/activate",
+      office: "Kisumu",
+    });
+    const text = (await extractPdfText(pdf))!;
+    expect(text).toContain("First line");
+    expect(text).toContain("Second line");
+    expect(text).not.toMatch(/line\s*\?/);
+  });
+
   it("wraps very long allegations onto further pages instead of cutting them off", async () => {
     const pdf = await buildNoticeLetter({
       caseNumber: "ACC/2026/000124",

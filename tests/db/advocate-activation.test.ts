@@ -64,7 +64,7 @@ describe("advocate activation", () => {
     const a = await notifiedCaseWithCode();
     const phone = `07${rnd()}`;
     for (let i = 0; i < 5; i++) await startAdvocateActivation({ admissionNo: a.admissionNo, code: "ZZZZZZZZ", phone }, "en");
-    expect(await startAdvocateActivation({ admissionNo: a.admissionNo, code: a.code, phone }, "en")).toEqual({ ok: false, reason: "locked" });
+    expect(await startAdvocateActivation({ admissionNo: a.admissionNo, code: a.code, phone }, "en")).toEqual({ ok: false, reason: "invalid" });
   });
 
   it("a used code no longer works", async () => {

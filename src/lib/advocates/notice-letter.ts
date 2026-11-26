@@ -21,6 +21,8 @@ const MARGIN = 56;
 /** Standard PDF fonts only cover Latin-1: normalise quotes/dashes and drop anything else. */
 function pdfSafe(s: string): string {
   return s
+    .replace(/\r\n?/g, "\n")
+    .replace(/\t/g, " ")
     .replace(/[‘’ʼ]/g, "'")
     .replace(/[“”]/g, '"')
     .replace(/[–—]/g, "-")
