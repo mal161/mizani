@@ -12,6 +12,7 @@
     "db:reset": "supabase db reset"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2",
     "bcryptjs": "^3.0.3",
@@ -20,6 +21,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "server-only": "^0.0.1",
+    "unpdf": "^2.2.2",
     "zod": "^4.6.7"
   },
   "devDependencies": {
