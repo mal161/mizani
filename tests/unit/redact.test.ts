@@ -27,6 +27,11 @@ describe("redact", () => {
     expect(r.counts).toMatchObject({ kra_pin: 1, national_id: 1 });
   });
 
+  it("removes an ID number followed by punctuation", () => {
+    expect(redact("ID number 23456789, phone", none).text).toBe("ID number [ID_NUMBER], phone");
+    expect(redact("(ID 1234567).", none).text).toBe("(ID [ID_NUMBER]).");
+  });
+
   it("removes passport numbers only near the word passport", () => {
     expect(redact("Passport no. AK1234567 was taken", none).text).toBe("Passport no. [PASSPORT] was taken");
     expect(redact("Plot AK1234567 in Nakuru", none).text).toBe("Plot AK1234567 in Nakuru");

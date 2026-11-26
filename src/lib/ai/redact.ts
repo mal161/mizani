@@ -20,8 +20,9 @@ const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 const PHONE = /(?<![\d+])(?:\+?254|0)[\s-]?[17]\d{2}[\s-]?\d{3}[\s-]?\d{3}(?!\d)/g;
 const KRA_PIN = /\b[AP]\d{9}[A-Z]\b/gi;
 const PASSPORT = /(passport[^\n]{0,20}?)\b([A-Z]{1,2}\d{6,8})\b/gi;
-// Standalone 7–8 digit numbers, except money amounts written with KES/Ksh/Sh.
-const NATIONAL_ID = /(?<!(?:KES|KSH|Ksh|Sh|shs?)\.?\s?)(?<![\d,.])\b\d{7,8}\b(?![\d,])/g;
+// Standalone 7–8 digit numbers, except money amounts written with KES/Ksh/Sh and digit groups like 1,250,000.
+// A comma or dot only joins numbers when a digit is on its other side, so "23456789," is still an ID.
+const NATIONAL_ID = /(?<!(?:KES|KSH|Ksh|Sh|shs?)\.?\s?)(?<!\d[,.])(?<![\dA-Za-z])\d{7,8}(?![,.]\d)(?![\dA-Za-z])/g;
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
