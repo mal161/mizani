@@ -61,4 +61,4 @@ Everything an officer does, plus **Administration**: staff accounts (create, dea
 - **Sign in** like staff; you land on **Commission**: your upcoming hearings, cases awaiting a decision, recent decisions; **Hearings** shows the week's agenda.
 - **Before a hearing:** open the case and **Download case bundle** (one PDF with the complaint, responses, history and evidence; confidential).
 - **After the hearing:** record the minutes (internal), then the decision: outcome, amount for refunds, reasons (published to both parties), orders and panel. A correction replaces the published decision and keeps the earlier one on record.
-- **Analytics:** resolution times, where cases wait, complaint trends, officer workload, advocates with repeated complaints and decision outcomes, by period and office, each with CSV download.
+- **Analytics:** resolution times, where cases wait, complaint trends, officer workload, advocates with repeated complaints and decision outcomes, by period and office. Overview, stages, trends, workload and advocates each have a CSV download (decision outcomes are included in the overview CSV).

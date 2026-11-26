@@ -37,7 +37,7 @@ Next.js 15 (App Router, TypeScript) · Supabase (Postgres + row-level security, 
 
 `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts` creates (synthetic) one admin, three officers (Nairobi, Mombasa, Kisumu) with authenticator apps pre-enrolled, and 25 cases across all stages. It prints each login and TOTP secret once — add the secret to an authenticator app ("enter a setup key"). Re-running skips existing demo accounts.
 
-To create a real staff account: `npx tsx scripts/create-staff.mts <email> <staff|admin|commissioner> <office> "<Full Name>"` (prints a one-time temporary password; the person sets up their authenticator at first sign-in). After the first admin exists, create others from **Administration → Staff accounts**.
+To create a real staff account: `npx tsx scripts/create-staff.mts <email> <staff|admin|commissioner> <office> "<Full Name>"` (prints the password once; it stays valid because the app has no password-change page, so hand it over in person. The person sets up their authenticator at first sign-in). After the first admin exists, create others from **Administration → Staff accounts**.
 
 ### Complainant demo sign-in
 
@@ -103,7 +103,7 @@ Database tests create test users and cases in the configured project. Use a deve
 
 ## Analytics
 
-`/commission/analytics` (commissioners and admins): complaints filed, closed and open; median days to resolve; deadlines met on time; where cases wait (median and 90th-percentile days per stage, open and overdue now); monthly complaint trends by category; officer workload; advocates with repeated complaints (and how many were upheld or referred); decision outcomes and refunds ordered. Filter by period (30/90/365 days or custom dates, Africa/Nairobi) and office; each section downloads as CSV. Figures are computed in the database (`analytics_*` functions) and only aggregates leave it: no complainant details. Views and exports are audited. Demo history: `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --analytics-only > private-logins.txt` adds 160 synthetic cases over the past 12 months.
+`/commission/analytics` (commissioners and admins): complaints filed, closed and open; median days to resolve; deadlines met on time; where cases wait (median and 90th-percentile days per stage, open and overdue now); monthly complaint trends by category; officer workload; advocates with repeated complaints (and how many were upheld or referred); decision outcomes and refunds ordered. Filter by period (30/90/365 days or custom dates, Africa/Nairobi) and office; overview, stages, trends, workload and advocates download as CSV (outcomes are in the overview CSV). Figures are computed in the database (`analytics_*` functions) and only aggregates leave it: no complainant details. Views and exports are audited. Demo history: `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --analytics-only > private-logins.txt` adds 160 synthetic cases over the past 12 months.
 
 ## Handover to the ACC
 

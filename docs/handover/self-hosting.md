@@ -54,7 +54,7 @@ The token must equal `CRON_SECRET`.
 
 ## 4. SMS and USSD (Africa's Talking)
 
-Use an ACC-owned Africa's Talking account with a dedicated short code. Set `SMS_PROVIDER=africastalking`, `AT_USERNAME` and `AT_API_KEY`. For USSD, set the service callback URL to `https://mizani.acc.example/api/ussd?key=<USSD_CALLBACK_SECRET>`.
+Use an ACC-owned Africa's Talking account with a dedicated short code or alphanumeric sender ID. Set `SMS_PROVIDER=africastalking`, `AT_USERNAME`, `AT_API_KEY` and `AT_SENDER_ID` (without it, messages go out from Africa's Talking's default sender). For USSD, set the service callback URL to `https://mizani.acc.example/api/ussd?key=<USSD_CALLBACK_SECRET>`.
 
 ## 5. First administrator
 
@@ -64,7 +64,11 @@ With the env file loaded on any machine that can reach Supabase:
 npx tsx scripts/create-staff.mts <email> admin <office> "<Full Name>"
 ```
 
-It prints a one-time password; the administrator sets up their authenticator app at first sign-in and creates every other account in **Administration → Staff accounts**.
+It prints the account's password once (it stays valid: the app has no password-change page, so keep it private or set a new one in Supabase Studio). The administrator sets up their authenticator app at first sign-in and creates every other account in **Administration → Staff accounts**.
+
+## 6. The advocates roll
+
+A fresh install has an empty `advocates` table; the demo roll in `supabase/seed.sql` is synthetic and must not be loaded. Advocates must be on the roll before officers can match them when sending a notice, and before they can activate their accounts (admission number + roll phone). Import the Law Society of Kenya roll as a CSV with the columns `admission_no` (unique), `full_name`, `phone` (international format, `+2547…`) and `firm` (optional): Supabase Studio → Table editor → `advocates` → Insert → Import data from CSV, or `\copy advocates (admission_no, full_name, phone, firm) from 'roll.csv' csv header` in `psql`. When the roll changes, insert new advocates and update changed phones or firms by admission number (e.g. `insert … on conflict (admission_no) do update set phone = excluded.phone, firm = excluded.firm`); never delete rows that cases already point to.
 
 ## Environment variables
 
@@ -76,6 +80,7 @@ It prints a one-time password; the administrator sets up their authenticator app
 | `SMS_PROVIDER` | `africastalking` in production; `fake` only for development (codes printed to the log) | yes | no |
 | `AT_USERNAME` | Africa's Talking username (`sandbox` for testing) | with Africa's Talking | no |
 | `AT_API_KEY` | Africa's Talking API key | with Africa's Talking | **yes** |
+| `AT_SENDER_ID` | The ACC's registered short code or sender ID shown to recipients | recommended with Africa's Talking | no |
 | `USSD_CALLBACK_SECRET` | Shared secret in the USSD callback URL | with USSD | **yes** |
 | `CRON_SECRET` | Bearer token for `/api/cron/deadlines` | yes | **yes** |
 | `AI_PROVIDER` | `none` (AI off), `claude`, `openrouter`, `openai-compatible` (e.g. a model hosted in Kenya) or `fake` (demo) | no (default `none`) | no |
@@ -87,7 +92,7 @@ It prints a one-time password; the administrator sets up their authenticator app
 
 `OTP_TEST_CODE` exists for automated tests only. It is ignored when `SMS_PROVIDER=africastalking` or `NODE_ENV=production`; **never set it on a server**.
 
-## 6. Check the installation
+## 7. Check the installation
 
 - `curl https://mizani.acc.example/api/health` → `{"ok":true,"db":"ok", ...}` with the expected `sms` and `ai` provider names.
 - File a test complaint at `/sw/my/file`, check it at `/sw/status`, then delete the test data.

@@ -37,3 +37,23 @@ describe("ACC handover pack", () => {
     expect(g).toContain("## Wakili");
   });
 });
+
+describe("handover docs say only what the code does", () => {
+  it("does not promise a one-time password or a recovery page the app lacks", () => {
+    for (const d of ["docs/handover/operations.md", "docs/handover/self-hosting.md"]) {
+      expect(read(d), d).not.toMatch(/one-time password|recovery link/i);
+    }
+    expect(read("docs/handover/security.md")).toMatch(/no in-app password change/i);
+  });
+
+  it("explains how to load the real advocates roll", () => {
+    expect(read("docs/handover/self-hosting.md")).toMatch(/advocates roll/i);
+  });
+
+  it("does not claim consent is stored or that every analytics section has a CSV", () => {
+    expect(read("docs/handover/data-protection.md")).not.toMatch(/records the complainant's consent/i);
+    expect(read("README.md")).not.toMatch(/each section downloads as CSV/i);
+    expect(read("docs/handover/user-guide.md")).not.toMatch(/each with CSV download/i);
+    expect(read("docs/handover/operations.md")).not.toMatch(/app log for `sms_failed`/i);
+  });
+});

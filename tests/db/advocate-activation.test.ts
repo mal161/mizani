@@ -87,6 +87,8 @@ describe("advocate activation", () => {
   });
 
   it("a complainant's own sign-in is unaffected", async () => {
+    // This fixed phone is reused by every run; clear its earlier codes so the daily send limit (8) is not hit.
+    await adminClient().from("login_codes").delete().eq("phone", "+254700002301");
     await requestLoginCode("0700002301", "en");
     const r = await verifyLoginCode("0700002301", lastCode());
     expect(r.ok && r.role).toBe("complainant");
