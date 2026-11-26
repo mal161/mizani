@@ -60,6 +60,51 @@ describe("redact", () => {
     expect(r.text).toBe("[COMPLAINANT] and [COMPLAINANT] came. Al was there.");
   });
 
+  describe("review fixes: formats that used to slip through", () => {
+    it.each([
+      ["Call 0712 34 56 78", "Call [PHONE]"],
+      ["Call 712345678 today", "Call [PHONE] today"],
+      ["Call (0712) 345678", "Call [PHONE]"],
+      ["Call 0712.345.678", "Call [PHONE]"],
+    ])("phone %s", (input, expected) => {
+      expect(redact(input, none).text).toBe(expected);
+    });
+
+    it.each([
+      ["My ID12345678 card", "My ID[ID_NUMBER] card"],
+      ["ID No. 1234 5678 issued", "ID No. [ID_NUMBER] issued"],
+      ["id number: 2345-6789.", "id number: [ID_NUMBER]."],
+    ])("ID %s", (input, expected) => {
+      expect(redact(input, none).text).toBe(expected);
+    });
+
+    it("removes bracketed email obfuscation", () => {
+      expect(redact("write jane [at] gmail [dot] com or jo(at)mail.co.ke", none).text).toBe("write [EMAIL] or [EMAIL]");
+    });
+
+    it("removes the parties' known phone numbers and emails in any layout", () => {
+      const r = redact("reach me on 0 7 1 2 - 3 4 5 - 6 7 8 or Mail: Zawadi.M@Example.com", none, {
+        phones: ["+254712345678"],
+        emails: ["zawadi.m@example.com"],
+      });
+      expect(r.text).toBe("reach me on [PHONE] or Mail: [EMAIL]");
+    });
+
+    it("matches names written with or without apostrophes, and hyphenated parts", () => {
+      const parties = [{ name: "Wanjiku-Mwangi Ng'ang'a", placeholder: "[ADVOCATE]" }];
+      expect(redact("Advocate Nganga said no", parties).text).toBe("Advocate [ADVOCATE] said no");
+      expect(redact("Advocate Ng’ang’a said no", parties).text).toBe("Advocate [ADVOCATE] said no");
+      expect(redact("Wanjiku came", parties).text).toBe("[ADVOCATE] came");
+    });
+
+    it("does not turn common words or firm suffixes into placeholders", () => {
+      const r = redact("Kamau and Associates sent the letter and the fee note.", [
+        { name: "Kamau and Associates Advocates", placeholder: "[ADVOCATE]" },
+      ]);
+      expect(r.text).toBe("[ADVOCATE] sent the letter and the fee note.");
+    });
+  });
+
   it("handles empty input", () => {
     const r = redact("", none);
     expect(r.text).toBe("");

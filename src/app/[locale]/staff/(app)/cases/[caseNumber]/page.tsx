@@ -122,6 +122,7 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
             triageRow
               ? ({
                   ...(triageRow.output ?? {}),
+                  id: triageRow.id,
                   status: triageRow.status,
                   model: triageRow.model,
                   created_at: triageRow.created_at,

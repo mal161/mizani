@@ -10,6 +10,7 @@ import {
 } from "@/app/[locale]/staff/(app)/cases/[caseNumber]/actions";
 
 export interface AiTriageView {
+  id: string;
   status: "ok" | "unavailable";
   category?: string;
   categoryLabel?: string;
@@ -95,6 +96,7 @@ export function AiPanel(props: {
               {tr?.status === "ok" && (
                 <form action={applyAct}>
                   {hidden}
+                  <input type="hidden" name="aiOutputId" value={tr.id} />
                   <button type="submit" disabled={applying} className={`${btn} bg-slate-900 text-white`}>
                     {t("apply")}
                   </button>

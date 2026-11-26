@@ -49,7 +49,8 @@
       "file_too_large": "Each file must be 10 MB or smaller.",
       "file_type": "Only PDF, JPG and PNG files are accepted.",
       "not_signed_in": "Your session has ended. Please sign in again.",
-      "server": "Something went wrong and your complaint was not filed. Please try again."
+      "server": "Something went wrong and your complaint was not filed. Please try again.",
+      "too_many_filings": "You have filed several complaints today. Please wait 24 hours, or visit an ACC office for help."
     },
     "fieldErrors": {
       "advocateNameGiven": "Advocate's name: at least 2 characters.",
@@ -416,7 +417,8 @@
       "invalid": "That did not work. Try again.",
       "stale": "The case changed. Reload the page.",
       "not_allowed": "Not allowed.",
-      "reason_required": "A reason is required."
+      "reason_required": "A reason is required.",
+      "ai_rate_limited": "AI was already run several times for this case in the last hour. Try again later."
     }
   },
   "flags": {

@@ -3,6 +3,7 @@ import type { StaffUser } from "@/lib/auth/staff-types";
 import { redact } from "./redact";
 import { extractPdfText } from "./document-text";
 import { activeProvider, caseParties, recordAi, addCounts, type AiRunStatus } from "./triage";
+import { aiRateLimited } from "./limits";
 
 const PER_DOC_CHARS = 4000;
 const TEXT_EVENTS = new Set(["note", "info_requested", "info_provided", "stage_changed"]);
@@ -27,7 +28,8 @@ export async function summarizeCaseAs(actor: StaffUser, caseId: string): Promise
   const provider = await activeProvider();
   if (!provider) return { status: "disabled" };
   const admin = createAdminClient();
-  const { parties, summary, description } = await caseParties(caseId);
+  if (await aiRateLimited(caseId, "case_summary")) return { status: "rate_limited" };
+  const { parties, known, summary, description } = await caseParties(caseId);
 
   const [{ data: events }, { data: docs }] = await Promise.all([
     admin.from("case_events").select("type,created_at,body").eq("case_id", caseId).order("created_at"),
@@ -47,8 +49,8 @@ export async function summarizeCaseAs(actor: StaffUser, caseId: string): Promise
     lines.push(text ? `Document ${d.file_name} (text):\n${text}` : `Document ${d.file_name}: no readable text (scanned).`);
   }
 
-  const complaint = redact(`${summary}\n\n${description}`, parties);
-  const timeline = redact(lines.join("\n"), parties);
+  const complaint = redact(`${summary}\n\n${description}`, parties, known);
+  const timeline = redact(lines.join("\n"), parties, known);
   const result = await provider.summarizeCase({ complaint: complaint.text, timeline: timeline.text });
   return { status: await recordAi(caseId, "case_summary", provider, result, addCounts(complaint.counts, timeline.counts), actor) };
 }

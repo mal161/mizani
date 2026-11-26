@@ -80,7 +80,7 @@ export async function applyAiAction(_p: ActionState, formData: FormData): Promis
   return run(formData, async (caseId) => {
     const actor = await assertStaff(WRITERS);
     const { applyAiSuggestionAs } = await import("@/lib/ai/apply");
-    await applyAiSuggestionAs(actor, caseId);
+    await applyAiSuggestionAs(actor, caseId, String(formData.get("aiOutputId") ?? ""));
   });
 }
 
@@ -90,6 +90,7 @@ export async function rerunTriageAction(_p: ActionState, formData: FormData): Pr
     const { triageCase } = await import("@/lib/ai/triage");
     const r = await triageCase(caseId, actor);
     if (r.status === "disabled") return { error: "ai_off" };
+    if (r.status === "rate_limited") return { error: "ai_rate_limited" };
   });
 }
 
@@ -100,5 +101,6 @@ export async function summarizeAction(_p: ActionState, formData: FormData): Prom
     const { summarizeCaseAs } = await import("@/lib/ai/summarize");
     const r = await summarizeCaseAs(actor, caseId);
     if (r.status === "disabled") return { error: "ai_off" };
+    if (r.status === "rate_limited") return { error: "ai_rate_limited" };
   });
 }

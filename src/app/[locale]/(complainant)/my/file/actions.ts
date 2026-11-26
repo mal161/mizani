@@ -1,6 +1,8 @@
 "use server";
 
+import { after } from "next/server";
 import { hasLocale } from "next-intl";
+import { checkFilingLimit } from "@/lib/ai/limits";
 import { getCurrentUser } from "@/lib/auth/session";
 import { fileComplaint, ComplaintValidationError } from "@/lib/cases/file-complaint";
 import { afterFiling } from "@/lib/cases/after-filing";
@@ -26,6 +28,10 @@ export async function fileComplaintAction(_prev: FileState, formData: FormData):
     return { status: "error", reason: "not_signed_in", fields: [], values };
   }
 
+  if (!(await checkFilingLimit(user.id))) {
+    return { status: "error", reason: "too_many_filings", fields: [], values };
+  }
+
   try {
     const r = await fileComplaint(
       {
@@ -39,7 +45,7 @@ export async function fileComplaintAction(_prev: FileState, formData: FormData):
       formData.getAll("evidence").filter((f): f is File => f instanceof File),
       { complainantId: user.id, filedBy: user.id, channel: "online", locale },
     );
-    await afterFiling(r.caseId);
+    await afterFiling(r.caseId, (task) => after(task));
     return { status: "filed", caseNumber: r.caseNumber, pin: r.pin };
   } catch (e) {
     if (e instanceof ComplaintValidationError) {

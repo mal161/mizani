@@ -54,7 +54,9 @@ describe("summarizeCaseAs", () => {
     expect(input.timeline).toContain("[PHONE]");
     expect(input.timeline).not.toContain("0711 222 333");
     expect(input.timeline).toContain("Paid KES 75,000");
-    expect(input.complaint).toContain("[ADVOCATE]");
+    // The ordinary word "advocate" stays; only the party's name would be replaced.
+    expect(input.complaint).toContain("the advocate has done nothing");
+    expect(input.complaint).not.toContain("Summary Test Advocate");
 
     expect((await latestAi(caseId, "case_summary"))?.status).toBe("ok");
     const { data } = await adminClient()

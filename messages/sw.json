@@ -49,7 +49,8 @@
       "file_too_large": "Kila faili lisizidi MB 10.",
       "file_type": "Faili za PDF, JPG na PNG pekee zinakubaliwa.",
       "not_signed_in": "Muda wako umeisha. Tafadhali ingia tena.",
-      "server": "Hitilafu imetokea na lalamiko lako halijawasilishwa. Tafadhali jaribu tena."
+      "server": "Hitilafu imetokea na lalamiko lako halijawasilishwa. Tafadhali jaribu tena.",
+      "too_many_filings": "Umewasilisha malalamiko kadhaa leo. Tafadhali subiri saa 24, au tembelea ofisi ya ACC kwa msaada."
     },
     "fieldErrors": {
       "advocateNameGiven": "Jina la wakili: angalau herufi 2.",
@@ -416,7 +417,8 @@
       "invalid": "Haikufanikiwa. Jaribu tena.",
       "stale": "Kesi imebadilika. Pakia upya ukurasa.",
       "not_allowed": "Hairuhusiwi.",
-      "reason_required": "Sababu inahitajika."
+      "reason_required": "Sababu inahitajika.",
+      "ai_rate_limited": "AI imeshatumika mara kadhaa kwa kesi hii katika saa moja iliyopita. Jaribu tena baadaye."
     }
   },
   "flags": {

@@ -3,11 +3,12 @@ import { logAudit } from "@/lib/audit";
 import { actorId, type StaffUser } from "@/lib/auth/staff-types";
 import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
 import { getAiProvider } from "./index";
-import { redact, type KnownParty, type RedactionKind } from "./redact";
+import { redact, type KnownParty, type KnownIdentifiers, type RedactionKind } from "./redact";
+import { aiRateLimited } from "./limits";
 import type { AiProvider, AiResult } from "./provider";
 
 export type AiKind = "triage" | "case_summary";
-export type AiRunStatus = "ok" | "unavailable" | "disabled";
+export type AiRunStatus = "ok" | "unavailable" | "disabled" | "rate_limited";
 
 export interface AiOutputRow {
   id: string;
@@ -28,22 +29,32 @@ export async function activeProvider(): Promise<AiProvider | null> {
 }
 
 /** Names to replace with placeholders: the complainant and the advocate (roll name and name as given). */
-export async function caseParties(caseId: string): Promise<{ parties: KnownParty[]; summary: string; description: string }> {
+export async function caseParties(
+  caseId: string,
+): Promise<{ parties: KnownParty[]; known: KnownIdentifiers; summary: string; description: string }> {
   const admin = createAdminClient();
   const { data: c, error } = await admin
     .from("cases")
-    .select("summary,description,advocate_name_given,complainant:profiles!cases_complainant_id_fkey(full_name),advocate:advocates(full_name)")
+    .select(
+      "summary,description,advocate_name_given,complainant:profiles!cases_complainant_id_fkey(full_name,phone),advocate:advocates(full_name,phone,email)",
+    )
     .eq("id", caseId)
     .single();
   if (error) throw new Error(`load case for AI: ${error.message}`);
-  const complainant = (c.complainant as unknown as { full_name: string | null } | null)?.full_name;
-  const advocateRoll = (c.advocate as unknown as { full_name: string } | null)?.full_name;
+  const comp = c.complainant as unknown as { full_name: string | null; phone: string | null } | null;
+  const adv = c.advocate as unknown as { full_name: string; phone: string | null; email: string | null } | null;
+  const complainant = comp?.full_name;
+  const advocateRoll = adv?.full_name;
+  const known: KnownIdentifiers = {
+    phones: [comp?.phone, adv?.phone].filter(Boolean) as string[],
+    emails: [adv?.email].filter(Boolean) as string[],
+  };
   const parties: KnownParty[] = [];
   if (complainant) parties.push({ name: complainant, placeholder: "[COMPLAINANT]" });
   for (const n of new Set([advocateRoll, c.advocate_name_given].filter(Boolean) as string[])) {
     parties.push({ name: n, placeholder: "[ADVOCATE]" });
   }
-  return { parties, summary: c.summary as string, description: c.description as string };
+  return { parties, known, summary: c.summary as string, description: c.description as string };
 }
 
 export function addCounts(a: Record<RedactionKind, number>, b: Record<RedactionKind, number>) {
@@ -93,9 +104,10 @@ export async function recordAi<T>(
 export async function triageCase(caseId: string, actor: StaffUser | null = null): Promise<{ status: AiRunStatus }> {
   const provider = await activeProvider();
   if (!provider) return { status: "disabled" };
+  if (actor && (await aiRateLimited(caseId, "triage"))) return { status: "rate_limited" };
   const cfg = await loadWorkflowConfig();
-  const { parties, summary, description } = await caseParties(caseId);
-  const r = redact(`${summary}\n\n${description}`, parties);
+  const { parties, known, summary, description } = await caseParties(caseId);
+  const r = redact(`${summary}\n\n${description}`, parties, known);
 
   let result = await provider.triage({ text: r.text, categories: cfg.categories });
   if (result.ok && !cfg.categories.includes(result.value.category)) result = { ok: false, reason: "invalid_output" };

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { applyAiSuggestionAs } from "@/lib/ai/apply";
-import { triageCase } from "@/lib/ai/triage";
+import { triageCase, latestAi } from "@/lib/ai/triage";
 import { resetAiProviderForTests } from "@/lib/ai";
 import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 import { adminClient, signInAs, signInStaff, makeCase } from "../helpers/db";
@@ -31,7 +31,7 @@ async function triagedCase() {
 describe("applyAiSuggestionAs", () => {
   it("copies the suggested category and priority onto the case and audits it", async () => {
     const c = await triagedCase();
-    await applyAiSuggestionAs(officer, c.id);
+    await applyAiSuggestionAs(officer, c.id, (await latestAi(c.id, "triage"))!.id);
     const admin = adminClient();
     const { data } = await admin.from("cases").select("category,priority").eq("id", c.id).single();
     expect(data).toEqual({ category: "withheld_funds", priority: "high" });
@@ -45,13 +45,13 @@ describe("applyAiSuggestionAs", () => {
 
   it("refuses a commissioner (read-only) and changes nothing", async () => {
     const c = await triagedCase();
-    await expect(applyAiSuggestionAs(commissioner, c.id)).rejects.toBeInstanceOf(ForbiddenError);
+    await expect(applyAiSuggestionAs(commissioner, c.id, (await latestAi(c.id, "triage"))!.id)).rejects.toBeInstanceOf(ForbiddenError);
     const { data } = await adminClient().from("cases").select("category").eq("id", c.id).single();
     expect(data!.category).toBeNull();
   });
 
   it("fails cleanly when there is no usable suggestion", async () => {
     const c = await makeCase(complainantId);
-    await expect(applyAiSuggestionAs(officer, c.id)).rejects.toThrow(/no AI suggestion/);
+    await expect(applyAiSuggestionAs(officer, c.id, crypto.randomUUID())).rejects.toThrow(/does not belong/);
   });
 });

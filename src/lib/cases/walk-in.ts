@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/routing";
 import type { ComplaintInput } from "./schema";
 import { complaintSchema, validateEvidence } from "./schema";
 import { fileComplaint, ComplaintValidationError, type FiledCase } from "./file-complaint";
-import { afterFiling } from "./after-filing";
+import { afterFiling, type Scheduler } from "./after-filing";
 import { logAudit } from "@/lib/audit";
 
 export interface WalkInForm extends ComplaintInput {
@@ -19,7 +19,12 @@ export interface WalkInForm extends ComplaintInput {
  * Files a complaint brought in person. Only officers and admins may do this. Validates everything before
  * creating any account, so a bad form never leaves an orphan complainant behind.
  */
-export async function fileWalkInComplaintAs(actor: StaffUser, form: WalkInForm, files: File[]): Promise<FiledCase> {
+export async function fileWalkInComplaintAs(
+  actor: StaffUser,
+  form: WalkInForm,
+  files: File[],
+  schedule?: Scheduler,
+): Promise<FiledCase> {
   if (actor.role !== "staff" && actor.role !== "admin") throw new ForbiddenError();
 
   const fullName = form.fullName.trim();
@@ -52,6 +57,6 @@ export async function fileWalkInComplaintAs(actor: StaffUser, form: WalkInForm, 
     office: actor.office ?? undefined,
   });
   await logAudit({ actorId: actor.id, channel: "web", action: "file_walk_in", entity: "cases", entityId: filed.caseId, details: { office: actor.office ?? null, with_phone: Boolean(form.phone?.trim()) } });
-  await afterFiling(filed.caseId);
+  await afterFiling(filed.caseId, schedule);
   return filed;
 }

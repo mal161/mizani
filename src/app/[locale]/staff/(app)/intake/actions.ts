@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { hasLocale } from "next-intl";
 import { assertStaff, ForbiddenError } from "@/lib/auth/staff";
 import { fileWalkInComplaintAs } from "@/lib/cases/walk-in";
@@ -40,6 +41,7 @@ export async function walkInAction(_prev: IntakeState, formData: FormData): Prom
         consentDataProcessing: formData.get("consent") === "on" ? true : (false as unknown as true),
       },
       formData.getAll("evidence").filter((f): f is File => f instanceof File),
+      (task) => after(task),
     );
     return { status: "filed", caseNumber: r.caseNumber, pin: r.pin, office: actor.office ?? null, filedAt: new Date().toISOString() };
   } catch (e) {
