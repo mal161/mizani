@@ -4,6 +4,8 @@
  * Usage:
  *   npx tsx scripts/eval-triage.mts --provider fake            # free, deterministic plumbing check
  *   npx tsx scripts/eval-triage.mts --provider claude --yes    # real model: spends money (needs ANTHROPIC_API_KEY)
+ *   npx tsx scripts/eval-triage.mts --provider openrouter --yes # any OpenRouter model (AI_API_KEY, AI_MODEL)
+ *   npx tsx scripts/eval-triage.mts --provider openai-compatible --yes # self-hosted (AI_BASE_URL, AI_MODEL)
  *   --limit N  only the first N cases
  */
 import fs from "node:fs";
@@ -21,17 +23,22 @@ const opt = (name: string) => {
 };
 const providerName = opt("provider") ?? "fake";
 const limit = Number(opt("limit") ?? "0") || undefined;
-if (providerName === "claude" && !args.includes("--yes")) {
-  console.error("Running the eval on Claude calls the paid API (30 requests). Re-run with --yes to confirm.");
+if (providerName !== "fake" && !args.includes("--yes")) {
+  console.error(`Running the eval on ${providerName} sends 30 requests (paid APIs bill for them). Re-run with --yes to confirm.`);
   process.exit(1);
 }
 
-const { ClaudeProvider } = await import("../src/lib/ai/claude");
-const { FakeAiProvider } = await import("../src/lib/ai/fake");
+process.env.AI_PROVIDER = providerName;
+const { getAiProvider } = await import("../src/lib/ai");
 const { redact } = await import("../src/lib/ai/redact");
 const { DEFAULT_WORKFLOW } = await import("../src/lib/cases/workflow-config");
 
-const provider = providerName === "claude" ? new ClaudeProvider() : new FakeAiProvider();
+const maybeProvider = getAiProvider();
+if (!maybeProvider) {
+  console.error(`Provider "${providerName}" is not configured (see README → AI assistance).`);
+  process.exit(1);
+}
+const provider = maybeProvider;
 const rank = { low: 0, normal: 1, high: 2, urgent: 3 } as const;
 type Rank = keyof typeof rank;
 

@@ -24,9 +24,12 @@ Hosting: Vercel (app) + Supabase (database, auth, storage). Demo data only.
 | `AT_USERNAME` | `sandbox` for the Africa's Talking sandbox |
 | `AT_API_KEY` | Africa's Talking API key |
 | `USSD_CALLBACK_SECRET` | random string; append `?key=<it>` to the USSD callback URL |
-| `AI_PROVIDER` | `claude`, `fake` (demo without a key) or `none` |
+| `AI_PROVIDER` | `claude`, `openrouter`, `openai-compatible`, `fake` (demo without a key) or `none` |
 | `ANTHROPIC_API_KEY` | Anthropic API key, only when `AI_PROVIDER=claude` (secret) |
-| `AI_MODEL` | optional model override (default `claude-opus-5-5`) |
+| `AI_API_KEY` | key for `openrouter` / `openai-compatible` (secret) |
+| `AI_MODEL` | model id; optional for `claude` (default `claude-opus-5-5`), required otherwise |
+| `AI_BASE_URL` | server URL for `openai-compatible`, e.g. `http://10.0.0.5:8000/v1` |
+| `OPENROUTER_PROVIDERS` | optional comma list of OpenRouter hosts to allow |
 | `CRON_SECRET` | random string; Vercel Cron sends it to `/api/cron/deadlines` (scheduled hourly in `vercel.json`) |
 
 Do **not** set `OTP_TEST_CODE` on a public deployment.
@@ -57,5 +60,5 @@ Under the Data Protection Act, 2019 and the 2021 Regulations, the ACC should, be
 1. Register with the Office of the Data Protection Commissioner as a data controller.
 2. Complete a Data Protection Impact Assessment (complaints can contain sensitive personal data).
 3. Confirm whether its processing must be kept in Kenya (s.50 and the Regulations); if so, self-host as above.
-4. Decide on the AI provider: implement `AiProvider` (`src/lib/ai/provider.ts`) for a self-hosted model in Kenya or a provider under a data-transfer agreement, or set `AI_PROVIDER=none` / switch *Use AI assistance* off. Redaction reduces but does not remove identifiability (the facts of a complaint can still identify people), so treat any external AI provider as a cross-border transfer under the Act. Record in the DPIA what redaction does **not** catch: names of people other than the two parties (witnesses, relatives, judges, clerks), land parcel and bank account numbers, and addresses written in free text or in PDF evidence. Only the parties' names and the phone numbers, emails, ID, KRA PIN and passport numbers listed in the README are removed.
+4. Decide on the AI provider: a self-hosted model in Kenya (`AI_PROVIDER=openai-compatible`), a provider under a data-transfer agreement (`claude`, or `openrouter` pinned with `OPENROUTER_PROVIDERS`), or `AI_PROVIDER=none` / switch *Use AI assistance* off. With OpenRouter, text is forwarded to the host serving the chosen model; list those hosts in the DPIA. Redaction reduces but does not remove identifiability (the facts of a complaint can still identify people), so treat any external AI provider as a cross-border transfer under the Act. Record in the DPIA what redaction does **not** catch: names of people other than the two parties (witnesses, relatives, judges, clerks), land parcel and bank account numbers, and addresses written in free text or in PDF evidence. Only the parties' names and the phone numbers, emails, ID, KRA PIN and passport numbers listed in the README are removed.
 5. Rotate every key used during the hackathon and remove all demo data.

@@ -74,10 +74,15 @@ Database tests create test users and cases in the configured project. Use a deve
 
 - **What it does:** suggests a category, priority, urgency reasons and an English + Kiswahili summary for each new complaint, and summarises a whole case file on request. Staff see it labelled *AI-generated* and click **Apply suggestion** to use it; AI never changes a case on its own. Complainants never see AI output.
 - **What is sent:** only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, ID numbers, KRA PINs, passport numbers and the parties' names with placeholders. Files are never sent; text-layer PDFs are read locally and redacted. Scanned images are not read (no OCR yet).
-- **Providers** (`AI_PROVIDER`): `claude` (Anthropic API, model `claude-opus-5-5` unless `AI_MODEL` is set; needs `ANTHROPIC_API_KEY`; refusals fall back server-side), `fake` (deterministic stand-in for development and demos, no network), `none` (default). Add another provider by implementing `AiProvider` in `src/lib/ai/provider.ts`.
+- **Providers** (`AI_PROVIDER`):
+  - `claude`: Anthropic API, model `claude-opus-5-5` unless `AI_MODEL` is set; needs `ANTHROPIC_API_KEY`; refusals fall back server-side.
+  - `openrouter`: any model on OpenRouter with one key; needs `AI_API_KEY` and `AI_MODEL` (e.g. `anthropic/…`, `google/…`, `meta-llama/…`). Requests ask OpenRouter to use only hosts that don't store or train on prompts; `OPENROUTER_PROVIDERS=HostA,HostB` pins the hosts (e.g. those covered by a data-transfer agreement).
+  - `openai-compatible`: any server with an OpenAI-style `/chat/completions` API, e.g. a self-hosted model in Kenya (vLLM, Ollama); needs `AI_BASE_URL` and `AI_MODEL`, plus `AI_API_KEY` if the server wants one.
+  - `fake`: deterministic stand-in for development and demos, no network. `none` (default): AI off.
+  - Answers are always checked against the same JSON schema; a model that returns something else just shows "AI suggestion unavailable". Compare models with the eval below before choosing one. Add a different kind of provider by implementing `AiProvider` in `src/lib/ai/provider.ts`.
 - **Switch:** Administration → Workflow settings → *Use AI assistance*. Off means nothing is sent anywhere and staff triage by hand.
 - **Flags** (no AI): possible duplicates (same complainant and advocate within 90 days) and the advocate's complaint history.
-- **Eval:** `npx tsx scripts/eval-triage.mts --provider fake` checks the plumbing for free; `--provider claude --yes` measures the real model on 30 synthetic complaints (English, Kiswahili, Sheng) and costs a little API credit.
+- **Eval:** `npx tsx scripts/eval-triage.mts --provider fake` checks the plumbing for free; `--provider claude --yes` (or `openrouter` / `openai-compatible`) measures a real model on 30 synthetic complaints (English, Kiswahili, Sheng) and costs a little API credit.
 
 ## Security model (summary)
 
