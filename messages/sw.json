@@ -3,7 +3,9 @@
     "title": "Mizani — Tume ya Malalamiko dhidi ya Mawakili",
     "tagline": "Wasilisha lalamiko dhidi ya wakili na ufuatilie hadi litatuliwe.",
     "fileComplaint": "Wasilisha lalamiko",
-    "trackCase": "Fuatilia kesi"
+    "trackCase": "Fuatilia kesi",
+    "advocatePrompt": "Je, wewe ni wakili uliyepokea ilani ya lalamiko?",
+    "advocateActivate": "Anzisha akaunti yako"
   },
   "language": {
     "label": "Lugha",
@@ -96,7 +98,9 @@
       "triaged": "Aina na kipaumbele vimewekwa",
       "sms_failed": "SMS haikuweza kutumwa",
       "routing_failed": "Ugawaji wa kiotomatiki umeshindwa",
-      "ai_failed": "Pendekezo la AI limeshindwa"
+      "ai_failed": "Pendekezo la AI limeshindwa",
+      "advocate_notified": "Wakili amearifiwa rasmi",
+      "advocate_linked": "Wakili amelinganishwa na orodha"
     },
     "internal": "Ndani"
   },
@@ -427,5 +431,58 @@
     "noDuplicates": "Hakuna marudio yanayowezekana.",
     "history": "Wakili huyu: malalamiko {total} kwa jumla, {open} yaliyo wazi, {closed} yaliyofungwa, {recent} katika miezi 12 iliyopita.",
     "notOnRoll": "Wakili hajalinganishwa na orodha, kwa hivyo historia haionyeshwi."
+  },
+  "advocatePortal": {
+    "portal": "Mawakili",
+    "signOut": "Toka",
+    "title": "Malalamiko dhidi yako",
+    "intro": "Malalamiko uliyoarifiwa rasmi. Soma madai na ujibu kabla ya tarehe ya mwisho.",
+    "empty": "Hakuna lalamiko lililokabidhiwa kwako kupitia Mizani.",
+    "responded": "Jibu limetumwa",
+    "dueOn": "Jibu kabla ya {date}",
+    "deadline": "Ilikabidhiwa tarehe {served}. Jibu lako linatakiwa kabla ya {date}.",
+    "allegations": "Madai",
+    "complainant": "Mlalamikaji: {name}",
+    "documents": "Nyaraka ulizoshirikishwa",
+    "noDocuments": "Hakuna nyaraka ulizoshirikishwa.",
+    "timeline": "Historia ya kesi",
+    "activate": {
+      "title": "Anzisha akaunti yako ya wakili",
+      "intro": "Tumia nambari ya usajili na nambari ya uanzishaji iliyochapishwa kwenye ilani ya lalamiko uliyopokea.",
+      "admissionNo": "Nambari ya usajili wa wakili",
+      "code": "Nambari ya uanzishaji",
+      "codeHint": "Herufi 8, kutoka kwenye barua ya ilani.",
+      "phone": "Nambari ya simu",
+      "smsSent": "Tumetuma nambari ya tarakimu 6 kwenye simu hii.",
+      "smsCode": "Nambari ya tarakimu 6",
+      "continue": "Endelea",
+      "finish": "Kamilisha",
+      "already": "Umeshaanzisha?",
+      "signIn": "Ingia kwa simu yako",
+      "errors": {
+        "invalid": "Nambari ya usajili au nambari ya uanzishaji si sahihi, au nambari imeisha muda au imeshatumika.",
+        "locked": "Majaribio mengi yasiyo sahihi kwa nambari hii. Wasiliana na ofisi ya ACC kupata ilani mpya.",
+        "phone_in_use": "Nambari hii ya simu tayari inatumiwa na akaunti nyingine ya Mizani. Tumia nambari nyingine.",
+        "invalid_phone": "Weka nambari sahihi ya simu ya Kenya.",
+        "invalid_code": "Nambari hiyo si sahihi au imeisha muda."
+      }
+    },
+    "respond": {
+      "title": "Jibu lako",
+      "text": "Jibu lako",
+      "attach": "Ambatisha nyaraka (si lazima)",
+      "send": "Tuma jibu",
+      "sent": "Jibu lako limetumwa kwa Tume.",
+      "sentLate": "Jibu lako limetumwa. Limepokelewa baada ya tarehe ya mwisho na limewekwa alama ya kuchelewa.",
+      "late": "limechelewa",
+      "errors": {
+        "invalid_input": "Andika jibu la angalau herufi 20.",
+        "too_many_files": "Unaweza kuambatisha faili 5 tu.",
+        "file_too_large": "Kila faili lisizidi MB 10.",
+        "file_type": "Faili za PDF, JPG na PNG pekee zinakubaliwa.",
+        "not_signed_in": "Muda wako umeisha. Tafadhali ingia tena.",
+        "server": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena."
+      }
+    }
   }
 }

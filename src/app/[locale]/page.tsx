@@ -22,6 +22,12 @@ export default function HomePage() {
           {t("trackCase")}
         </Link>
       </div>
+      <p className="text-sm text-slate-600">
+        {t("advocatePrompt")}{" "}
+        <Link href="/advocate/activate" className="underline">
+          {t("advocateActivate")}
+        </Link>
+      </p>
     </main>
   );
 }

@@ -3,7 +3,9 @@
     "title": "Mizani — Advocates Complaints Commission",
     "tagline": "File a complaint against an advocate and follow it to resolution.",
     "fileComplaint": "File a complaint",
-    "trackCase": "Track a case"
+    "trackCase": "Track a case",
+    "advocatePrompt": "Are you an advocate who received a notice of complaint?",
+    "advocateActivate": "Activate your account"
   },
   "language": {
     "label": "Language",
@@ -96,7 +98,9 @@
       "triaged": "Category and priority set",
       "sms_failed": "SMS could not be sent",
       "routing_failed": "Automatic assignment failed",
-      "ai_failed": "AI suggestion failed"
+      "ai_failed": "AI suggestion failed",
+      "advocate_notified": "Advocate formally notified",
+      "advocate_linked": "Advocate matched to the roll"
     },
     "internal": "Internal"
   },
@@ -427,5 +431,58 @@
     "noDuplicates": "No possible duplicates.",
     "history": "This advocate: {total} complaints in total, {open} open, {closed} closed, {recent} in the last 12 months.",
     "notOnRoll": "Advocate not matched to the roll, so no history is shown."
+  },
+  "advocatePortal": {
+    "portal": "Advocates",
+    "signOut": "Sign out",
+    "title": "Complaints against you",
+    "intro": "Complaints you have been formally notified of. Read the allegations and respond before the deadline.",
+    "empty": "No complaints have been served on you through Mizani.",
+    "responded": "Response sent",
+    "dueOn": "Response due {date}",
+    "deadline": "Served on {served}. Your response is due by {date}.",
+    "allegations": "Allegations",
+    "complainant": "Complainant: {name}",
+    "documents": "Documents shared with you",
+    "noDocuments": "No documents have been shared with you.",
+    "timeline": "Case history",
+    "activate": {
+      "title": "Activate your advocate account",
+      "intro": "Use the admission number and activation code printed on the notice of complaint you received.",
+      "admissionNo": "Advocate admission number",
+      "code": "Activation code",
+      "codeHint": "8 characters, from the notice letter.",
+      "phone": "Mobile number",
+      "smsSent": "We sent a 6-digit code to this phone.",
+      "smsCode": "6-digit code",
+      "continue": "Continue",
+      "finish": "Finish",
+      "already": "Already activated?",
+      "signIn": "Sign in with your phone",
+      "errors": {
+        "invalid": "The admission number or activation code is not correct, or the code has expired or been used.",
+        "locked": "Too many wrong attempts for this code. Contact the ACC office for a new notice.",
+        "phone_in_use": "This phone number is already used by another Mizani account. Use a different number.",
+        "invalid_phone": "Enter a valid Kenyan mobile number.",
+        "invalid_code": "That code is wrong or has expired."
+      }
+    },
+    "respond": {
+      "title": "Your response",
+      "text": "Your response",
+      "attach": "Attach documents (optional)",
+      "send": "Send response",
+      "sent": "Your response was sent to the Commission.",
+      "sentLate": "Your response was sent. It was received after the deadline and is marked late.",
+      "late": "late",
+      "errors": {
+        "invalid_input": "Write a response of at least 20 characters.",
+        "too_many_files": "You can attach at most 5 files.",
+        "file_too_large": "Each file must be 10 MB or smaller.",
+        "file_type": "Only PDF, JPG and PNG files are accepted.",
+        "not_signed_in": "Your session has ended. Please sign in again.",
+        "server": "Your response could not be sent. Please try again."
+      }
+    }
   }
 }

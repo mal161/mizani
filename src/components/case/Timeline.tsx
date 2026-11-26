@@ -22,6 +22,8 @@ const KNOWN = [
   "sms_failed",
   "routing_failed",
   "ai_failed",
+  "advocate_notified",
+  "advocate_linked",
 ];
 
 const str = (v: unknown) => (typeof v === "string" ? v : null);
