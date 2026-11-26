@@ -70,6 +70,7 @@ export async function saveSettingsAction(_p: AdminState, fd: FormData): Promise<
     const patch: SettingsPatch = {
       slaDays: slaDays as SettingsPatch["slaDays"],
       conciliationEnabled: fd.get("conciliationEnabled") === "on",
+      aiEnabled: fd.get("aiEnabled") === "on",
       advocateResponseDays: Number.parseInt(String(fd.get("advocateResponseDays") ?? ""), 10),
       categories: String(fd.get("categories") ?? "")
         .split(/[\n,]/)

@@ -11,6 +11,11 @@ import { StageBadge } from "@/components/case/StageBadge";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { CaseActions } from "./CaseActions";
+import { latestAi } from "@/lib/ai/triage";
+import { getAiProvider } from "@/lib/ai";
+import { caseFlags } from "@/lib/cases/flags";
+import { AiPanel, type AiTriageView, type AiSummaryView } from "@/components/staff/AiPanel";
+import { FlagsPanel } from "@/components/staff/FlagsPanel";
 
 export default async function StaffCasePage({ params }: { params: Promise<{ locale: Locale; caseNumber: string }> }) {
   const { locale, caseNumber: slug } = await params;
@@ -29,6 +34,9 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
     supabase.from("profiles").select("id,full_name,office").in("role", ["staff", "admin"]).eq("active", true).order("full_name"),
     loadWorkflowConfig(),
   ]);
+  // Staff-only extras (page already passed requireStaff): AI output and database flags.
+  const [triageRow, summaryRow, flags] = await Promise.all([latestAi(c.id, "triage"), latestAi(c.id, "case_summary"), caseFlags(c.id)]);
+  const aiOn = cfg.aiEnabled && getAiProvider() !== null;
 
   const t = await getTranslations("staffCase");
   const tStages = await getTranslations("stages");
@@ -104,7 +112,26 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
         </section>
       </div>
 
-      <aside>
+      <aside className="flex flex-col gap-4">
+        <AiPanel
+          caseId={c.id}
+          path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}
+          aiOn={aiOn}
+          canWrite={user.role !== "commissioner"}
+          triage={
+            triageRow
+              ? ({
+                  ...(triageRow.output ?? {}),
+                  status: triageRow.status,
+                  model: triageRow.model,
+                  created_at: triageRow.created_at,
+                  categoryLabel: typeof triageRow.output?.category === "string" ? categoryName(triageRow.output.category) : undefined,
+                } as AiTriageView)
+              : null
+          }
+          summary={summaryRow ? ({ ...(summaryRow.output ?? {}), status: summaryRow.status, created_at: summaryRow.created_at } as AiSummaryView) : null}
+        />
+        <FlagsPanel flags={flags} />
         <CaseActions
           caseId={c.id}
           path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}

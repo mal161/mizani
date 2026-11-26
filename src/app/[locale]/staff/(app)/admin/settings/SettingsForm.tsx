@@ -92,6 +92,11 @@ export function SettingsForm({
           <input name="conciliationEnabled" type="checkbox" defaultChecked={cfg.conciliationEnabled} />
           {t("conciliation")}
         </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input name="aiEnabled" type="checkbox" defaultChecked={cfg.aiEnabled} />
+          {t("aiEnabled")}
+        </label>
+        <p className="text-xs text-slate-500 sm:col-span-2">{t("aiHint")}</p>
       </div>
 
       <label className="flex flex-col gap-1 text-sm">

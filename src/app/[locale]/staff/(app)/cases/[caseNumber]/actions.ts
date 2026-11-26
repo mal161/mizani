@@ -75,3 +75,30 @@ export async function requestInfoAction(_p: ActionState, formData: FormData): Pr
     await requestInfoAs(actor, caseId, String(formData.get("message") ?? ""), days);
   });
 }
+
+export async function applyAiAction(_p: ActionState, formData: FormData): Promise<ActionState> {
+  return run(formData, async (caseId) => {
+    const actor = await assertStaff(WRITERS);
+    const { applyAiSuggestionAs } = await import("@/lib/ai/apply");
+    await applyAiSuggestionAs(actor, caseId);
+  });
+}
+
+export async function rerunTriageAction(_p: ActionState, formData: FormData): Promise<ActionState> {
+  return run(formData, async (caseId) => {
+    const actor = await assertStaff(WRITERS);
+    const { triageCase } = await import("@/lib/ai/triage");
+    const r = await triageCase(caseId, actor);
+    if (r.status === "disabled") return { error: "ai_off" };
+  });
+}
+
+/** Any staff role (commissioners included) may ask for a summary; it changes nothing on the case. */
+export async function summarizeAction(_p: ActionState, formData: FormData): Promise<ActionState> {
+  return run(formData, async (caseId) => {
+    const actor = await assertStaff();
+    const { summarizeCaseAs } = await import("@/lib/ai/summarize");
+    const r = await summarizeCaseAs(actor, caseId);
+    if (r.status === "disabled") return { error: "ai_off" };
+  });
+}

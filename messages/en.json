@@ -94,7 +94,8 @@
       "assigned": "Case assigned",
       "triaged": "Category and priority set",
       "sms_failed": "SMS could not be sent",
-      "routing_failed": "Automatic assignment failed"
+      "routing_failed": "Automatic assignment failed",
+      "ai_failed": "AI suggestion failed"
     },
     "internal": "Internal"
   },
@@ -350,7 +351,9 @@
       "categories": "Complaint categories (one per line)",
       "categoriesHint": "Lowercase letters, digits and underscores, e.g. withheld_funds.",
       "save": "Save settings",
-      "saved": "Settings saved."
+      "saved": "Settings saved.",
+      "aiEnabled": "Use AI assistance",
+      "aiHint": "When off, nothing is sent to any AI provider and staff triage manually. Personal details are always removed before text is sent."
     },
     "routing": {
       "title": "Routing rules",
@@ -387,5 +390,40 @@
       "next": "Next",
       "pageOf": "Page {page} of {pages}"
     }
+  },
+  "ai": {
+    "panel": "AI assistance",
+    "label": "AI-generated suggestion",
+    "summaryLabel": "AI-generated summary",
+    "off": "AI is switched off. All work continues as normal.",
+    "none": "No AI suggestion yet.",
+    "unavailable": "AI suggestion unavailable for this case.",
+    "summaryUnavailable": "AI summary unavailable. Try again later.",
+    "category": "Category",
+    "priority": "Priority",
+    "showOther": "Show Kiswahili",
+    "showMine": "Show English",
+    "checkOriginal": "Check against the original complaint before applying. Personal details were removed before the AI saw it.",
+    "apply": "Apply suggestion",
+    "rerun": "Re-run triage",
+    "summarize": "Summarize case file",
+    "summarizing": "Summarizing…",
+    "keyDates": "Key dates",
+    "openQuestions": "Open questions",
+    "errors": {
+      "ai_off": "AI is switched off.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid": "That did not work. Try again.",
+      "stale": "The case changed. Reload the page.",
+      "not_allowed": "Not allowed.",
+      "reason_required": "A reason is required."
+    }
+  },
+  "flags": {
+    "panel": "Case flags",
+    "duplicates": "Possible duplicates (same complainant and advocate, within 90 days):",
+    "noDuplicates": "No possible duplicates.",
+    "history": "This advocate: {total} complaints in total, {open} open, {closed} closed, {recent} in the last 12 months.",
+    "notOnRoll": "Advocate not matched to the roll, so no history is shown."
   }
 }

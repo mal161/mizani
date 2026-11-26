@@ -94,7 +94,8 @@
       "assigned": "Kesi imegawiwa",
       "triaged": "Aina na kipaumbele vimewekwa",
       "sms_failed": "SMS haikuweza kutumwa",
-      "routing_failed": "Ugawaji wa kiotomatiki umeshindwa"
+      "routing_failed": "Ugawaji wa kiotomatiki umeshindwa",
+      "ai_failed": "Pendekezo la AI limeshindwa"
     },
     "internal": "Ndani"
   },
@@ -350,7 +351,9 @@
       "categories": "Aina za malalamiko (moja kwa kila mstari)",
       "categoriesHint": "Herufi ndogo, tarakimu na mistari chini, k.m. withheld_funds.",
       "save": "Hifadhi mipangilio",
-      "saved": "Mipangilio imehifadhiwa."
+      "saved": "Mipangilio imehifadhiwa.",
+      "aiEnabled": "Tumia msaada wa AI",
+      "aiHint": "Ikizimwa, hakuna kinachotumwa kwa mtoa huduma yeyote wa AI na wafanyakazi hupanga kesi wenyewe. Taarifa binafsi huondolewa kila mara kabla maandishi kutumwa."
     },
     "routing": {
       "title": "Kanuni za ugawaji",
@@ -387,5 +390,40 @@
       "next": "Inayofuata",
       "pageOf": "Ukurasa {page} kati ya {pages}"
     }
+  },
+  "ai": {
+    "panel": "Msaada wa AI",
+    "label": "Pendekezo lililotolewa na AI",
+    "summaryLabel": "Muhtasari uliotolewa na AI",
+    "off": "AI imezimwa. Kazi zote zinaendelea kama kawaida.",
+    "none": "Bado hakuna pendekezo la AI.",
+    "unavailable": "Pendekezo la AI halipatikani kwa kesi hii.",
+    "summaryUnavailable": "Muhtasari wa AI haupatikani. Jaribu tena baadaye.",
+    "category": "Aina",
+    "priority": "Kipaumbele",
+    "showOther": "Onyesha Kiingereza",
+    "showMine": "Onyesha Kiswahili",
+    "checkOriginal": "Linganisha na lalamiko la asili kabla ya kutumia. Taarifa binafsi ziliondolewa kabla AI kuliona.",
+    "apply": "Tumia pendekezo",
+    "rerun": "Rudia upangaji",
+    "summarize": "Fupisha faili la kesi",
+    "summarizing": "Inafupisha…",
+    "keyDates": "Tarehe muhimu",
+    "openQuestions": "Maswali yaliyosalia",
+    "errors": {
+      "ai_off": "AI imezimwa.",
+      "forbidden": "Huna ruhusa ya kufanya hivyo.",
+      "invalid": "Haikufanikiwa. Jaribu tena.",
+      "stale": "Kesi imebadilika. Pakia upya ukurasa.",
+      "not_allowed": "Hairuhusiwi.",
+      "reason_required": "Sababu inahitajika."
+    }
+  },
+  "flags": {
+    "panel": "Alama za kesi",
+    "duplicates": "Huenda ni marudio (mlalamikaji na wakili yule yule, ndani ya siku 90):",
+    "noDuplicates": "Hakuna marudio yanayowezekana.",
+    "history": "Wakili huyu: malalamiko {total} kwa jumla, {open} yaliyo wazi, {closed} yaliyofungwa, {recent} katika miezi 12 iliyopita.",
+    "notOnRoll": "Wakili hajalinganishwa na orodha, kwa hivyo historia haionyeshwi."
   }
 }

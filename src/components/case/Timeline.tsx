@@ -21,6 +21,7 @@ const KNOWN = [
   "triaged",
   "sms_failed",
   "routing_failed",
+  "ai_failed",
 ];
 
 const str = (v: unknown) => (typeof v === "string" ? v : null);

@@ -20,7 +20,7 @@ export default defineConfig({
     command: "npm run dev -- -p 3100",
     url: "http://localhost:3100/en",
     reuseExistingServer: true,
-    env: { SMS_PROVIDER: "fake", OTP_TEST_CODE: "123456" },
+    env: { SMS_PROVIDER: "fake", OTP_TEST_CODE: "123456", AI_PROVIDER: "fake" },
     timeout: 180000,
   },
 });

@@ -18,6 +18,7 @@ export const settingsPatchSchema = z
       .min(1)
       .max(30),
     advocateResponseDays: z.number().int().min(7).max(60),
+    aiEnabled: z.boolean(),
   })
   .partial();
 
@@ -29,6 +30,7 @@ const KEY: Record<keyof SettingsPatch, string> = {
   stageLabels: "stage_labels",
   categories: "categories",
   advocateResponseDays: "advocate_response_days",
+  aiEnabled: "ai_enabled",
 };
 
 /** Validates and saves workflow settings; each changed key is audited with its before/after values. */
