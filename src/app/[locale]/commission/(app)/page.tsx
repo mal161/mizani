@@ -23,6 +23,9 @@ export default async function CommissionHome({ params }: { params: Promise<{ loc
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
       <h1 className="text-2xl font-bold">{t("home.title")}</h1>
+      <Link href="/commission/analytics" className="self-start rounded-md border border-emerald-800 px-3 py-2 text-sm text-emerald-900 underline">
+        {t("home.analyticsLink")}
+      </Link>
       <div className="grid gap-6 lg:grid-cols-3">
         <section className={card} data-testid="upcoming-hearings">
           <h2 className="text-lg font-semibold">{t("home.upcoming")}</h2>

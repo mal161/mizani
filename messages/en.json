@@ -532,7 +532,8 @@
       "dashboard": "Dashboard",
       "hearings": "Hearings",
       "workspace": "Case workspace",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "analytics": "Analytics"
     },
     "home": {
       "title": "Commission",
@@ -541,7 +542,8 @@
       "awaiting": "Awaiting decision",
       "noAwaiting": "No heard cases are waiting for a decision.",
       "decided": "Recently decided",
-      "noDecided": "No decisions yet."
+      "noDecided": "No decisions yet.",
+      "analyticsLink": "Open analytics: resolution times, bottlenecks, trends and repeat advocates"
     },
     "agenda": {
       "title": "Hearings",
@@ -681,5 +683,93 @@
       "not_scheduled": "Only a scheduled hearing can be changed."
     },
     "reasonHint": "The reason is shown to the complainant and the advocate."
+  },
+  "analytics": {
+    "title": "Analytics",
+    "intro": "Figures for {from} to {to}, {office}. Aggregates only: no complainant details.",
+    "allOffices": "all offices",
+    "officeNamed": "office: {office}",
+    "empty": "No data for this period.",
+    "csv": "Download CSV",
+    "filters": {
+      "period": "Period",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days",
+      "365d": "Last 12 months",
+      "custom": "Custom dates",
+      "from": "From",
+      "to": "To",
+      "office": "Office",
+      "allOffices": "All offices",
+      "apply": "Apply"
+    },
+    "overview": {
+      "title": "Overview",
+      "filed": "Complaints filed",
+      "filedSplit": "{online} online · {walkIn} walk-in · {sw} in Kiswahili",
+      "closed": "Closed",
+      "openNow": "Open now",
+      "median": "Median days to resolve",
+      "deadlines": "Deadlines met on time",
+      "deadlinesSub": "{met} of {due} due",
+      "decisions": "Decisions",
+      "refunds": "Refunds ordered (KES)"
+    },
+    "stages": {
+      "title": "Where cases wait",
+      "chart": "Median days spent in each stage",
+      "longest": "Longest wait",
+      "days": "days",
+      "head": {
+        "stage": "Stage",
+        "entered": "Entered",
+        "median": "Median days",
+        "p90": "90th percentile days",
+        "open": "Open now",
+        "overdue": "Overdue now"
+      }
+    },
+    "trends": {
+      "title": "Complaint trends",
+      "chart": "Complaints filed per month",
+      "head": {
+        "month": "Month",
+        "total": "Total"
+      }
+    },
+    "officers": {
+      "title": "Officer workload",
+      "caption": "Workload depends on case mix; use this to balance work, not to rank officers.",
+      "head": {
+        "officer": "Officer",
+        "office": "Office",
+        "open": "Open now",
+        "assigned": "Assigned in period",
+        "closed": "Closed in period",
+        "median": "Median days to resolve",
+        "overdue": "Overdue now"
+      }
+    },
+    "advocates": {
+      "title": "Advocates with repeated complaints",
+      "caption": "Advocates with two or more complaints filed in the period. Upheld = admonished, refund ordered or referred to the Tribunal.",
+      "head": {
+        "advocate": "Advocate",
+        "admission": "Admission no.",
+        "complaints": "Complaints",
+        "open": "Open",
+        "upheld": "Upheld",
+        "referred": "Referred",
+        "last": "Last complaint"
+      }
+    },
+    "outcomes": {
+      "title": "Decision outcomes",
+      "chart": "Decisions by outcome",
+      "head": {
+        "outcome": "Outcome",
+        "count": "Decisions"
+      }
+    }
   }
 }

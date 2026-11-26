@@ -532,7 +532,8 @@
       "dashboard": "Dashibodi",
       "hearings": "Usikilizaji",
       "workspace": "Eneo la kesi",
-      "signOut": "Toka"
+      "signOut": "Toka",
+      "analytics": "Takwimu"
     },
     "home": {
       "title": "Tume",
@@ -541,7 +542,8 @@
       "awaiting": "Zinasubiri uamuzi",
       "noAwaiting": "Hakuna kesi zilizosikilizwa zinazosubiri uamuzi.",
       "decided": "Zilizoamuliwa karibuni",
-      "noDecided": "Bado hakuna maamuzi."
+      "noDecided": "Bado hakuna maamuzi.",
+      "analyticsLink": "Fungua takwimu: muda wa kutatua, vikwazo, mwelekeo na mawakili wanaolalamikiwa mara kwa mara"
     },
     "agenda": {
       "title": "Usikilizaji",
@@ -681,5 +683,93 @@
       "not_scheduled": "Ni usikilizaji uliopangwa tu unaoweza kubadilishwa."
     },
     "reasonHint": "Sababu inaonyeshwa kwa mlalamikaji na wakili."
+  },
+  "analytics": {
+    "title": "Takwimu",
+    "intro": "Takwimu za {from} hadi {to}, {office}. Jumla tu: hakuna maelezo ya walalamikaji.",
+    "allOffices": "ofisi zote",
+    "officeNamed": "ofisi: {office}",
+    "empty": "Hakuna data kwa kipindi hiki.",
+    "csv": "Pakua CSV",
+    "filters": {
+      "period": "Kipindi",
+      "30d": "Siku 30 zilizopita",
+      "90d": "Siku 90 zilizopita",
+      "365d": "Miezi 12 iliyopita",
+      "custom": "Tarehe maalum",
+      "from": "Kuanzia",
+      "to": "Hadi",
+      "office": "Ofisi",
+      "allOffices": "Ofisi zote",
+      "apply": "Tumia"
+    },
+    "overview": {
+      "title": "Muhtasari",
+      "filed": "Malalamiko yaliyowasilishwa",
+      "filedSplit": "{online} mtandaoni · {walkIn} ana kwa ana · {sw} kwa Kiswahili",
+      "closed": "Yaliyofungwa",
+      "openNow": "Yaliyo wazi sasa",
+      "median": "Siku za kati za kutatua",
+      "deadlines": "Tarehe za mwisho zilizotimizwa",
+      "deadlinesSub": "{met} kati ya {due}",
+      "decisions": "Maamuzi",
+      "refunds": "Marejesho yaliyoamriwa (KES)"
+    },
+    "stages": {
+      "title": "Kesi zinaposubiri",
+      "chart": "Siku za kati katika kila hatua",
+      "longest": "Kusubiri zaidi",
+      "days": "siku",
+      "head": {
+        "stage": "Hatua",
+        "entered": "Zilizoingia",
+        "median": "Siku za kati",
+        "p90": "Siku (asilimia 90)",
+        "open": "Wazi sasa",
+        "overdue": "Zimechelewa sasa"
+      }
+    },
+    "trends": {
+      "title": "Mwelekeo wa malalamiko",
+      "chart": "Malalamiko kwa kila mwezi",
+      "head": {
+        "month": "Mwezi",
+        "total": "Jumla"
+      }
+    },
+    "officers": {
+      "title": "Mzigo wa kazi wa maafisa",
+      "caption": "Mzigo unategemea aina ya kesi; tumia hii kugawa kazi, si kuwapanga maafisa.",
+      "head": {
+        "officer": "Afisa",
+        "office": "Ofisi",
+        "open": "Wazi sasa",
+        "assigned": "Waliogawiwa",
+        "closed": "Zilizofungwa",
+        "median": "Siku za kati za kutatua",
+        "overdue": "Zimechelewa sasa"
+      }
+    },
+    "advocates": {
+      "title": "Mawakili wenye malalamiko yanayojirudia",
+      "caption": "Mawakili wenye malalamiko mawili au zaidi katika kipindi. Yaliyothibitishwa = ameonywa, kurejesha pesa au kupelekwa Mahakama ya Nidhamu.",
+      "head": {
+        "advocate": "Wakili",
+        "admission": "Nambari ya usajili",
+        "complaints": "Malalamiko",
+        "open": "Wazi",
+        "upheld": "Yaliyothibitishwa",
+        "referred": "Yaliyopelekwa",
+        "last": "Lalamiko la mwisho"
+      }
+    },
+    "outcomes": {
+      "title": "Matokeo ya maamuzi",
+      "chart": "Maamuzi kwa matokeo",
+      "head": {
+        "outcome": "Matokeo",
+        "count": "Maamuzi"
+      }
+    }
   }
 }

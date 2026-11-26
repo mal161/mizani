@@ -15,6 +15,7 @@ export async function CommissionNav({ user, locale }: { user: StaffUser; locale:
         </Link>
         <Link href="/commission">{t("dashboard")}</Link>
         <Link href="/commission/hearings">{t("hearings")}</Link>
+        <Link href="/commission/analytics">{t("analytics")}</Link>
         <Link href="/staff">{t("workspace")}</Link>
         <span className="ml-auto text-emerald-100">
           {user.full_name ?? ""} · {tRoles(user.role)}
