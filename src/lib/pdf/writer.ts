@@ -54,15 +54,25 @@ export class Writer {
         if (font.widthOfTextAtSize(candidate, size) <= width) line = candidate;
         else {
           this.line(line, font, size);
-          // A single word wider than the page is split hard.
-          let rest = word;
-          while (font.widthOfTextAtSize(rest, size) > width) {
-            let cut = rest.length;
-            while (cut > 1 && font.widthOfTextAtSize(rest.slice(0, cut), size) > width) cut--;
-            this.line(rest.slice(0, cut), font, size);
-            rest = rest.slice(cut);
+          // A single word wider than the page is split hard, in one pass over its characters (linear: the text is
+          // untrusted and can be 20,000 characters with no spaces).
+          if (font.widthOfTextAtSize(word, size) <= width) {
+            line = word;
+            continue;
           }
-          line = rest;
+          let chunk = "";
+          let chunkWidth = 0;
+          for (const ch of word) {
+            const w = font.widthOfTextAtSize(ch, size);
+            if (chunk && chunkWidth + w > width) {
+              this.line(chunk, font, size);
+              chunk = "";
+              chunkWidth = 0;
+            }
+            chunk += ch;
+            chunkWidth += w;
+          }
+          line = chunk;
         }
       }
       this.line(line, font, size);
