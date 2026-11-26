@@ -13,7 +13,7 @@ Mizani tracks each complaint against an advocate from intake to closure: one cas
 | Plan 1 — foundation + complainant portal (filing, tracking, web/USSD status, EN/SW) | done |
 | Plan 2 — staff workspace (MFA sign-in, queues, walk-in intake, routing, deadlines, admin, audit viewer) | done |
 | Plan 3 — AI triage (swappable provider, PII redaction, on/off switch) | done |
-| Plan 4 — advocate portal | next |
+| Plan 4 — advocate portal (formal notice + letter, activation, response) | done |
 | Plan 5 — commissioner portal (hearings, decisions, tribunal referrals) | planned |
 | Plan 6 — analytics + ACC handover pack | planned |
 
@@ -69,6 +69,18 @@ Database tests create test users and cases in the configured project. Use a deve
 | `/[locale]/staff/admin` | admins | staff accounts, workflow settings, routing rules, audit log + CSV |
 | `GET /api/cron/deadlines` | Vercel Cron | hourly deadline alerts (`Authorization: Bearer $CRON_SECRET`) |
 | `GET /api/documents/[id]` | parties | audited evidence download |
+| `/[locale]/advocate/activate` | advocates | claim an account with the admission number + activation code from the notice |
+| `/[locale]/advocate` | advocates | complaints served on them, allegations, shared evidence, response form |
+| `POST /api/cases/[id]/notice` | officers | record service, issue activation code, return the notice letter PDF |
+
+## Advocate portal
+
+- **Notice:** on the staff case page, the officer links the case to the advocate on the roll, ticks which documents to share, records how and when the notice was served, and downloads the notice letter (PDF, English + Kiswahili). The letter carries a one-time activation code; only its hash is stored. The advocate's roll phone also gets an SMS.
+- **Deadline:** date of service + the advocate response window (Administration → Workflow settings, default 14 days). Late responses are accepted and marked late.
+- **Activation:** the advocate enters admission number + activation code + their mobile number, then the SMS code. Afterwards they sign in at `/login` with that phone, like complainants; the login sends them to the advocate portal.
+- **What advocates see:** the allegations, the complainant's name, the documents the officer shared, their own responses and uploads, and the parts of the timeline marked for them. Never the complainant's phone or other contact details, internal notes, AI output, flags or unshared evidence.
+- **What complainants see:** that the advocate responded, never the response text or the advocate's documents.
+- **Demo:** `SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts --advocates-only` adds two demo advocates (phones `+254700009901`, `+254700009902`) with six notified cases.
 
 ## AI assistance
 

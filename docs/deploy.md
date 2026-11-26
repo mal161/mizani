@@ -38,6 +38,10 @@ Do **not** set `OTP_TEST_CODE` on a public deployment.
 4. Create the first admin: `npx tsx scripts/create-staff.mts <email> admin <office> "<Full Name>"` with `.env.local` pointing at the project. They set up their authenticator at first sign-in, then create other staff in the app.
 5. Deploy. Smoke test: file a complaint at `/sw/my/file`, then check it at `/sw/status` — expected stage "Imepokelewa".
 
+### Serving notices on advocates
+
+Mizani does not send email. Officers download the notice letter PDF from the case page and serve it by hand, courier or post (or attach it to an email from the ACC's own mail system), then record the method and date of service, which starts the advocate's response deadline. The advocate's roll phone also receives an SMS. Each new notice for a case replaces the earlier activation code. Keep the advocates roll (`advocates` table) current: the roll phone receives the SMS and the admission number is part of activation.
+
 ### 3. Africa's Talking (sandbox)
 
 1. Create an account at africastalking.com and open the Sandbox app; copy the API key.

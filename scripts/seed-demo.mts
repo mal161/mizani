@@ -3,7 +3,9 @@
  * 1 admin + 3 officers (Nairobi, Mombasa, Kisumu) with authenticator apps pre-enrolled,
  * and 25 cases across stages and categories, with notes, deadlines (some overdue) and info requests.
  *
- * Usage: SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts
+ * Plus 2 advocates with portal accounts (sign in by phone), 6 notified cases and 3 responses (1 late).
+ *
+ * Usage: SMS_PROVIDER=fake npx tsx scripts/seed-demo.mts [--advocates-only]
  * Prints demo logins (email, password, TOTP secret) once. Re-running skips existing demo accounts.
  */
 import { randomBytes } from "node:crypto";
@@ -24,6 +26,10 @@ const { changeStageAs, addNoteAs, setCategoryPriorityAs, requestInfoAs, assignCa
 const { ensureComplainantForPhone } = await import("../src/lib/auth/accounts");
 
 const admin = createAdminClient();
+const advocatesOnly = process.argv.includes("--advocates-only");
+const { notifyAdvocateAs } = await import("../src/lib/advocates/notify");
+const { submitAdvocateResponse } = await import("../src/lib/advocates/respond");
+const { phoneEmail } = await import("../src/lib/auth/accounts");
 type Role = "admin" | "staff";
 const STAFF: { email: string; name: string; role: Role; office: string }[] = [
   { email: "demo-admin@mizani.demo", name: "Wanjiru Kamau (Demo Admin)", role: "admin", office: "Nairobi" },
@@ -71,7 +77,7 @@ const officers = STAFF.filter((s) => s.role === "staff").map((s) => ({ id: ids[s
 
 const { data: advocates } = await admin.from("advocates").select("id,full_name").limit(20);
 let created = 0;
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < (advocatesOnly ? 0 : 25); i++) {
   const story = stories[i % stories.length];
   const officer = officers[i % officers.length];
   const phone = `+2547000090${String(i).padStart(2, "0")}`;
@@ -98,6 +104,57 @@ for (let i = 0; i < 25; i++) {
   created++;
 }
 
+// --- Advocate portal demo: two roll advocates with accounts, six notified cases, three responses. ---
+const DEMO_ADVOCATES = [
+  { admission: "P.105/DEMO1/2012", name: "Baraka Kiprono (Demo Advocate)", phone: "+254700009901", firm: "Haki & Co. Advocates" },
+  { admission: "P.105/DEMO2/2015", name: "Leila Mutua (Demo Advocate)", phone: "+254700009902", firm: "Uadilifu LLP" },
+];
+const advocateLines: string[] = [];
+let notified = 0;
+for (const [k, a] of DEMO_ADVOCATES.entries()) {
+  let { data: roll } = await admin.from("advocates").select("id,profile_id").eq("admission_no", a.admission).maybeSingle();
+  if (!roll) {
+    ({ data: roll } = await admin
+      .from("advocates")
+      .insert({ admission_no: a.admission, full_name: a.name, phone: a.phone, firm: a.firm })
+      .select("id,profile_id")
+      .single());
+  }
+  let profileId = roll!.profile_id as string | null;
+  if (!profileId) {
+    const created = await admin.auth.admin.createUser({ email: phoneEmail(a.phone), phone: a.phone, email_confirm: true, phone_confirm: true });
+    profileId = created.data.user!.id;
+    await admin.from("profiles").insert({ id: profileId, role: "advocate", phone: a.phone, full_name: a.name });
+    await admin.from("advocates").update({ profile_id: profileId }).eq("id", roll!.id);
+  }
+  advocateLines.push(`advocate ${a.phone}  (${a.name}, ${a.admission}) — sign in at /login with this phone`);
+
+  for (let j = 0; j < 3; j++) {
+    const story = stories[(k * 3 + j) % stories.length];
+    const officer = officers[(k + j) % officers.length];
+    const complainantId = await ensureComplainantForPhone(`+2547000098${k}${j}`, story.lang, people[(k * 3 + j) % people.length]);
+    const filed = await fileComplaint(
+      { advocateId: roll!.id, advocateNameGiven: a.name, summary: story.summary, description: story.description, language: story.lang, consentDataProcessing: true },
+      [new File([new TextEncoder().encode("%PDF-1.4 demo evidence")], "evidence.pdf", { type: "application/pdf" })],
+      { complainantId, filedBy: complainantId, channel: "online", locale: story.lang, office: officer.office },
+    );
+    await assignCaseAs(officer, filed.caseId, officer.id);
+    await changeStageAs(officer, filed.caseId, "received", "screening");
+    const { data: docs } = await admin.from("documents").select("id").eq("case_id", filed.caseId);
+    const servedOn = new Date(Date.now() - (j === 2 ? 20 : 3) * 86_400_000).toISOString().slice(0, 10);
+    await notifyAdvocateAs(officer, filed.caseId, { servedOn, method: "hand", shareDocumentIds: (docs ?? []).map((d) => d.id) });
+    notified++;
+    if (k === 0 && j < 2) {
+      await submitAdvocateResponse(profileId, filed.caseId, "I deny the allegations. The matter is being handled and the client was informed in writing on several occasions.", []);
+    }
+    if (k === 1 && j === 2) {
+      await submitAdvocateResponse(profileId, filed.caseId, "Apologies for the delay. Attached is my account of the transaction and the fee note.", []);
+    }
+  }
+}
+
 console.log("Demo accounts (synthetic; dev project only):");
 for (const a of accounts) console.log("  " + a);
 console.log(`${created} cases created`);
+for (const l of advocateLines) console.log("  " + l);
+console.log(`${notified} advocates notified`);
