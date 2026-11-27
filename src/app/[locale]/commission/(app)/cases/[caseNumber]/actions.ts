@@ -16,6 +16,7 @@ function errorKey(e: unknown): string {
   if (m.includes("must be held")) return "held";
   if (m.includes("on the panel") || m.includes("on the hearing panel")) return "not_on_panel";
   if (m.includes("adjourned")) return "adjourned";
+  if (m.includes("not started")) return "not_started";
   for (const k of ["amount", "reasons", "panel", "stage", "minutes", "cancelled"]) if (m.includes(k)) return k;
   console.error("commission action failed", e);
   return "invalid";

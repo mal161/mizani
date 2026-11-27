@@ -89,11 +89,12 @@ A fresh install has an empty `advocates` table; the demo roll in `supabase/seed.
 | `AI_API_KEY` | Key for `openrouter` or an `openai-compatible` server that needs one | with those | **yes** |
 | `AI_BASE_URL` | Base URL of an `openai-compatible` server | with `openai-compatible` | no |
 | `OPENROUTER_PROVIDERS` | Comma-separated list pinning which OpenRouter hosts may serve requests | no | no |
+| `HEARING_VIDEO_BASE_URL` | https address of the ACC's Jitsi server for hearing video rooms Mizani creates (default `https://meet.jit.si`) | no | no |
 
 `OTP_TEST_CODE` exists for automated tests only. It is ignored when `SMS_PROVIDER=africastalking` or `NODE_ENV=production`; **never set it on a server**.
 
 ## 7. Check the installation
 
-- `curl https://mizani.acc.example/api/health` → `{"ok":true,"db":"ok", ...}` with the expected `sms` and `ai` provider names.
+- `curl https://mizani.acc.example/api/health` → `{"ok":true,"db":"ok","time":...}`. To see which SMS and AI providers and which version are running, send the cron secret: `curl -H "Authorization: Bearer $CRON_SECRET" https://mizani.acc.example/api/health` → also `sms`, `ai` and `version`. Anonymous callers never see those.
 - File a test complaint at `/sw/my/file`, check it at `/sw/status`, then delete the test data.
 - Sign in as the administrator and open **Administration → Audit log**: the test filing and views must be there.

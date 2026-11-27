@@ -167,9 +167,9 @@ export async function scheduleHearingAs(actor: StaffUser, caseId: string, input:
 }
 
 async function loadScheduled(hearingId: string) {
-  const { data } = await createAdminClient().from("hearings").select("id,case_id,status,panel,duration_minutes").eq("id", hearingId).maybeSingle();
+  const { data } = await createAdminClient().from("hearings").select("id,case_id,status,panel,duration_minutes,starts_at").eq("id", hearingId).maybeSingle();
   if (!data) throw new Error("hearing not found");
-  return data as { id: string; case_id: string; status: string; panel: string[]; duration_minutes: number };
+  return data as { id: string; case_id: string; status: string; panel: string[]; duration_minutes: number; starts_at: string };
 }
 
 export async function rescheduleHearingAs(actor: StaffUser, hearingId: string, input: HearingInput): Promise<{ clashes: string[] }> {
@@ -215,6 +215,7 @@ export async function recordHearingMinutesAs(actor: StaffUser, hearingId: string
   if (actor.role === "commissioner" && !h.panel.includes(actor.id)) throw new Error("only a commissioner on the panel can record minutes");
   if (h.status === "cancelled") throw new Error("the hearing was cancelled");
   if (h.status === "adjourned") throw new Error("the hearing was adjourned");
+  if (new Date(h.starts_at).getTime() > Date.now()) throw new Error("the hearing has not started yet");
   const text = minutes.trim();
   if (text.length < 10 || text.length > 50000) throw new Error("minutes must be 10-50000 characters");
   // Guarded on status so a cancel or adjournment at the same moment is not overwritten.

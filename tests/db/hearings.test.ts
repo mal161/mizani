@@ -147,7 +147,10 @@ describe("scheduleHearingAs", () => {
 describe("recordHearingMinutesAs", () => {
   it("a panel commissioner records minutes; they stay internal; officers cannot record them", async () => {
     const c = await investigationCase();
-    const { hearingId } = await scheduleHearingAs(officer, c.id, { startsAt: inDays(4), durationMinutes: 60, mode: "in_person", venue: "Room 1", panel: [comm.id] });
+    const { hearingId } = await scheduleHearingAs(officer, c.id, { startsAt: inDays(4), durationMinutes: 60, mode: "in_person", venue: "Room 1", panel: [comm.id], confirmClash: true });
+    // Not before the hearing has started.
+    await expect(recordHearingMinutesAs(comm, hearingId, "Written before anyone met, should be refused.")).rejects.toThrow(/not started/);
+    await adminClient().from("hearings").update({ starts_at: new Date(Date.now() - 3600_000).toISOString() }).eq("id", hearingId);
     await expect(recordHearingMinutesAs(officer, hearingId, "Officer minutes attempt that should fail.")).rejects.toBeInstanceOf(ForbiddenError);
     await expect(recordHearingMinutesAs(comm2, hearingId, "Not on the panel, should fail to record.")).rejects.toThrow(/panel/);
     await recordHearingMinutesAs(comm, hearingId, "Both parties attended. Advocate conceded receipt of KES 300,000.");

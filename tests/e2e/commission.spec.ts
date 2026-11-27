@@ -40,7 +40,10 @@ test("commissioner hears a case, records minutes and a refund decision; officers
   const [bundle] = await Promise.all([cp.waitForEvent("download"), cp.getByRole("link", { name: "Download case bundle" }).click()]);
   expect(bundle.suggestedFilename()).toMatch(/^bundle-.*\.pdf$/);
 
-  // Minutes
+  // Minutes open only once the hearing has started
+  await expect(cp.getByTestId("minutes-not-yet")).toBeVisible();
+  await db.from("hearings").update({ starts_at: new Date(Date.now() - 3600_000).toISOString() }).eq("case_id", c.id);
+  await cp.reload();
   await cp.getByLabel("Hearing minutes").fill("Both parties attended. The advocate conceded receipt of the money.");
   await cp.getByRole("button", { name: "Save minutes" }).click();
   await expect(cp.getByRole("article").getByText("Both parties attended. The advocate conceded receipt of the money.")).toBeVisible();
@@ -122,6 +125,8 @@ test("officer schedules an online hearing past a clash; parties see the hearing 
   await expect(cp.getByTestId("next-hearing")).toContainText("10:30");
 
   // Commissioner records minutes and a refund decision
+  // The hearing has taken place (moved into the past so minutes can be recorded)
+  await db.from("hearings").update({ starts_at: new Date(Date.now() - 3600_000).toISOString() }).eq("case_id", c.id).eq("status", "scheduled");
   await mp.goto(`/en/commission/cases/${slug}`);
   await mp.getByLabel("Hearing minutes").fill(MINUTES);
   await mp.getByRole("button", { name: "Save minutes" }).click();

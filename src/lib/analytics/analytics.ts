@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 import { csvCell, toCsv } from "@/lib/csv";
-import type { Period } from "./period";
+import { firstParam, type Period, type QueryValue } from "./period";
 
 export interface Overview {
   filed: number;
@@ -182,8 +182,8 @@ export function analyticsCsv(r: AnalyticsReport, s: AnalyticsSection): string {
 }
 
 /** Office filter from the URL: any non-empty name up to 80 characters (an office with no cases shows empty sections). */
-export function officeParam(v: string | undefined | null): string | null {
-  const o = v?.trim().slice(0, 80);
+export function officeParam(v: QueryValue): string | null {
+  const o = firstParam(v)?.trim().slice(0, 80);
   return o ? o : null;
 }
 

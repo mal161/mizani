@@ -50,3 +50,13 @@ describe("parsePeriod with object-prototype names", () => {
     expect(Number.isNaN(p.from.getTime())).toBe(false);
   });
 });
+
+describe("repeated query parameters", () => {
+  it("use the first value instead of crashing", async () => {
+    const { officeParam } = await import("@/lib/analytics/analytics");
+    expect(officeParam(["Nairobi", "Mombasa"])).toBe("Nairobi");
+    expect(officeParam([])).toBeNull();
+    expect(parsePeriod({ period: ["30d", "365d"] }, now).key).toBe("30d");
+    expect(parsePeriod({ period: ["custom"], from: ["2026-01-01", "x"], to: ["2026-01-31"] }, now)).toMatchObject({ key: "custom", toDay: "2026-01-31" });
+  });
+});
