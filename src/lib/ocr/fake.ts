@@ -10,7 +10,7 @@ export class FakeOcrProvider implements OcrProvider {
     this.nextError = error;
   }
 
-  async read(_bytes: Uint8Array, fileName: string): Promise<OcrResult> {
+  async read(_bytes: Uint8Array, fileName: string, _mime?: string): Promise<OcrResult> {
     this.calls.push({ fileName });
     const err = this.nextError;
     this.nextError = null;
