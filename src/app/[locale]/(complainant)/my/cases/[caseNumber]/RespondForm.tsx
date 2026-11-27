@@ -20,7 +20,7 @@ export function RespondForm({ caseId, path }: { caseId: string; path: string }) 
       <input type="hidden" name="path" value={path} />
       <label className="flex flex-col gap-1">
         <span className="text-sm font-medium">{t("answer")}</span>
-        <textarea name="text" required maxLength={5000} rows={4} className="rounded-md border px-3 py-2" />
+        <textarea name="text" required maxLength={5000} rows={4} className="rounded-md border px-3 py-2.5" />
       </label>
       <label className="flex flex-col gap-1">
         <span className="text-sm font-medium">{t("attach")}</span>
@@ -31,7 +31,7 @@ export function RespondForm({ caseId, path }: { caseId: string; path: string }) 
           {t(`errors.${state.reason ?? "server"}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("send")}
       </button>
     </form>

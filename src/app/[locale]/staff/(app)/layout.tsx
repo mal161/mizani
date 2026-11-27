@@ -21,7 +21,7 @@ export default async function StaffAppLayout({
   return (
     <>
       <StaffNav user={user} locale={locale} unread={count ?? 0} />
-      {children}
+      <div id="main">{children}</div>
     </>
   );
 }

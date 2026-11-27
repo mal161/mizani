@@ -32,7 +32,7 @@ export default async function HearingsAgenda({
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
       <div className="flex flex-wrap items-center gap-4">
-        <h1 className="text-2xl font-bold">{t("agenda.title")}</h1>
+        <h1 className="text-3xl font-bold text-primary">{t("agenda.title")}</h1>
         <span className="text-slate-600">
           {format.dateTime(start, { dateStyle: "medium", timeZone: "Africa/Nairobi" })} –{" "}
           {format.dateTime(new Date(end.getTime() - DAY), { dateStyle: "medium", timeZone: "Africa/Nairobi" })}
@@ -56,7 +56,7 @@ export default async function HearingsAgenda({
           const today = rows.filter((h) => nairobiDay(new Date(h.starts_at)) === key);
           return (
             <li key={key} className="flex flex-col gap-2 rounded-lg border p-4">
-              <h2 className="font-semibold">{format.dateTime(d, { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Nairobi" })}</h2>
+              <h2 className="font-medium">{format.dateTime(d, { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Nairobi" })}</h2>
               {today.length === 0 ? (
                 <p className="text-sm text-slate-400">{t("agenda.none")}</p>
               ) : (
@@ -64,11 +64,11 @@ export default async function HearingsAgenda({
                   {today.map((h) => {
                     const mine = h.panel.includes(user.id);
                     return (
-                      <li key={h.id} data-mine={mine} className={`rounded-md px-3 py-2 ${mine ? "border-l-4 border-emerald-700 bg-emerald-50" : "bg-slate-50"}`}>
+                      <li key={h.id} data-mine={mine} className={`rounded-md px-3 py-2 ${mine ? "border-l-4 border-primary bg-primary-soft" : "bg-slate-50"}`}>
                         <span className="mr-3 font-medium">
                           {format.dateTime(new Date(h.starts_at), { timeStyle: "short", timeZone: "Africa/Nairobi" })}
                         </span>
-                        <Link href={`/commission/cases/${caseSlug(h.case_number!)}`} className="font-mono underline">
+                        <Link href={`/commission/cases/${caseSlug(h.case_number!)}`} className="case-stamp text-sm">
                           {h.case_number}
                         </Link>
                         <span className="text-slate-600">
@@ -79,7 +79,7 @@ export default async function HearingsAgenda({
                           {" · "}
                           {h.panel.map((p) => names.get(p) ?? "—").join(", ")}
                         </span>
-                        {mine && <span className="ml-2 rounded bg-emerald-700 px-1.5 text-xs text-white">{t("agenda.yourPanel")}</span>}
+                        {mine && <span className="ml-2 rounded border border-primary/40 px-1.5 text-xs text-primary">{t("agenda.yourPanel")}</span>}
                       </li>
                     );
                   })}

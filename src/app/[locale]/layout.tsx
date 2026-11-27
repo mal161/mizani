@@ -27,7 +27,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   return (
     <html lang={locale} className={`${roboto.variable} ${robotoMono.variable}`}>
-      <body className="min-h-screen bg-white font-sans text-slate-900 antialiased">
+      <body className="min-h-screen font-sans antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

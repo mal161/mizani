@@ -17,7 +17,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
   if (state.status === "filed") {
     return (
       <section className="slip flex flex-col gap-4 rounded-lg border-2 border-slate-900 p-6">
-        <h2 className="text-xl font-bold">{t("slip.title")}</h2>
+        <h2 className="text-xl font-medium">{t("slip.title")}</h2>
         <p className="text-sm">{t("slip.org")}</p>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
           <dt className="font-medium">{t("slip.caseNumber")}</dt>
@@ -32,7 +32,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         <p className="text-sm">{t("slip.howToCheck", { url: statusUrl })}</p>
         <p className="text-sm font-medium">{t("slip.keepPin")}</p>
         <div className="no-print flex gap-3">
-          <button type="button" onClick={() => window.print()} className="rounded-md bg-slate-900 px-4 py-2 text-white">
+          <button type="button" onClick={() => window.print()} className="rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover">
             {t("slip.print")}
           </button>
           <a href={`/${locale}/staff/intake`} className="rounded-md border px-4 py-2">
@@ -60,7 +60,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         </div>
       )}
       <fieldset className="flex flex-col gap-3 rounded-lg border p-4">
-        <legend className="px-1 font-semibold">{t("person")}</legend>
+        <legend className="px-1 font-medium">{t("person")}</legend>
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{t("fullName")}</span>
           <input name="fullName" required defaultValue={v?.fullName} className={field} />
@@ -84,7 +84,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-3 rounded-lg border p-4">
-        <legend className="px-1 font-semibold">{t("complaint")}</legend>
+        <legend className="px-1 font-medium">{t("complaint")}</legend>
         <AdvocatePicker defaultName={v?.advocateNameGiven} />
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">{tf("summary")}</span>
@@ -105,7 +105,7 @@ export function IntakeForm({ statusUrl }: { statusUrl: string }) {
         <input name="consent" type="checkbox" required className="mt-1" />
         <span>{t("consent")}</span>
       </label>
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {pending ? tf("submitting") : t("submit")}
       </button>
     </form>

@@ -1,37 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/*
+ * Mizani design tokens — see DESIGN.md (direction: Kenyan public-service portal).
+ * Navy is the primary colour; orange is a small accent (current step, active nav, focus ring, logo).
+ * The slate ramp is re-pointed to navy-tinted neutrals so every slate-* class is on-brand.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@theme {
+  --color-primary: #1b2a4a;
+  --color-primary-hover: #26395f;
+  --color-primary-soft: #eef1f7;
+  --color-accent: #e07a1f;
+  --color-accent-ink: #a8540d;
+  --color-accent-soft: #fdf1e6;
+  --color-danger: #b42318;
+  --color-success: #1e7a46;
+  --color-flag-black: #000000;
+  --color-flag-red: #bb0000;
+  --color-flag-green: #006600;
+
+  --color-slate-50: #f5f7fa;
+  --color-slate-100: #ebeef4;
+  --color-slate-200: #d9dee8;
+  --color-slate-300: #bcc4d3;
+  --color-slate-400: #8d97ab;
+  --color-slate-500: #5e6a82;
+  --color-slate-600: #4a5670;
+  --color-slate-700: #36425a;
+  --color-slate-800: #26314a;
+  --color-slate-900: #18233b;
+  --color-slate-950: #0f172a;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+  /* Borders are structure: 1px slate-200 unless a class says otherwise (Tailwind v4 defaults to currentColor). */
+  *,
+  ::before,
+  ::after,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-slate-200);
+  }
+  /* Form controls keep a visible edge (3:1 against white). */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea {
+    border-color: var(--color-slate-400);
+  }
+  /* Orange focus ring: 3:1 on white, 4.7:1 on the navy band. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  a,
+  button {
+    transition-property: color, background-color, border-color;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-out);
+  }
+  body {
+    background: var(--color-slate-50);
+    color: var(--color-slate-900);
+    font-family: var(--font-sans);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+/* A case number set like a registry stamp: navy mono on a hairline frame. */
+.case-stamp {
+  display: inline-block;
+  border: 1px solid rgb(27 42 74 / 0.3);
+  border-radius: 4px;
+  padding: 0 6px;
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+a.case-stamp:hover {
+  background: var(--color-primary-soft);
 }
 
 /* Printing the walk-in slip: hide navigation and anything marked no-print. */
 @media print {
   header,
+  footer,
   .no-print {
     display: none !important;
   }
   .slip {
     border-color: #000;
   }
+}
+
+/* Evidence pickers: the native file button, styled as a secondary button (keeps the browser's own labels). */
+input[type="file"] {
+  font-size: 14px;
+  color: var(--color-slate-600);
+}
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: 1px solid var(--color-slate-300);
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 8px 12px;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button:hover {
+  background: var(--color-primary-soft);
 }

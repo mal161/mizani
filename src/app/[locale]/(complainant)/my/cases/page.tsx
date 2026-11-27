@@ -22,8 +22,8 @@ export default async function MyCasesPage({ params }: { params: Promise<{ locale
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <Link href="/my/file" className="rounded-md bg-slate-900 px-4 py-2 text-white">
+        <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
+        <Link href="/my/file" className="rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover">
           {t("fileNew")}
         </Link>
       </div>
@@ -34,7 +34,7 @@ export default async function MyCasesPage({ params }: { params: Promise<{ locale
           {cases.map((c) => (
             <li key={c.id} className="flex flex-col gap-1 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
-                <Link href={`/my/cases/${caseSlug(c.case_number)}`} className="font-mono font-medium underline">
+                <Link href={`/my/cases/${caseSlug(c.case_number)}`} className="case-stamp text-sm">
                   {c.case_number}
                 </Link>
                 <p className="truncate text-sm text-slate-600">{c.summary}</p>

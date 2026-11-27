@@ -13,7 +13,7 @@ export default async function IntakePage({ params }: { params: Promise<{ locale:
   const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-8">
-      <h1 className="no-print text-2xl font-bold">{t("title")}</h1>
+      <h1 className="no-print text-2xl font-medium">{t("title")}</h1>
       <p className="no-print text-slate-600">{t("intro")}</p>
       <IntakeForm statusUrl={`${proto}://${host}/${locale}/status`} />
     </main>

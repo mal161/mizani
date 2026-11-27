@@ -16,16 +16,18 @@ export function ComplaintForm() {
   if (state.status === "filed") {
     return (
       <section className="flex flex-col gap-4 rounded-lg border border-green-200 bg-green-50 p-6">
-        <h2 className="text-xl font-semibold">{t("success.title")}</h2>
+        <h2 className="text-xl font-medium">{t("success.title")}</h2>
         <p>{t("success.body")}</p>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
           <dt className="font-medium">{t("success.caseNumber")}</dt>
-          <dd data-testid="case-number" className="font-mono">{state.caseNumber}</dd>
+          <dd>
+            <span data-testid="case-number" className="case-stamp">{state.caseNumber}</span>
+          </dd>
           <dt className="font-medium">{t("success.pin")}</dt>
           <dd data-testid="case-pin" className="font-mono text-lg">{state.pin}</dd>
         </dl>
         <p className="text-sm text-slate-700">{t("success.pinWarning")}</p>
-        <Link href="/my/cases" className="self-start rounded-md bg-slate-900 px-4 py-2 text-white">
+        <Link href="/my/cases" className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover">
           {t("success.viewCases")}
         </Link>
       </section>
@@ -63,7 +65,7 @@ export function ComplaintForm() {
           required
           maxLength={200}
           aria-invalid={bad("summary")}
-          className="rounded-md border px-3 py-2"
+          className="rounded-md border px-3 py-2.5"
         />
       </label>
 
@@ -76,7 +78,7 @@ export function ComplaintForm() {
           rows={7}
           maxLength={10000}
           aria-invalid={bad("description")}
-          className="rounded-md border px-3 py-2"
+          className="rounded-md border px-3 py-2.5"
         />
       </label>
 
@@ -100,7 +102,7 @@ export function ComplaintForm() {
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60"
+        className="self-start rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
       >
         {pending ? t("submitting") : t("submit")}
       </button>

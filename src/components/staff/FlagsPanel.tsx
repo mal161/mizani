@@ -10,14 +10,14 @@ export async function FlagsPanel({ flags }: { flags: CaseFlags }) {
   const h = flags.advocate_history;
   return (
     <section aria-label={t("panel")} className="flex flex-col gap-2 rounded-lg border p-4 text-sm">
-      <h3 className="font-semibold">{t("panel")}</h3>
+      <h3 className="font-medium">{t("panel")}</h3>
       {flags.possible_duplicates.length > 0 ? (
         <div>
-          <p className="font-medium text-amber-800">{t("duplicates")}</p>
+          <p className="font-medium text-accent-ink">{t("duplicates")}</p>
           <ul className="list-disc pl-5">
             {flags.possible_duplicates.map((d) => (
               <li key={d.case_number}>
-                <Link href={`/staff/cases/${caseSlug(d.case_number)}`} className="font-mono underline">
+                <Link href={`/staff/cases/${caseSlug(d.case_number)}`} className="case-stamp text-sm">
                   {d.case_number}
                 </Link>{" "}
                 · {format.dateTime(new Date(d.created_at), { dateStyle: "medium", timeZone: "Africa/Nairobi" })}

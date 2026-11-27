@@ -27,8 +27,11 @@ export async function signInAs(
   });
   let userId = created.data.user?.id;
   if (!userId) {
-    const { data } = await admin.auth.admin.listUsers({ perPage: 1000 });
-    userId = data.users.find((u) => u.email === email)!.id;
+    // Already exists (fixed test phones are reused across runs). Look it up by email: listing users is paged and
+    // the shared dev project holds thousands of test accounts.
+    const { data: existing, error } = await admin.rpc("auth_user_id_by_email", { p_email: email });
+    if (error || !existing) throw new Error(`test user ${email} could not be created or found: ${created.error?.message ?? error?.message}`);
+    userId = existing as string;
   }
   await admin
     .from("profiles")

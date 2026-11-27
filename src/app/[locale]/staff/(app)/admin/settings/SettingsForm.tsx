@@ -25,7 +25,7 @@ export function SettingsForm({
       <input type="hidden" name="path" value={path} />
       <section className="overflow-x-auto rounded-lg border">
         <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <thead className="bg-slate-50 text-xs text-slate-600">
             <tr>
               <th className="px-3 py-2">{t("stage")}</th>
               <th className="px-3 py-2">{t("slaDays")}</th>
@@ -115,7 +115,7 @@ export function SettingsForm({
           {ta(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("save")}
       </button>
     </form>

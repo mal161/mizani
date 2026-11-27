@@ -10,7 +10,7 @@ import {
 } from "@/app/[locale]/staff/(app)/cases/[caseNumber]/hearing-actions";
 
 const box = "flex flex-col gap-2 rounded-lg border p-4";
-const btn = "self-start rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-60";
+const btn = "self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60";
 const field = "rounded-md border px-2 py-1.5 text-sm";
 const REFERRAL_STATUSES = ["prepared", "lodged", "acknowledged", "concluded"] as const;
 
@@ -68,13 +68,13 @@ export function HearingPanel(props: {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">{t("title")}</h2>
+      <h2 className="text-xl font-medium text-primary">{t("title")}</h2>
       <a href={props.bundleHref} className="text-sm underline">
         {t("downloadBundle")}
       </a>
 
       {s && (
-        <div data-testid="scheduled-hearing" className="rounded-md bg-sky-50 p-3 text-sm">
+        <div data-testid="scheduled-hearing" className="rounded-md border bg-white p-3 text-sm">
           <p className="font-medium">{s.whenLabel}</p>
           <p>
             {s.mode === "online" ? `${t("online")} · ${s.link ?? ""}` : s.venue} · {t("minutesLong", { minutes: s.duration })}
@@ -98,7 +98,7 @@ export function HearingPanel(props: {
         <form action={schedAct} key={sched.at ?? 0} className={box}>
           {hidden}
           {s && <input type="hidden" name="hearingId" value={s.id} />}
-          <h3 className="font-semibold">{s ? t("reschedule") : t("schedule")}</h3>
+          <h3 className="font-medium">{s ? t("reschedule") : t("schedule")}</h3>
           <label className="flex flex-col gap-1 text-sm">
             {t("when")}
             <input type="datetime-local" name="when" required defaultValue={val("when", s?.whenLocal ?? "")} className={field} />
@@ -141,7 +141,7 @@ export function HearingPanel(props: {
             ))}
           </fieldset>
           {sched.error === "clash" && (
-            <div data-testid="clash-alert" className="flex flex-col gap-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <div data-testid="clash-alert" className="flex flex-col gap-2 rounded-md bg-accent-soft px-3 py-2 text-sm text-accent-ink">
               <p>{t("clash", { cases: (sched.clashes ?? []).join(", ") })}</p>
               <button type="submit" name="confirmClash" value="1" disabled={schedPending} className={btn}>
                 {t("scheduleAnyway")}
@@ -149,7 +149,7 @@ export function HearingPanel(props: {
             </div>
           )}
           <Err state={sched} />
-          {sched.ok && <p className="text-sm text-emerald-700">{t("saved")}</p>}
+          {sched.ok && <p className="text-sm text-primary">{t("saved")}</p>}
           <button type="submit" disabled={schedPending} className={btn}>
             {s ? t("saveReschedule") : t("schedule")}
           </button>
@@ -161,7 +161,7 @@ export function HearingPanel(props: {
         <form action={endAct} key={`end-${end.at ?? 0}`} className={box}>
           {hidden}
           <input type="hidden" name="hearingId" value={s.id} />
-          <h3 className="font-semibold">{t("endTitle")}</h3>
+          <h3 className="font-medium">{t("endTitle")}</h3>
           <label className="flex flex-col gap-1 text-sm">
             {t("reason")}
             <input name="reason" required minLength={3} defaultValue={typeof end.values?.reason === "string" ? end.values.reason : ""} className={field} />
@@ -180,7 +180,7 @@ export function HearingPanel(props: {
       )}
 
       {props.decision && (
-        <div className="flex flex-col gap-1 rounded-md bg-emerald-50 p-3 text-sm">
+        <div className="flex flex-col gap-1 rounded-md bg-primary-soft p-3 text-sm">
           <p className="font-medium">
             {t("decision")}: {props.decision.outcomeLabel}
           </p>
@@ -192,7 +192,7 @@ export function HearingPanel(props: {
 
       {props.referral && (
         <div data-testid="referral" className={box}>
-          <h3 className="font-semibold">{t("referralTitle")}</h3>
+          <h3 className="font-medium">{t("referralTitle")}</h3>
           <p className="text-sm">
             {tRef(props.referral.status)}
             {props.referral.reference ? ` · ${props.referral.reference}` : ""}

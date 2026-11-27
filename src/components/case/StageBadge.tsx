@@ -7,7 +7,7 @@ export function StageBadge({ stage, label }: { stage: string; label?: string }) 
   return (
     <span
       data-testid="stage"
-      className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-800"
+      className="inline-block rounded bg-slate-100 px-3 py-1 text-xs font-medium text-slate-800"
     >
       {label ?? stageLabel(stage, t)}
     </span>

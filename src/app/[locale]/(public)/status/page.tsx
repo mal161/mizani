@@ -1,15 +1,11 @@
 import { useTranslations } from "next-intl";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { StatusForm } from "./StatusForm";
 
 export default function StatusPage() {
   const t = useTranslations("status");
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-6 px-4 py-16">
-      <div className="flex justify-end">
-        <LanguageSwitcher />
-      </div>
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
+    <main className="mx-auto my-10 flex max-w-md flex-col gap-6 rounded-lg border bg-white px-6 py-8 sm:my-12 sm:px-8">
+      <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
       <p className="text-slate-600">{t("intro")}</p>
       <StatusForm />
     </main>

@@ -15,7 +15,7 @@ export function RuleForm({ path, categories, officers }: { path: string; categor
   return (
     <form action={action} className="flex flex-col gap-3 rounded-lg border p-4" key={state.at}>
       <input type="hidden" name="path" value={path} />
-      <h2 className="font-semibold">{t("addTitle")}</h2>
+      <h2 className="font-medium">{t("addTitle")}</h2>
       <div className="grid gap-3 sm:grid-cols-4">
         <label className="flex flex-col gap-1 text-sm">
           {t("position")}
@@ -64,7 +64,7 @@ export function RuleForm({ path, categories, officers }: { path: string; categor
           {ta(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("add")}
       </button>
     </form>

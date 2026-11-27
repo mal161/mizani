@@ -25,7 +25,7 @@ export function DecisionForm(props: {
     <form action={act} key={state.at ?? 0} className="flex flex-col gap-3 rounded-lg border p-4">
       <input type="hidden" name="caseId" value={props.caseId} />
       <input type="hidden" name="path" value={props.path} />
-      <h3 className="font-semibold">{props.correcting ? t("decision.correctTitle") : t("decision.title")}</h3>
+      <h3 className="font-medium">{props.correcting ? t("decision.correctTitle") : t("decision.title")}</h3>
       {props.correcting && <p className="text-xs text-slate-500">{t("decision.correctHint")}</p>}
 
       <label className="flex flex-col gap-1 text-sm font-medium">
@@ -76,7 +76,7 @@ export function DecisionForm(props: {
           {t(`errors.${state.error}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-md bg-emerald-800 px-3 py-1.5 text-sm text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {props.correcting ? t("decision.correct") : t("decision.record")}
       </button>
     </form>

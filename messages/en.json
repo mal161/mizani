@@ -1,11 +1,23 @@
 {
   "home": {
     "title": "Mizani — Advocates Complaints Commission",
-    "tagline": "File a complaint against an advocate and follow it to resolution.",
+    "tagline": "Tell us what happened. You get a case number and a PIN, and you can follow every step online, by SMS or on USSD.",
     "fileComplaint": "File a complaint",
     "trackCase": "Track a case",
     "advocatePrompt": "Are you an advocate who received a notice of complaint?",
-    "advocateActivate": "Activate your account"
+    "advocateActivate": "Activate your account",
+    "headline": "Complain about an advocate and follow your case to a decision",
+    "services": "What do you want to do?",
+    "service": {
+      "file": "Tell us what the advocate did. You get a case number and a PIN by SMS.",
+      "track": "Check the stage of a case with its case number and PIN. No account needed.",
+      "mine": "Sign in with your phone number to see your cases and answer the Commission.",
+      "advocate": "Received a notice of complaint? Activate your account and send your response."
+    },
+    "process": "How a complaint is handled",
+    "processIntro": "Every case moves through the same stages. You are told by SMS each time it moves.",
+    "channelsTitle": "No internet? You can still complain",
+    "channels": "Visit any ACC office and staff will file the complaint for you and print a slip with your case number and PIN. You can then follow it by SMS or USSD."
   },
   "language": {
     "label": "Language",
@@ -180,7 +192,8 @@
       "admin": "Administrator",
       "commissioner": "Commissioner"
     },
-    "commission": "Commission"
+    "commission": "Commission",
+    "portal": "Staff workspace"
   },
   "staffCases": {
     "empty": "No cases here.",
@@ -255,7 +268,8 @@
     "misconduct": "Professional misconduct",
     "overcharging": "Overcharging",
     "conflict_of_interest": "Conflict of interest",
-    "other": "Other"
+    "other": "Other",
+    "uncategorised": "Not yet categorised"
   },
   "notifications": {
     "title": "Alerts",
@@ -532,7 +546,8 @@
       "dashboard": "Dashboard",
       "hearings": "Hearings",
       "workspace": "Case workspace",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "analytics": "Analytics"
     },
     "home": {
       "title": "Commission",
@@ -541,7 +556,8 @@
       "awaiting": "Awaiting decision",
       "noAwaiting": "No heard cases are waiting for a decision.",
       "decided": "Recently decided",
-      "noDecided": "No decisions yet."
+      "noDecided": "No decisions yet.",
+      "analyticsLink": "Open analytics: resolution times, bottlenecks, trends and repeat advocates"
     },
     "agenda": {
       "title": "Hearings",
@@ -681,5 +697,127 @@
       "not_scheduled": "Only a scheduled hearing can be changed."
     },
     "reasonHint": "The reason is shown to the complainant and the advocate."
+  },
+  "analytics": {
+    "title": "Analytics",
+    "intro": "Figures for {from} to {to}, {office}. Aggregates only: no complainant details.",
+    "allOffices": "all offices",
+    "officeNamed": "office: {office}",
+    "empty": "No data for this period.",
+    "csv": "Download CSV",
+    "filters": {
+      "period": "Period",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days",
+      "365d": "Last 12 months",
+      "custom": "Custom dates",
+      "from": "From",
+      "to": "To",
+      "office": "Office",
+      "allOffices": "All offices",
+      "apply": "Apply"
+    },
+    "overview": {
+      "title": "Overview",
+      "filed": "Complaints filed",
+      "filedSplit": "{online} online · {walkIn} walk-in · {sw} in Kiswahili",
+      "closed": "Closed",
+      "openNow": "Open now",
+      "median": "Median days to resolve",
+      "deadlines": "Deadlines met on time",
+      "deadlinesSub": "{met} of {due} due",
+      "decisions": "Decisions",
+      "refunds": "Refunds ordered (KES)"
+    },
+    "stages": {
+      "title": "Where cases wait",
+      "chart": "Median days spent in each stage",
+      "longest": "Longest wait",
+      "days": "days",
+      "head": {
+        "stage": "Stage",
+        "entered": "Entered",
+        "median": "Median days",
+        "p90": "90th percentile days",
+        "open": "Open now",
+        "overdue": "Overdue now"
+      }
+    },
+    "trends": {
+      "title": "Complaint trends",
+      "chart": "Complaints filed per month",
+      "head": {
+        "month": "Month",
+        "total": "Total"
+      }
+    },
+    "officers": {
+      "title": "Officer workload",
+      "caption": "Workload depends on case mix; use this to balance work, not to rank officers.",
+      "head": {
+        "officer": "Officer",
+        "office": "Office",
+        "open": "Open now",
+        "assigned": "Assigned in period",
+        "closed": "Closed in period",
+        "median": "Median days to resolve",
+        "overdue": "Overdue now"
+      }
+    },
+    "advocates": {
+      "title": "Advocates with repeated complaints",
+      "caption": "Advocates with two or more complaints filed in the period. Upheld = admonished, refund ordered or referred to the Tribunal.",
+      "head": {
+        "advocate": "Advocate",
+        "admission": "Admission no.",
+        "complaints": "Complaints",
+        "open": "Open",
+        "upheld": "Upheld",
+        "referred": "Referred",
+        "last": "Last complaint"
+      }
+    },
+    "outcomes": {
+      "title": "Decision outcomes",
+      "chart": "Decisions by outcome",
+      "head": {
+        "outcome": "Outcome",
+        "count": "Decisions"
+      }
+    }
+  },
+  "caseTrack": {
+    "title": "Where your case is",
+    "now": "Now"
+  },
+  "shell": {
+    "skip": "Skip to main content",
+    "tagline": "Every complaint, fairly weighed",
+    "org": "Advocates Complaints Commission",
+    "descriptor": "Case management system",
+    "staffSignIn": "Staff sign in",
+    "nav": {
+      "label": "Main",
+      "home": "Home",
+      "file": "File a complaint",
+      "track": "Track a case",
+      "advocates": "For advocates",
+      "myCases": "My cases",
+      "signIn": "Sign in",
+      "signOut": "Sign out",
+      "advocatePortal": "Advocate portal"
+    },
+    "footer": {
+      "about": "Mizani is where the Advocates Complaints Commission receives, investigates and decides complaints against advocates.",
+      "dpa": "Personal data is handled under the Data Protection Act, 2019. Only the people working on a case can see it.",
+      "services": "Services",
+      "staff": "Commission staff",
+      "channels": "You can also follow a case by SMS, on USSD, or at an ACC office.",
+      "line": "Mizani — ACC Case Management System"
+    },
+    "logo": {
+      "advocate": "Advocate",
+      "complainant": "Complainant"
+    }
   }
 }

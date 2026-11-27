@@ -20,7 +20,7 @@ export function MfaForm({ factorId }: { factorId: string }) {
           autoComplete="one-time-code"
           maxLength={6}
           required
-          className="rounded-md border px-3 py-2 tracking-widest"
+          className="rounded-md border px-3 py-2.5 tracking-widest"
         />
       </label>
       {state.error && (
@@ -28,7 +28,7 @@ export function MfaForm({ factorId }: { factorId: string }) {
           {t("errors.invalid_code")}
         </p>
       )}
-      <button type="submit" disabled={pending} className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="rounded-md bg-primary px-5 py-3 font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-60">
         {t("verify")}
       </button>
     </form>

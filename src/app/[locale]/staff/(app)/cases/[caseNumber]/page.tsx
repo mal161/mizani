@@ -8,6 +8,7 @@ import { allowedNextStages, labelFor } from "@/lib/cases/workflow-config";
 import { isStage } from "@/lib/cases/stages";
 import { logAudit } from "@/lib/audit";
 import { StageBadge } from "@/components/case/StageBadge";
+import { CaseStamp } from "@/components/case/CaseStamp";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { CaseActions } from "./CaseActions";
@@ -75,7 +76,9 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
           ← {t("back")}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-2xl font-bold">{c.case_number}</h1>
+          <h1>
+          <CaseStamp number={c.case_number} size="lg" />
+        </h1>
           <StageBadge stage={c.stage} label={stageName(c.stage)} />
         </div>
 
@@ -87,7 +90,7 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
           <dt className="text-slate-500">{t("officer")}</dt>
           <dd>{c.assigned_officer_name ?? t("unassigned")}</dd>
           <dt className="text-slate-500">{t("nextDeadline")}</dt>
-          <dd className={due && due.getTime() < Date.now() ? "font-semibold text-red-700" : ""}>
+          <dd className={due && due.getTime() < Date.now() ? "font-medium text-red-700" : ""}>
             {due ? format.dateTime(due, { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" }) : "—"}
           </dd>
           <dt className="text-slate-500">{t("channel")}</dt>
@@ -98,20 +101,20 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
         </dl>
 
         <section className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">{t("complaint")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("complaint")}</h2>
           <p className="text-sm text-slate-500">{t("against", { name: c.advocate_name_given })}</p>
           <p className="font-medium">{c.summary}</p>
           <p className="whitespace-pre-wrap text-slate-700">{c.description}</p>
         </section>
 
         <section className="flex flex-col gap-1 text-sm">
-          <h2 className="text-lg font-semibold">{t("complainant")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("complainant")}</h2>
           <p>{c.complainant_name ?? "—"}</p>
           <p>{c.complainant_phone ?? t("noPhone")}</p>
         </section>
 
         <section className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">{t("documents")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("documents")}</h2>
           {!docs?.length ? (
             <p className="text-sm text-slate-500">{t("noDocuments")}</p>
           ) : (
@@ -128,7 +131,7 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
         </section>
 
         <section className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">{t("timeline")}</h2>
+          <h2 className="text-xl font-medium text-primary">{t("timeline")}</h2>
           <Timeline events={(events ?? []) as TimelineEvent[]} showInternal stageName={stageName} />
         </section>
       </div>
