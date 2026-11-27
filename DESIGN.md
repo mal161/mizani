@@ -67,3 +67,4 @@ The Tailwind `slate-*` ramp is re-pointed to navy-tinted neutrals in `src/app/gl
   - The logo's words are tiny relative to the scales: below ~450px wide use `textScale` (1.6–1.8) on `Logo`; the header `LogoMark` draws strokes 2.2× so the pan strings survive at 32–40px.
   - Attention states (information requests, minutes, unread alerts, clash warnings) use `accent-soft` with `accent-ink` text, never Tailwind amber/yellow.
   - Navigation never wraps on phones: one horizontally scrolling row.
+  - Home hero image (`public/images/hero-scales.jpg`, 736px wide): text always sits on navy. From lg the image fills the right half (58% from xl) with navy fading into it; on phones it sits behind the text under an 85% navy wash. The overlapping service panel needs `relative z-10` to stay above the hero.
