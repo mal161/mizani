@@ -9,6 +9,7 @@ import {
   NoticeArt,
   ReceivedArt,
 } from "@/components/home/StoryArt";
+import { Ripple } from "@/components/home/Ripple";
 
 /** The five steps of the home story, each with its illustration (StoryArt.tsx). */
 const STORY = [
@@ -180,7 +181,7 @@ export default async function HomePage() {
         {/* From complaint to decision: five alternating rows, statement on one side and the case object on the other. */}
         <section
           aria-labelledby="story"
-          className="mx-auto max-w-6xl px-4 pt-20 pb-16 sm:px-6"
+          className="mx-auto max-w-6xl overflow-x-clip px-4 pt-20 pb-16 sm:px-6"
         >
           <div className="flex max-w-2xl flex-col gap-4">
             <h2
@@ -221,7 +222,10 @@ export default async function HomePage() {
                     {t(`story.steps.${key}.text`)}
                   </p>
                 </div>
-                <div className={i % 2 === 1 ? "lg:order-1" : ""}>
+                <div
+                  className={`relative isolate py-6 ${i % 2 === 1 ? "lg:order-1" : ""}`}
+                >
+                  <Ripple offset={i} />
                   <Art />
                 </div>
               </li>

@@ -9,12 +9,12 @@ import { CaseFileCard } from "./CaseFileCard";
  */
 
 const paper = "rounded-md border border-slate-200 bg-white shadow-[0_12px_32px_rgb(15_23_42/0.12)]";
-/** Grey bars standing in for paragraph text. */
+/** Grey bars standing in for paragraph text, with a loading shimmer (globals.css `.skeleton-bar`). */
 function Lines({ widths }: { widths: string[] }) {
   return (
-    <div aria-hidden className="flex flex-col gap-2">
+    <div data-skeleton aria-hidden className="flex flex-col gap-2">
       {widths.map((w, i) => (
-        <span key={i} className="h-2 rounded-full bg-slate-200" style={{ width: w }} />
+        <span key={i} className="skeleton-bar h-2 rounded-full bg-slate-200" style={{ width: w }} />
       ))}
     </div>
   );

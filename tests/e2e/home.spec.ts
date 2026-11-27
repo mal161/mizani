@@ -36,6 +36,33 @@ test("home tells a case's story in five illustrated steps", async ({ page }) => 
   await expect(page.getByRole("img", { name: /ilani ya usikilizaji/ })).toBeVisible();
 });
 
+test("each story illustration sits on a ripple that is decorative, animated, and still for reduced motion", async ({ page }) => {
+  await page.goto("/en");
+  const ripples = page.locator('section[aria-labelledby="story"] [data-ripple]');
+  await expect(ripples).toHaveCount(5);
+  await expect(ripples.first()).toHaveAttribute("aria-hidden", "true");
+  const water = ripples.first().locator(".ripple-water");
+  expect(await water.evaluate((el) => getComputedStyle(el).animationName)).toBe("ripple-flow");
+  // The rings must not widen the page on phones.
+  await page.setViewportSize({ width: 390, height: 800 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  expect(await page.locator("[data-ripple] .ripple-water").first().evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+});
+
+test("the placeholder text bars in the illustrations shimmer, and stay still for reduced motion", async ({ page }) => {
+  await page.goto("/en");
+  const bars = page.locator('section[aria-labelledby="story"] [data-skeleton] > span');
+  expect(await bars.count()).toBeGreaterThan(10);
+  expect(await bars.first().evaluate((el) => getComputedStyle(el, "::after").animationName)).toBe("shimmer");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  expect(await page.locator("[data-skeleton] > span").first().evaluate((el) => getComputedStyle(el, "::after").animationName)).toBe("none");
+});
+
 test("/sw shows the Swahili title", async ({ page }) => {
   await page.goto("/sw");
   await expect(page.getByRole("banner")).toContainText("Tume ya Malalamiko dhidi ya Mawakili");
