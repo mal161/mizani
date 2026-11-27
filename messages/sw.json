@@ -135,11 +135,30 @@
     "caseNumber": "Nambari ya kesi",
     "check": "Angalia hali",
     "currentStage": "Hatua ya sasa",
-    "updated": "Ilisasishwa {date}",
     "errors": {
       "bad_case_number": "Weka nambari ya kesi kama ilivyo kwenye karatasi au SMS, k.m. ACC/2026/000123.",
       "invalid": "Nambari ya kesi na PIN hazilingani. Tafadhali angalia ujaribu tena.",
       "locked": "Majaribio mengi yasiyo sahihi kwa kesi hii. Jaribu tena baada ya saa 1."
+    },
+    "inStageSince": "Katika hatua hii tangu {date}",
+    "smsNote": "Utapata SMS kila kesi inaposonga.",
+    "explain": {
+      "received": "Lalamiko lako limepokelewa na litakaguliwa na afisa.",
+      "screening": "Afisa anakagua kama lalamiko ni jambo ambalo Tume inaweza kulishughulikia.",
+      "advocate_notified": "Wakili ameelezwa rasmi kuhusu lalamiko na ana muda wa kujibu.",
+      "investigation": "Afisa mchunguzi anachunguza lalamiko na anaweza kuwasiliana nawe.",
+      "conciliation": "Tume inajaribu kusuluhisha jambo hili kati yako na wakili.",
+      "hearing": "Lalamiko litasikilizwa na jopo la makamishna.",
+      "decision": "Tume imetoa uamuzi kuhusu lalamiko.",
+      "closed": "Kesi imefungwa."
+    },
+    "actions": {
+      "title": "Unachohitaji kujua",
+      "info": "Tume imekuomba maelezo zaidi.",
+      "reply": "Ingia kwa simu yako ujibu, au tembelea ofisi ya ACC.",
+      "hearing": "Usikilizaji umepangwa. Tarehe na mahali vilitumwa kwako kwa SMS.",
+      "decision": "Uamuzi umetolewa.",
+      "read": "Ingia kwa simu yako uusome, au tembelea ofisi ya ACC."
     }
   },
   "staffLogin": {

@@ -85,7 +85,7 @@ describe("workflow settings", () => {
   it("renaming a stage in Swahili changes the USSD reply", async () => {
     await updateWorkflowSettingsAs(adminUser, { stageLabels: { en: {}, sw: { hearing: "Kikao cha Tume" } } });
     const cfg = await loadWorkflowConfig();
-    const ok = async () => ({ ok: true as const, stage: "hearing" as const, updatedAt: "" });
+    const ok = async () => ({ ok: true as const, stage: "hearing" as const, stageSince: "", actions: { infoRequested: false, hearingScheduled: false, decisionIssued: false } });
     expect(await ussdResponse("2*2026000123*123456", ok, "+254700000000", cfg.stageLabels)).toContain("Kikao cha Tume");
     const rows = await auditRows("admin_update_settings", "stage_labels");
     expect(rows.at(-1)!.details).toHaveProperty("before");

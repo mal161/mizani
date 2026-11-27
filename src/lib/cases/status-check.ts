@@ -3,8 +3,18 @@ import { verifyPin } from "@/lib/pin";
 import { logAudit } from "@/lib/audit";
 import { isStage, type Stage } from "./stages";
 
+/** What the complainant may need to do or know, as yes/no only: the details stay behind sign-in. */
+export interface StatusActions {
+  /** The Commission's latest information request has not been answered yet. */
+  infoRequested: boolean;
+  /** A hearing is scheduled in the future. */
+  hearingScheduled: boolean;
+  /** A decision has been issued (the current, non-superseded one). */
+  decisionIssued: boolean;
+}
+
 export type StatusResult =
-  | { ok: true; stage: Stage; updatedAt: string }
+  | { ok: true; stage: Stage; stageSince: string; actions: StatusActions }
   | { ok: false; reason: "invalid" | "locked" };
 
 /**
@@ -24,7 +34,7 @@ export async function checkStatus(
 
   const { data: c } = await admin
     .from("cases")
-    .select("id,stage,updated_at,pin_hash")
+    .select("id,stage,created_at,pin_hash")
     .eq("case_number", caseNumber)
     .maybeSingle();
   const entityId = c?.id ?? caseNumber;
@@ -48,5 +58,36 @@ export async function checkStatus(
   await logAudit({ actorId: null, channel, action: "status_check", entity: "cases", entityId, details: { ok, caller } });
 
   if (!ok || !c) return { ok: false, reason: "invalid" };
-  return { ok: true, stage: isStage(c.stage) ? c.stage : "received", updatedAt: c.updated_at };
+  const stage: Stage = isStage(c.stage) ? c.stage : "received";
+  const [{ data: moved }, { data: requests }, { count: hearings }, { count: decisions }] = await Promise.all([
+    // When the case entered its current stage (filing date for "received" or if no move is recorded).
+    admin
+      .from("case_events")
+      .select("created_at")
+      .eq("case_id", c.id)
+      .eq("type", "stage_changed")
+      .eq("body->>to", stage)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    admin
+      .from("case_events")
+      .select("type")
+      .eq("case_id", c.id)
+      .in("type", ["info_requested", "info_provided"])
+      .order("created_at", { ascending: false })
+      .limit(1),
+    admin.from("hearings").select("id", { count: "exact", head: true }).eq("case_id", c.id).eq("status", "scheduled").gt("starts_at", new Date().toISOString()),
+    admin.from("decisions").select("id", { count: "exact", head: true }).eq("case_id", c.id).is("superseded_by", null),
+  ]);
+  return {
+    ok: true,
+    stage,
+    stageSince: (moved?.created_at as string | undefined) ?? c.created_at,
+    actions: {
+      infoRequested: requests?.[0]?.type === "info_requested",
+      hearingScheduled: (hearings ?? 0) > 0,
+      decisionIssued: (decisions ?? 0) > 0,
+    },
+  };
 }

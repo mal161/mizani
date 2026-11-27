@@ -4,7 +4,7 @@ import type { checkStatus } from "@/lib/cases/status-check";
 
 type Check = typeof checkStatus;
 
-const ok: Check = vi.fn(async () => ({ ok: true as const, stage: "hearing" as const, updatedAt: "2026-11-20T10:00:00Z" }));
+const ok: Check = vi.fn(async () => ({ ok: true as const, stage: "hearing" as const, stageSince: "2026-11-20T10:00:00Z", actions: { infoRequested: false, hearingScheduled: false, decisionIssued: false } }));
 const invalid: Check = vi.fn(async () => ({ ok: false as const, reason: "invalid" as const }));
 const locked: Check = vi.fn(async () => ({ ok: false as const, reason: "locked" as const }));
 
