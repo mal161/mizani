@@ -14,13 +14,9 @@
       "mine": "Ingia kwa nambari yako ya simu kuona kesi zako na kujibu Tume.",
       "advocate": "Umepokea ilani ya lalamiko? Anzisha akaunti yako na utume jibu lako."
     },
-    "process": "Jinsi lalamiko linavyoshughulikiwa",
-    "processIntro": "Kila kesi hupitia hatua zilezile. Unaarifiwa kwa SMS kila inaposonga.",
     "channelsTitle": "Huna intaneti? Bado unaweza kulalamika",
     "channels": "Tembelea ofisi yoyote ya ACC na wafanyakazi watawasilisha lalamiko kwa niaba yako na kukuchapishia risiti yenye nambari ya kesi na PIN. Kisha unaweza kuifuatilia kwa SMS au USSD.",
     "file": {
-      "title": "Jalada moja la kesi, kutoka lalamiko hadi uamuzi.",
-      "text": "Kila lalamiko hupata nambari yake ya kesi na PIN mara linapowasilishwa. Tume huweka kila kitu kwenye jalada hilo moja: jibu la wakili, uchunguzi, usikilizaji na uamuzi. Unapata SMS kila kesi inaposonga, na unaweza kuiangalia mtandaoni, kwa USSD au katika ofisi yoyote ya ACC.",
       "fact1": "Kwa Kiingereza au Kiswahili",
       "fact2": "Mtandaoni, kwa SMS, USSD au ana kwa ana",
       "fact3": "Inalindwa chini ya Sheria ya Ulinzi wa Data, 2019",
@@ -40,6 +36,83 @@
         "stamp": "IMEPOKELEWA",
         "stampDate": "12 NOV 2026",
         "caption": "Mfano wa jalada la kesi: nambari ya kesi, maelezo ya uwasilishaji, aina, hatua, jibu la wakili na hatua inayofuata."
+      }
+    },
+    "story": {
+      "title": "Kutoka lalamiko hadi uamuzi",
+      "intro": "Kila lalamiko hupata jalada lake la kesi. Hivi ndivyo linavyopita katika Tume, na unachoona katika kila hatua.",
+      "step": "Hatua {n}",
+      "steps": {
+        "received": {
+          "label": "Limepokelewa",
+          "title": "Lalamiko lako linaingia kwenye jalada siku hiyo hiyo.",
+          "text": "Mtandaoni au katika ofisi ya ACC, lalamiko hupata nambari ya kesi na PIN mara moja, unazotumiwa kwa SMS. Kuanzia hapo kila kitu kuhusu lalamiko huwekwa kwenye jalada hilo moja."
+        },
+        "notified": {
+          "label": "Wakili ameelezwa",
+          "title": "Wakili anaelezwa rasmi na lazima ajibu.",
+          "text": "Afisa humpa wakili ilani yenye tarehe ya mwisho ya kujibu, kwa kawaida siku 14. Wakili hujibu mtandaoni, na unaarifiwa anapojibu."
+        },
+        "investigation": {
+          "label": "Uchunguzi",
+          "title": "Afisa anachunguza ushahidi.",
+          "text": "Afisa mchunguzi hupitia nyaraka zako na jibu la wakili. Kikikosekana kitu, Tume hukuomba, na unaweza kujibu mtandaoni au ofisini."
+        },
+        "hearing": {
+          "label": "Usikilizaji",
+          "title": "Pande zote zinasikilizwa na jopo.",
+          "text": "Kesi inapohitaji usikilizaji, wewe na wakili mnaarifiwa tarehe, saa na mahali kwa SMS, ana kwa ana au mtandaoni, mbele ya jopo la makamishna."
+        },
+        "decision": {
+          "label": "Uamuzi",
+          "title": "Tume inaamua, pamoja na sababu.",
+          "text": "Uamuzi unaeleza matokeo na sababu, kama amri ya kurejesha pesa, na pande zote zinaweza kupakua barua ya uamuzi."
+        }
+      },
+      "sms": {
+        "from": "ACC",
+        "text": "Lalamiko lako limepokelewa. Kesi ACC/2026/000231. PIN ••••••. Fuatilia mtandaoni au USSD.",
+        "time": "Leo 10:42"
+      },
+      "notice": {
+        "title": "Ilani ya lalamiko",
+        "case": "Kesi",
+        "served": "Ilitolewa",
+        "servedValue": "14 Nov 2026, kwa mkono",
+        "due": "Jibu kabla ya",
+        "dueValue": "28 Nov 2026",
+        "code": "Nambari ya uanzishaji"
+      },
+      "evidence": {
+        "receipt": "Risiti",
+        "receiptLine": "Imepokelewa kutoka kwa mteja",
+        "receiptAmount": "KES 65,000",
+        "letter": "Mkataba wa mauzo",
+        "tag": "Maelezo yameombwa"
+      },
+      "hearing": {
+        "title": "Ilani ya usikilizaji",
+        "month": "Des",
+        "weekday": "Jumatano",
+        "time": "Saa 4:00 asubuhi",
+        "venue": "Ukumbi wa ACC, Nairobi",
+        "panel": "Jopo la makamishna watatu"
+      },
+      "decision": {
+        "title": "Uamuzi",
+        "outcomeLabel": "Matokeo",
+        "outcome": "Amri ya kurejesha pesa",
+        "amount": "KES 65,000",
+        "reasons": "Sababu",
+        "seal": "Imeamuliwa",
+        "date": "16 Des 2026"
+      },
+      "illustration": {
+        "received": "Mfano wa jalada la kesi lenye muhuri wa Imepokelewa, na SMS yenye nambari ya kesi na PIN.",
+        "notified": "Mfano wa ilani ya lalamiko yenye tarehe ilipotolewa na tarehe ya mwisho ya kujibu.",
+        "investigation": "Mfano wa jalada la kesi lililofunguliwa lenye risiti na mkataba wa mauzo, na lebo ya Maelezo yameombwa.",
+        "hearing": "Mfano wa ilani ya usikilizaji: Jumatano 9 Desemba, saa 4:00 asubuhi, Ukumbi wa ACC, Nairobi, mbele ya makamishna watatu.",
+        "decision": "Mfano wa barua ya uamuzi: amri ya kurejesha pesa, KES 65,000, pamoja na muhuri wa Tume."
       }
     }
   },
