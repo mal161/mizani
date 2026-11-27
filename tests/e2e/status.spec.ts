@@ -19,6 +19,12 @@ test("anyone can check status with case number + PIN on the web and via the USSD
   await page.getByLabel("PIN").fill(pin);
   await page.getByRole("button", { name: "Angalia hali" }).click();
   await expect(page.getByTestId("status-stage")).toHaveText("Imepokelewa");
+  // What the stage means and since when, the case tracker, no action needed yet, and nothing personal.
+  await expect(page.getByTestId("status-explain")).toContainText("Lalamiko lako limepokelewa");
+  await expect(page.getByText(/Katika hatua hii tangu/)).toBeVisible();
+  await expect(page.getByRole("list", { name: "Kesi yako iko wapi" })).toBeVisible();
+  await expect(page.locator('[data-testid^="status-action-"]')).toHaveCount(0);
+  await expect(page.getByText("Status page end-to-end test")).toHaveCount(0);
 
   // USSD (Africa's Talking callback format)
   const digits = caseNumber.replace(/\D/g, "");

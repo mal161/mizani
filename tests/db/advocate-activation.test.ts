@@ -77,7 +77,12 @@ describe("advocate activation", () => {
 
   it("an expired code does not work", async () => {
     const a = await notifiedCaseWithCode();
-    await adminClient().from("advocate_activations").update({ expires_at: new Date(Date.now() - 1000).toISOString() }).eq("case_id", a.caseId);
+    // An hour back, not a second: this machine's clock can run ahead of the database's.
+    const { error } = await adminClient()
+      .from("advocate_activations")
+      .update({ expires_at: new Date(Date.now() - 3_600_000).toISOString() })
+      .eq("case_id", a.caseId);
+    expect(error).toBeNull();
     expect(await startAdvocateActivation({ admissionNo: a.admissionNo, code: a.code, phone: `07${rnd()}` }, "en")).toEqual({ ok: false, reason: "invalid" });
   });
 
