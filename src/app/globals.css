@@ -74,6 +74,30 @@
   }
 }
 
+/*
+ * Home page below the hero (DESIGN.md): dark brown text on light brown surfaces, like a paper registry.
+ * Re-points the same tokens the page already uses, so every text-primary / text-slate-* / bg-slate-* /
+ * bg-primary-soft inside turns brown; white "papers" stay white and the orange accent is unchanged.
+ */
+.home-warm {
+  --color-primary: #3b2716;
+  --color-primary-hover: #523621;
+  --color-primary-soft: #efe2cf;
+  --color-slate-50: #f5ecdf;
+  --color-slate-100: #ede0cc;
+  --color-slate-200: #dfcdb3;
+  --color-slate-300: #cbb393;
+  --color-slate-400: #a68b6a;
+  --color-slate-500: #735a43;
+  --color-slate-600: #634c37;
+  --color-slate-700: #4e3a29;
+  --color-slate-800: #3d2c1f;
+  --color-slate-900: #2e2117;
+  --color-slate-950: #1f160f;
+  background: var(--color-slate-50);
+  color: var(--color-slate-900);
+}
+
 /* A case number set like a registry stamp: navy mono on a hairline frame. */
 .case-stamp {
   display: inline-block;
