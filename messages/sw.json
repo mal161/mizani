@@ -17,7 +17,31 @@
     "process": "Jinsi lalamiko linavyoshughulikiwa",
     "processIntro": "Kila kesi hupitia hatua zilezile. Unaarifiwa kwa SMS kila inaposonga.",
     "channelsTitle": "Huna intaneti? Bado unaweza kulalamika",
-    "channels": "Tembelea ofisi yoyote ya ACC na wafanyakazi watawasilisha lalamiko kwa niaba yako na kukuchapishia risiti yenye nambari ya kesi na PIN. Kisha unaweza kuifuatilia kwa SMS au USSD."
+    "channels": "Tembelea ofisi yoyote ya ACC na wafanyakazi watawasilisha lalamiko kwa niaba yako na kukuchapishia risiti yenye nambari ya kesi na PIN. Kisha unaweza kuifuatilia kwa SMS au USSD.",
+    "file": {
+      "title": "Jalada moja la kesi, kutoka lalamiko hadi uamuzi.",
+      "text": "Kila lalamiko hupata nambari yake ya kesi na PIN mara linapowasilishwa. Tume huweka kila kitu kwenye jalada hilo moja: jibu la wakili, uchunguzi, usikilizaji na uamuzi. Unapata SMS kila kesi inaposonga, na unaweza kuiangalia mtandaoni, kwa USSD au katika ofisi yoyote ya ACC.",
+      "fact1": "Kwa Kiingereza au Kiswahili",
+      "fact2": "Mtandaoni, kwa SMS, USSD au ana kwa ana",
+      "fact3": "Inalindwa chini ya Sheria ya Ulinzi wa Data, 2019",
+      "card": {
+        "label": "Mfano wa jalada la kesi",
+        "office": "Ofisi ya Nairobi",
+        "filedLabel": "Iliwasilishwa",
+        "filed": "Ana kwa ana, 12 Nov 2026",
+        "aboutLabel": "Lalamiko",
+        "about": "Wakili alishikilia pesa za mauzo",
+        "categoryLabel": "Aina",
+        "stageLabel": "Hatua",
+        "responseLabel": "Jibu la wakili",
+        "response": "Lilipokelewa 19 Nov",
+        "nextLabel": "Kinachofuata",
+        "next": "Afisa anapitia mkataba wa mauzo na jibu la wakili.",
+        "stamp": "IMEPOKELEWA",
+        "stampDate": "12 NOV 2026",
+        "caption": "Mfano wa jalada la kesi: nambari ya kesi, maelezo ya uwasilishaji, aina, hatua, jibu la wakili na hatua inayofuata."
+      }
+    }
   },
   "language": {
     "label": "Lugha",

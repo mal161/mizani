@@ -3,6 +3,7 @@ import { Link } from "@/i18n/routing";
 import { PublicShell } from "@/components/shell/PublicShell";
 import Image from "next/image";
 import { StageTrack } from "@/components/case/StageTrack";
+import { CaseFileCard } from "@/components/home/CaseFileCard";
 
 /**
  * The four service tiles take the Kenyan flag's colours in its order (black, white, red, green). White text on the
@@ -89,6 +90,30 @@ export default async function HomePage() {
             );
           })}
         </ul>
+      </section>
+
+      {/* One case file per complaint: what the system keeps, with an example docket. */}
+      <section aria-labelledby="case-file" className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-20 pb-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <div className="flex flex-col gap-6">
+          <h2 id="case-file" className="max-w-[16ch] text-4xl leading-tight font-bold text-primary sm:text-5xl sm:leading-[1.1]">
+            {t("file.title")}
+          </h2>
+          <p className="max-w-xl text-lg leading-8 text-slate-700">{t("file.text")}</p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Link href="/status" className="rounded-md bg-primary px-6 py-3 text-base font-medium text-white hover:bg-primary-hover">
+              {t("trackCase")}
+            </Link>
+            <Link href="/my/file" className="py-3 text-base font-medium text-primary underline underline-offset-4 hover:text-primary-hover">
+              {t("fileComplaint")}
+            </Link>
+          </div>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+            <li>{t("file.fact1")}</li>
+            <li>{t("file.fact2")}</li>
+            <li>{t("file.fact3")}</li>
+          </ul>
+        </div>
+        <CaseFileCard />
       </section>
 
       <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
