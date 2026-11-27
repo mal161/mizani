@@ -67,7 +67,7 @@ Database tests create test users and cases in the configured project. Use a deve
 | `/[locale]/staff/cases/[case]` | staff | timeline, notes, stage, triage, assignment, info requests |
 | `/[locale]/staff/intake` | officers | walk-in filing with printable slip |
 | `/[locale]/staff/admin` | admins | staff accounts, workflow settings, routing rules, audit log + CSV |
-| `GET /api/cron/deadlines` | Vercel Cron | hourly deadline alerts (`Authorization: Bearer $CRON_SECRET`) |
+| `GET /api/cron/deadlines` | Vercel Cron | deadline alerts (`Authorization: Bearer $CRON_SECRET`): daily at 08:00 Nairobi on the Vercel Hobby plan, hourly when self-hosted or on Pro |
 | `GET /api/documents/[id]` | parties | audited evidence download |
 | `/[locale]/advocate/activate` | advocates | claim an account with the admission number + activation code from the notice |
 | `/[locale]/advocate` | advocates | complaints served on them, allegations, shared evidence, response form |

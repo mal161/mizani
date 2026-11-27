@@ -30,7 +30,7 @@ Hosting: Vercel (app) + Supabase (database, auth, storage). Demo data only.
 | `AI_MODEL` | model id; optional for `claude` (default `claude-opus-5-5`), required otherwise |
 | `AI_BASE_URL` | server URL for `openai-compatible`, e.g. `http://10.0.0.5:8000/v1` |
 | `OPENROUTER_PROVIDERS` | optional comma list of OpenRouter hosts to allow |
-| `CRON_SECRET` | random string; Vercel Cron sends it to `/api/cron/deadlines` (scheduled hourly in `vercel.json`) |
+| `CRON_SECRET` | random string; Vercel Cron sends it to `/api/cron/deadlines` (scheduled daily at 05:00 UTC = 08:00 Nairobi in `vercel.json`, because the Hobby plan allows one run a day; on Pro, change the schedule to `0 * * * *` for hourly alerts) |
 
 Do **not** set `OTP_TEST_CODE` on a public deployment.
 
