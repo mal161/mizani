@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { PublicShell } from "@/components/shell/PublicShell";
-import { Logo } from "@/components/brand/Logo";
+import Image from "next/image";
 import { StageTrack } from "@/components/case/StageTrack";
 
 /**
@@ -23,8 +23,14 @@ export default async function HomePage() {
 
   return (
     <PublicShell>
-      <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-12 pb-20 sm:px-6 lg:grid-cols-2 lg:pt-16 lg:pb-24">
+      <section className="relative isolate overflow-hidden bg-primary text-white">
+        {/* Hero image: full-bleed behind the text on phones, the right side from lg (shown near its native 736px). */}
+        <div aria-hidden className="absolute inset-y-0 right-0 -z-10 w-full lg:w-1/2 xl:w-[58%]">
+          <Image src="/images/hero-scales.jpg" alt="" fill priority sizes="(min-width: 1280px) 58vw, (min-width: 1024px) 50vw, 100vw" className="object-cover object-center" />
+          {/* Phones: navy wash so white text stays readable. From lg: navy fades into the image from the text side. */}
+          <div className="absolute inset-0 bg-primary/85 lg:bg-transparent lg:bg-[linear-gradient(to_right,var(--color-primary)_0%,rgb(27_42_74/0.6)_30%,rgb(27_42_74/0)_60%)]" />
+        </div>
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-12 pb-20 sm:px-6 lg:min-h-[480px] lg:grid-cols-2 lg:pt-16 lg:pb-24">
           <div className="flex flex-col gap-6">
             <p className="text-base text-slate-300">{ts("org")}</p>
             <h1 className="max-w-[18ch] text-4xl leading-tight font-bold sm:text-5xl sm:leading-[1.1]">{t("headline")}</h1>
@@ -38,15 +44,10 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-          <Logo
-            tone="light"
-            className="mx-auto hidden w-full max-w-xl lg:block"
-            labels={{ advocate: ts("logo.advocate"), complainant: ts("logo.complainant"), tagline: ts("tagline") }}
-          />
         </div>
       </section>
 
-      <section aria-labelledby="services" className="mx-auto -mt-10 max-w-6xl px-4 sm:px-6">
+      <section aria-labelledby="services" className="relative z-10 mx-auto -mt-10 max-w-6xl px-4 sm:px-6">
         <h2 id="services" className="sr-only">
           {t("services")}
         </h2>
