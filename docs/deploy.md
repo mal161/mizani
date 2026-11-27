@@ -30,6 +30,7 @@ Hosting: Vercel (app) + Supabase (database, auth, storage). Demo data only.
 | `AI_MODEL` | model id; optional for `claude` (default `claude-opus-5-5`), required otherwise |
 | `AI_BASE_URL` | server URL for `openai-compatible`, e.g. `http://10.0.0.5:8000/v1` |
 | `OPENROUTER_PROVIDERS` | optional comma list of OpenRouter hosts to allow |
+| `HEARING_VIDEO_BASE_URL` | optional; https address of the Jitsi server for hearing rooms Mizani creates (default `https://meet.jit.si`) |
 | `CRON_SECRET` | random string; Vercel Cron sends it to `/api/cron/deadlines` (scheduled daily at 05:00 UTC = 08:00 Nairobi in `vercel.json`, because the Hobby plan allows one run a day; on Pro, change the schedule to `0 * * * *` for hourly alerts) |
 
 Do **not** set `OTP_TEST_CODE` on a public deployment.
@@ -44,7 +45,8 @@ Mizani does not send email. Officers download the notice letter PDF from the cas
 
 ### Hearings, decisions and referral packs
 
-- **Hearing notices** go out by SMS to both parties (complainant in their language, advocate in English) and as in-app alerts to the panel. Mizani does not send calendar invitations; for online hearings, officers paste the link from the ACC's own video service, and parties see it in their portals.
+- **Hearing notices** go out by SMS to both parties (complainant in their language, advocate in English) and as in-app alerts to the panel. Mizani does not send calendar invitations. For an online hearing, officers either paste a link from the ACC's own video service (Zoom, Teams, Google Meet…) or leave the link blank, and Mizani creates a Jitsi video room for that hearing. Parties and the panel see the link in their portals; it is never sent by SMS.
+- **Video rooms:** by default rooms are on the public `https://meet.jit.si` (free, no account or API key). Room names are `ACC-Hearing-` plus 16 random characters, with no case number or names. On meet.jit.si the first person to join (the panel chair) is asked to sign in with a Google, GitHub or Facebook account to open the room. For production, the ACC should run its own Jitsi server (open source, can be hosted in Kenya, allows recording on its own storage) and set `HEARING_VIDEO_BASE_URL` to its address, e.g. `https://video.acc.go.ke`. Changing it affects only hearings scheduled afterwards.
 - **Decision letters** (English + Kiswahili) are generated on demand from the stored decision and can be downloaded by staff, the complainant and the notified advocate. Print and serve them through the ACC's usual channels if a signed copy is needed.
 - **Referral packs** (decision letter + full case bundle) are for lodging with the Disciplinary Tribunal. Bundles contain internal notes and hearing minutes: share them only with the Tribunal.
 - **Retention:** hearings, minutes, decisions (including superseded ones) and referrals are part of the case record and follow the same retention period as the case (see *Data protection*). Generated PDFs are not stored; each download is rebuilt from the record and logged in the audit log.

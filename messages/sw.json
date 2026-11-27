@@ -781,7 +781,7 @@
     "when": "Tarehe na saa",
     "duration": "Muda",
     "format": "Namna",
-    "link": "Kiungo cha mtandaoni",
+    "link": "Kiungo cha mtandaoni (si lazima)",
     "venue": "Mahali",
     "clash": "Mwanajopo tayari ana usikilizaji wakati huu (kesi {cases}).",
     "scheduleAnyway": "Panga hata hivyo",
@@ -806,13 +806,14 @@
       "duration": "Chagua muda kati ya dakika 15 na saa 8.",
       "panel": "Chagua makamishna 1 hadi 5 walio hai.",
       "venue": "Weka mahali pa usikilizaji wa ana kwa ana.",
-      "link": "Weka kiungo cha https:// kwa usikilizaji wa mtandaoni.",
+      "link": "Weka kiungo kinachoanza na https://, au kiache wazi ili kuunda chumba cha video.",
       "stage": "Usikilizaji unapangwa kuanzia hatua ya uchunguzi, upatanisho au usikilizaji.",
       "reason": "Toa sababu.",
       "already_scheduled": "Kesi hii tayari ina usikilizaji uliopangwa. Upange upya badala yake.",
       "not_scheduled": "Ni usikilizaji uliopangwa tu unaoweza kubadilishwa."
     },
-    "reasonHint": "Sababu inaonyeshwa kwa mlalamikaji na wakili."
+    "reasonHint": "Sababu inaonyeshwa kwa mlalamikaji na wakili.",
+    "linkHint": "Bandika kiungo cha Zoom, Teams, Google Meet au huduma nyingine, au kiache wazi na Mizani itaunda chumba cha video kwa usikilizaji huu."
   },
   "analytics": {
     "title": "Takwimu",

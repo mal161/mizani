@@ -121,10 +121,22 @@ export function HearingPanel(props: {
             </select>
           </label>
           {mode === "online" ? (
-            <label className="flex flex-col gap-1 text-sm">
-              {t("link")}
-              <input type="url" name="onlineLink" required placeholder="https://" defaultValue={val("onlineLink", s?.link ?? "")} className={field} />
-            </label>
+            <div className="flex flex-col gap-1">
+              <label className="flex flex-col gap-1 text-sm">
+                {t("link")}
+                <input
+                  type="url"
+                  name="onlineLink"
+                  placeholder="https://"
+                  aria-describedby="online-link-hint"
+                  defaultValue={val("onlineLink", s?.link ?? "")}
+                  className={field}
+                />
+              </label>
+              <p id="online-link-hint" className="text-xs text-slate-500">
+                {t("linkHint")}
+              </p>
+            </div>
           ) : (
             <label className="flex flex-col gap-1 text-sm">
               {t("venue")}

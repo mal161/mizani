@@ -47,5 +47,5 @@ Deliberately left for the ACC to prioritise after handover:
 - No automatic deletion: retention periods must be set first ([data-protection.md](data-protection.md)).
 - Scanned evidence images are not read for AI summaries (no OCR).
 - Hearing minutes can be recorded before the hearing's start time; a very long venue name can push a hearing SMS past one 160-character message.
-- No calendar invitations or video-conference integration for hearings; the online link is typed in by staff.
+- No calendar invitations for hearings. Online hearings use a link pasted by staff or a Jitsi room Mizani creates (`src/lib/commission/video.ts`). On the default public meet.jit.si, call audio and video pass through a third-party service outside Kenya; the room name holds no case details and is unguessable, but for production set `HEARING_VIDEO_BASE_URL` to an ACC-run Jitsi server.
 - Mizani does not send email; notice letters are printed or sent from the ACC's own mail system.

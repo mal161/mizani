@@ -5,6 +5,7 @@ import { ForbiddenError, actorId, type StaffUser } from "@/lib/auth/staff-types"
 import { openStageDeadline } from "@/lib/cases/deadlines";
 import { smsText } from "@/lib/cases/messages";
 import type { Locale } from "@/i18n/routing";
+import { newHearingRoom } from "./video";
 
 export type HearingMode = "in_person" | "online";
 
@@ -13,6 +14,7 @@ export interface HearingInput {
   durationMinutes: number;
   mode: HearingMode;
   venue?: string;
+  /** Optional: an online hearing without one gets a video room (see video.ts). */
   onlineLink?: string;
   panel: string[];
   /** Schedule anyway when a panel member already has an overlapping hearing. */
@@ -51,7 +53,8 @@ async function validate(input: HearingInput): Promise<{ startsAt: string; venue:
     .eq("active", true);
   if ((members ?? []).length !== panel.length) throw new Error("every panel member must be an active commissioner");
   const venue = input.venue?.trim() || null;
-  const link = input.onlineLink?.trim() || null;
+  // A pasted link is kept as typed; an online hearing without one gets its own video room.
+  const link = input.onlineLink?.trim() || (input.mode === "online" ? newHearingRoom() : null);
   if (input.mode === "in_person" && !venue) throw new Error("venue required for an in-person hearing");
   if (input.mode === "online" && !(link && /^https:\/\/\S+$/.test(link))) throw new Error("online hearings need an https link");
   return { startsAt: start.toISOString(), venue: input.mode === "in_person" ? venue : null, link: input.mode === "online" ? link : null, panel };
