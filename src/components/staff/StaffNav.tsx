@@ -6,7 +6,7 @@ import { AppHeader } from "@/components/shell/AppHeader";
 export async function StaffNav({ user, locale, unread }: { user: StaffUser; locale: Locale; unread: number }) {
   const t = await getTranslations("staffNav");
   const items = [
-    { href: "/staff", label: t("workspace") },
+    { href: "/staff", label: t("workspace"), also: ["/staff/cases"] },
     ...(user.role !== "commissioner" ? [{ href: "/staff/intake", label: t("intake") }] : []),
     ...(user.role === "admin" ? [{ href: "/staff/admin", label: t("admin"), prefix: true }] : []),
     ...(user.role === "admin" || user.role === "commissioner" ? [{ href: "/commission", label: t("commission") }] : []),

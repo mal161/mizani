@@ -1,12 +1,10 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/routing";
+import { isNavActive, type NavMatch } from "./nav-active";
 
-export interface NavItem {
-  href: string;
+export interface NavItem extends NavMatch {
   label: string;
-  /** Match sub-pages too (e.g. /staff/cases/...). Exact match when false. */
-  prefix?: boolean;
   badge?: number;
   ariaLabel?: string;
 }
@@ -18,7 +16,7 @@ export function NavLinks({ items, tone, label }: { items: NavItem[]; tone: "dark
   return (
     <nav aria-label={label} className="-mb-px flex h-full items-stretch gap-x-1 overflow-x-auto whitespace-nowrap [scrollbar-width:none]">
       {items.map((i) => {
-        const active = i.prefix ? pathname === i.href || pathname.startsWith(`${i.href}/`) : pathname === i.href;
+        const active = isNavActive(pathname, i);
         return (
           <Link
             key={i.href}

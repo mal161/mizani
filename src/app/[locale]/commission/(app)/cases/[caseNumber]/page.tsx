@@ -201,7 +201,16 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
           )}
         </section>
 
-        {live && onPanel(live.panel) && <MinutesForm hearingId={live.id} path={path} current={live.minutes} />}
+        {live &&
+          onPanel(live.panel) &&
+          // Minutes are for a hearing that has taken place: the form opens at the start time.
+          (new Date(live.starts_at).getTime() <= Date.now() ? (
+            <MinutesForm hearingId={live.id} path={path} current={live.minutes} />
+          ) : (
+            <p data-testid="minutes-not-yet" className="text-sm text-slate-600">
+              {t("minutes.notYet", { when: when(live.starts_at) })}
+            </p>
+          ))}
 
         {canDecide && (
           <DecisionForm caseId={c.id} path={path} members={members} defaultPanel={defaultPanel} correcting={Boolean(decision)} />

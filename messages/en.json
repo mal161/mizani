@@ -706,7 +706,8 @@
       "label": "Hearing minutes",
       "hint": "Minutes are internal to the Commission and are included in the case bundle. Saving marks the hearing as held.",
       "save": "Save minutes",
-      "internal": "Minutes (internal)"
+      "internal": "Minutes (internal)",
+      "notYet": "Minutes can be recorded once the hearing has started ({when})."
     },
     "decision": {
       "title": "Record decision",
@@ -752,7 +753,8 @@
       "cancelled": "This hearing was cancelled.",
       "held": "Record the hearing minutes before the decision.",
       "not_on_panel": "Only commissioners who sat on this hearing can do this.",
-      "adjourned": "This hearing was adjourned. Minutes go on the hearing that took place."
+      "adjourned": "This hearing was adjourned. Minutes go on the hearing that took place.",
+      "not_started": "This hearing has not started yet. Record the minutes once it has taken place."
     }
   },
   "partyCase": {

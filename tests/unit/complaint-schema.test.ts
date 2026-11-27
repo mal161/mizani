@@ -58,4 +58,20 @@ describe("smsText", () => {
       expect(msg).toContain("048213");
     }
   });
+
+  it("keeps a hearing notice to one SMS however long the venue, shortening only the venue", () => {
+    const venue = "Advocates Complaints Commission Boardroom, 4th Floor, Bishops Garden Towers, Bishops Road, Upper Hill, Nairobi";
+    for (const l of ["en", "sw"] as const) {
+      const msg = smsText.hearingScheduled(l, "ACC/2026/000123", "2026-12-09 10:00", venue);
+      expect(msg.length).toBeLessThanOrEqual(160);
+      expect(msg).toContain("ACC/2026/000123");
+      expect(msg).toContain("2026-12-09 10:00");
+      expect(msg).toContain("Advocates Complaints Commission Boardroom");
+      // "..." (GSM-7; "…" would force 70-character UCS-2) then the full stop.
+      expect(msg.endsWith("....")).toBe(true);
+      expect(msg).not.toContain("…");
+      // A short venue is untouched.
+      expect(smsText.hearingScheduled(l, "ACC/2026/000123", "2026-12-09 10:00", "Room 2")).toContain("Room 2.");
+    }
+  });
 });

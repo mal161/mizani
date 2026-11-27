@@ -37,15 +37,15 @@ export async function CaseFileCard() {
         ))}
       </dl>
 
-      <div className="mt-4 flex flex-col gap-1 pr-24">
+      <div className="mt-4 flex flex-col gap-1 sm:pr-24">
         <span className="text-sm text-[#6b5d3f]">{t("nextLabel")}</span>
         <p className="text-base leading-6">{t("next")}</p>
       </div>
 
-      {/* Rubber stamp in the flag red. */}
+      {/* Rubber stamp in the flag red: under the text on phones, in the bottom corner from sm. */}
       <span
         aria-hidden
-        className="absolute right-5 bottom-6 flex -rotate-[8deg] flex-col items-center rounded-sm border-[3px] border-flag-red px-2.5 py-1 text-flag-red opacity-85"
+        className="mt-4 ml-auto flex w-fit -rotate-[8deg] flex-col items-center rounded-sm border-[3px] border-flag-red px-2.5 py-1 text-flag-red opacity-85 sm:absolute sm:right-5 sm:bottom-6 sm:mt-0"
       >
         <span className="text-base leading-none font-bold">{t("stamp")}</span>
         <span className="mt-0.5 text-xs leading-none font-bold">{t("stampDate")}</span>

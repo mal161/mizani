@@ -45,6 +45,18 @@ test("commissioner reads analytics, filters, exports; officers are refused", asy
   await expect(cp.getByTestId("stat-filed")).toContainText("3");
   await expect(cp.getByTestId("stat-refunds")).toContainText("25,000");
 
+  // Stage names an admin renamed in Workflow settings are used; a repeated office parameter does not crash the page
+  const { data: labelRow } = await db.from("settings").select("value").eq("key", "stage_labels").single();
+  const renamed = `Under inquiry ${stamp}`;
+  await db.from("settings").update({ value: { en: { investigation: renamed }, sw: {} } }).eq("key", "stage_labels");
+  try {
+    await cp.goto(`/en/commission/analytics?period=365d&office=${encodeURIComponent(office)}&office=Elsewhere`);
+    await expect(cp.getByRole("cell", { name: renamed })).toBeVisible({ timeout: 90_000 });
+    await expect(cp.getByTestId("stat-filed")).toContainText("3");
+  } finally {
+    await db.from("settings").update({ value: labelRow!.value }).eq("key", "stage_labels");
+  }
+
   // The repeat advocate's name opens that advocate's cases in the workspace
   await cp.getByRole("link", { name: adv!.full_name }).click();
   await expect(cp).toHaveURL(/\/en\/staff\?.*advocate=/, { timeout: 90_000 });

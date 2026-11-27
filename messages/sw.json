@@ -706,7 +706,8 @@
       "label": "Kumbukumbu za usikilizaji",
       "hint": "Kumbukumbu ni za ndani ya Tume na zimo kwenye jalada la kesi. Kuhifadhi kunaonyesha usikilizaji umefanyika.",
       "save": "Hifadhi kumbukumbu",
-      "internal": "Kumbukumbu (za ndani)"
+      "internal": "Kumbukumbu (za ndani)",
+      "notYet": "Kumbukumbu zinaweza kuandikwa usikilizaji ukishaanza ({when})."
     },
     "decision": {
       "title": "Rekodi uamuzi",
@@ -752,7 +753,8 @@
       "cancelled": "Usikilizaji huu ulifutwa.",
       "held": "Rekodi kumbukumbu za usikilizaji kabla ya uamuzi.",
       "not_on_panel": "Ni makamishna walioketi kwenye usikilizaji huu tu wanaoweza kufanya hivi.",
-      "adjourned": "Usikilizaji huu uliahirishwa. Kumbukumbu zinaandikwa kwenye usikilizaji uliofanyika."
+      "adjourned": "Usikilizaji huu uliahirishwa. Kumbukumbu zinaandikwa kwenye usikilizaji uliofanyika.",
+      "not_started": "Usikilizaji huu bado haujaanza. Andika kumbukumbu baada ya kufanyika."
     }
   },
   "partyCase": {

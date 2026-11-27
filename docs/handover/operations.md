@@ -28,7 +28,7 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 
 ## Monitoring
 
-- `GET /api/health` every minute from the ACC's monitoring tool. Alert when the status is not 200 or `db` is not `"ok"`. The response holds no personal data.
+- `GET /api/health` every minute from the ACC's monitoring tool. Alert when the status is not 200 or `db` is not `"ok"`. The response holds no personal data; provider names and the version are added only for callers sending `Authorization: Bearer $CRON_SECRET`.
 - Undelivered SMS appear as "SMS could not be sent" entries on the case timeline (`case_events` rows of type `sms_failed`); check for them weekly, e.g. `select count(*) from case_events where type = 'sms_failed' and created_at > now() - interval '7 days';`. Watch the app's own output for repeated 5xx errors.
 - The hourly deadline job writes alerts to staff; if officers stop receiving "deadline within 48 hours" alerts, check the cron entry and `CRON_SECRET`.
 

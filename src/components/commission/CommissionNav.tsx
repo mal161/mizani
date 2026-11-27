@@ -12,7 +12,7 @@ export async function CommissionNav({ user, locale }: { user: StaffUser; locale:
       home="/commission"
       portal={t("brand")}
       items={[
-        { href: "/commission", label: t("dashboard") },
+        { href: "/commission", label: t("dashboard"), also: ["/commission/cases"] },
         { href: "/commission/hearings", label: t("hearings") },
         { href: "/commission/analytics", label: t("analytics") },
         { href: "/staff", label: t("workspace") },

@@ -15,7 +15,7 @@ vi.mock("@/lib/supabase/admin", () => ({
 describe("GET /api/health database probe", () => {
   it("reads at most one row and never counts the cases table (the endpoint is unauthenticated)", async () => {
     const { GET } = await import("@/app/api/health/route");
-    const res = await GET();
+    const res = await GET(new Request("http://localhost/api/health"));
     expect(res.status).toBe(200);
     expect(selects).toEqual([undefined]);
   });

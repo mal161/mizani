@@ -25,8 +25,17 @@ function isDay(s: string | undefined): s is string {
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
 }
 
+/** A query parameter as Next.js gives it: repeated keys (`?a=1&a=2`) arrive as an array. */
+export type QueryValue = string | string[] | undefined | null;
+
+/** The first value of a query parameter, so a repeated key never crashes a parser. */
+export function firstParam(v: QueryValue): string | undefined {
+  return (Array.isArray(v) ? v[0] : v) ?? undefined;
+}
+
 /** Reads the dashboard's period from query parameters; anything invalid falls back to the last 90 days. */
-export function parsePeriod(q: { period?: string; from?: string; to?: string }, now: Date = new Date()): Period {
+export function parsePeriod(query: { period?: QueryValue; from?: QueryValue; to?: QueryValue }, now: Date = new Date()): Period {
+  const q = { period: firstParam(query.period), from: firstParam(query.from), to: firstParam(query.to) };
   if (q.period === "custom" && isDay(q.from) && isDay(q.to)) {
     const from = nairobiMidnight(q.from);
     const to = new Date(nairobiMidnight(q.to).getTime() + DAY);

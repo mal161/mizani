@@ -1,5 +1,7 @@
 import type { Locale } from "@/i18n/routing";
 
+const SMS_LIMIT = 160;
+
 /** SMS templates. Each must stay within one 160-character SMS. */
 export const smsText = {
   filed: (l: Locale, caseNumber: string, pin: string) =>
@@ -14,11 +16,18 @@ export const smsText = {
     l === "sw"
       ? `ACC: Uamuzi umetolewa kwa kesi ${caseNumber}: ${outcome}. Soma sababu na pakua barua kwenye Mizani.`
       : `ACC: A decision was issued on case ${caseNumber}: ${outcome}. Read the reasons and download the letter on Mizani.`,
-  /** Hearing notice: date/time in Nairobi, venue or "online" (the link is only shown in the portals). */
-  hearingScheduled: (l: Locale, caseNumber: string, when: string, place: string | null) =>
-    l === "sw"
-      ? `ACC: Usikilizaji wa kesi ${caseNumber} ni ${when}, ${place ?? "mtandaoni (kiungo kiko Mizani)"}.`
-      : `ACC: Hearing for case ${caseNumber} on ${when}, ${place ?? "online (link on Mizani)"}.`,
+  /**
+   * Hearing notice: date/time in Nairobi, venue or "online" (the link is only shown in the portals).
+   * A venue too long for one SMS is shortened with "..." (plain dots keep the GSM-7 encoding; "…" would not).
+   */
+  hearingScheduled: (l: Locale, caseNumber: string, when: string, place: string | null) => {
+    const text = (p: string) => (l === "sw" ? `ACC: Usikilizaji wa kesi ${caseNumber} ni ${when}, ${p}.` : `ACC: Hearing for case ${caseNumber} on ${when}, ${p}.`);
+    const where = place ?? (l === "sw" ? "mtandaoni (kiungo kiko Mizani)" : "online (link on Mizani)");
+    const full = text(where);
+    if (full.length <= SMS_LIMIT) return full;
+    const room = SMS_LIMIT - (full.length - where.length) - 3;
+    return text(`${where.slice(0, Math.max(0, room)).trimEnd()}...`);
+  },
   hearingChanged: (l: Locale, caseNumber: string, what: string) =>
     l === "sw" ? `ACC: Usikilizaji wa kesi ${caseNumber}: ${what}. Angalia Mizani.` : `ACC: Hearing for case ${caseNumber}: ${what}. See Mizani.`,
   /** To the advocate (roll phone). No complainant details. */

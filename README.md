@@ -80,7 +80,7 @@ Database tests create test users and cases in the configured project. Use a deve
 | `GET /api/referrals/[id]/pack` | staff roles | audited tribunal referral pack (decision letter + case bundle) |
 | `/[locale]/commission/analytics` | commissioners, admins | resolution times, where cases wait, trends, officer workload, repeat advocates, outcomes; period + office filters |
 | `GET /api/analytics/export?section=…` | commissioners, admins | audited CSV of one analytics section (aggregates only) |
-| `GET /api/health` | monitoring | database reachable + provider names (no secrets, no data) |
+| `GET /api/health` | monitoring | database reachable; provider names and version only with `Authorization: Bearer $CRON_SECRET` (no secrets, no data) |
 
 ## Advocate portal
 

@@ -3,7 +3,9 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { requireStaff } from "@/lib/auth/staff";
 import { COMMISSION_ROLES } from "@/lib/commission/roles";
 import { analyticsAs, officeOptions, officeParam, type AnalyticsSection } from "@/lib/analytics/analytics";
-import { parsePeriod, periodQuery } from "@/lib/analytics/period";
+import { parsePeriod, periodQuery, type QueryValue } from "@/lib/analytics/period";
+import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
+import { labelFor } from "@/lib/cases/workflow-config";
 import { isOutcome } from "@/lib/commission/outcomes";
 import { logAudit } from "@/lib/audit";
 import { StatTile } from "@/components/analytics/StatTile";
@@ -13,7 +15,7 @@ import { DataTable } from "@/components/analytics/DataTable";
 import { Link, type Locale } from "@/i18n/routing";
 import { Filters } from "./Filters";
 
-type Search = { period?: string; from?: string; to?: string; office?: string };
+type Search = { period?: QueryValue; from?: QueryValue; to?: QueryValue; office?: QueryValue };
 
 export default async function AnalyticsPage({ params, searchParams }: { params: Promise<{ locale: Locale }>; searchParams: Promise<Search> }) {
   const { locale } = await params;
@@ -21,7 +23,7 @@ export default async function AnalyticsPage({ params, searchParams }: { params: 
   const q = await searchParams;
   const period = parsePeriod(q);
   const office = officeParam(q.office);
-  const [r, offices] = await Promise.all([analyticsAs(user, period, office), officeOptions()]);
+  const [r, offices, workflow] = await Promise.all([analyticsAs(user, period, office), officeOptions(), loadWorkflowConfig()]);
   await logAudit({
     actorId: user.id,
     channel: "web",
@@ -41,6 +43,8 @@ export default async function AnalyticsPage({ params, searchParams }: { params: 
   const dateOf = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium", timeZone: "Africa/Nairobi" });
   const monthOf = (day: string) => format.dateTime(new Date(`${day}T12:00:00Z`), { month: "short", year: "2-digit", timeZone: "UTC" });
   const catName = (k: string) => (tCat.has(k) ? tCat(k) : k);
+  // Stage names as the admin set them in Workflow settings, falling back to the defaults.
+  const stageName = (s: string) => labelFor(s, locale, workflow, tStages);
   const exportHref = (s: AnalyticsSection) => `/api/analytics/export?section=${s}&${periodQuery(period)}${office ? `&office=${encodeURIComponent(office)}` : ""}`;
   const o = r.overview;
 
@@ -109,11 +113,11 @@ export default async function AnalyticsPage({ params, searchParams }: { params: 
             label={t("stages.chart")}
             unit={t("stages.days")}
             format={(v) => format.number(v, { maximumFractionDigits: 1 })}
-            items={r.stages.map((s) => ({ label: tStages(s.stage), value: s.medianDays, note: s.stage === longest ? t("stages.longest") : undefined }))}
+            items={r.stages.map((s) => ({ label: stageName(s.stage), value: s.medianDays, note: s.stage === longest ? t("stages.longest") : undefined }))}
           />
           <DataTable
             head={[t("stages.head.stage"), t("stages.head.entered"), t("stages.head.median"), t("stages.head.p90"), t("stages.head.open"), t("stages.head.overdue")]}
-            rows={r.stages.map((s) => [tStages(s.stage), n(s.entered), d1(s.medianDays), d1(s.p90Days), n(s.openNow), n(s.overdueNow)])}
+            rows={r.stages.map((s) => [stageName(s.stage), n(s.entered), d1(s.medianDays), d1(s.p90Days), n(s.openNow), n(s.overdueNow)])}
           />
         </>,
       )}
