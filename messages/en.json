@@ -14,13 +14,9 @@
       "mine": "Sign in with your phone number to see your cases and answer the Commission.",
       "advocate": "Received a notice of complaint? Activate your account and send your response."
     },
-    "process": "How a complaint is handled",
-    "processIntro": "Every case moves through the same stages. You are told by SMS each time it moves.",
     "channelsTitle": "No internet? You can still complain",
     "channels": "Visit any ACC office and staff will file the complaint for you and print a slip with your case number and PIN. You can then follow it by SMS or USSD.",
     "file": {
-      "title": "One case file, from complaint to decision.",
-      "text": "Every complaint gets its own case number and a PIN the moment it is filed. The Commission keeps everything on that one file: the advocate's response, the investigation, the hearing and the decision. You get an SMS each time it moves, and you can check it online, on USSD or at any ACC office.",
       "fact1": "In English or Kiswahili",
       "fact2": "Online, by SMS, on USSD or walk-in",
       "fact3": "Protected under the Data Protection Act, 2019",
@@ -40,6 +36,83 @@
         "stamp": "RECEIVED",
         "stampDate": "12 NOV 2026",
         "caption": "An example case file: case number, filing details, category, stage, the advocate's response and the next step."
+      }
+    },
+    "story": {
+      "title": "From complaint to decision",
+      "intro": "Every complaint gets its own case file. Here is how one moves through the Commission, and what you see at each step.",
+      "step": "Step {n}",
+      "steps": {
+        "received": {
+          "label": "Received",
+          "title": "Your complaint is on file the same day.",
+          "text": "Online or at an ACC office, the complaint gets a case number and a PIN straight away, sent to you by SMS. From now on everything about it goes on that one file."
+        },
+        "notified": {
+          "label": "Advocate notified",
+          "title": "The advocate is formally told and must respond.",
+          "text": "An officer serves a notice on the advocate with a deadline to respond, usually 14 days. The advocate answers online, and you are told when they do."
+        },
+        "investigation": {
+          "label": "Investigation",
+          "title": "An officer examines the evidence.",
+          "text": "The investigating officer reviews your documents and the advocate's answer. If anything is missing, the Commission asks you for it, and you can reply online or at an office."
+        },
+        "hearing": {
+          "label": "Hearing",
+          "title": "Both sides are heard by a panel.",
+          "text": "When a case needs a hearing, both you and the advocate are told the date, time and place by SMS, in person or online, before a panel of commissioners."
+        },
+        "decision": {
+          "label": "Decision",
+          "title": "The Commission decides, with reasons.",
+          "text": "The decision states the outcome and the reasons, such as an order to refund money, and both sides can download the decision letter."
+        }
+      },
+      "sms": {
+        "from": "ACC",
+        "text": "Your complaint was received. Case ACC/2026/000231. PIN ••••••. Track online or via USSD.",
+        "time": "Today 10:42"
+      },
+      "notice": {
+        "title": "Notice of complaint",
+        "case": "Case",
+        "served": "Served",
+        "servedValue": "14 Nov 2026, by hand",
+        "due": "Respond by",
+        "dueValue": "28 Nov 2026",
+        "code": "Activation code"
+      },
+      "evidence": {
+        "receipt": "Receipt",
+        "receiptLine": "Received from client",
+        "receiptAmount": "KES 65,000",
+        "letter": "Sale agreement",
+        "tag": "Information requested"
+      },
+      "hearing": {
+        "title": "Hearing notice",
+        "month": "Dec",
+        "weekday": "Wednesday",
+        "time": "10:00 a.m.",
+        "venue": "ACC Boardroom, Nairobi",
+        "panel": "Panel of three commissioners"
+      },
+      "decision": {
+        "title": "Decision",
+        "outcomeLabel": "Outcome",
+        "outcome": "Refund ordered",
+        "amount": "KES 65,000",
+        "reasons": "Reasons",
+        "seal": "Decided",
+        "date": "16 Dec 2026"
+      },
+      "illustration": {
+        "received": "An example case file with a Received stamp, and the SMS that gives the case number and PIN.",
+        "notified": "An example notice of complaint with the date it was served and the response deadline.",
+        "investigation": "An example open case file with a receipt and a sale agreement, tagged Information requested.",
+        "hearing": "An example hearing notice: Wednesday 9 December, 10:00, ACC Boardroom, Nairobi, before three commissioners.",
+        "decision": "An example decision letter: refund ordered, KES 65,000, with the Commission's seal."
       }
     }
   },

@@ -58,6 +58,7 @@ The Tailwind `slate-*` ramp is re-pointed to navy-tinted neutrals in `src/app/gl
 - `src/components/shell/PublicShell.tsx` — utility strip, masthead, footer for public, complainant and advocate-activation pages.
 - `src/components/shell/AppHeader.tsx` — the navy band for staff, commission and advocate portals.
 - `src/components/case/CaseStamp.tsx`, `StageTrack.tsx` — case number stamp; case progress (current step in orange).
+- `src/components/home/StoryArt.tsx` — the home story illustrations (docket + SMS, notice, evidence folder, hearing notice, decision letter), drawn in code from one example case (ACC/2026/000231); `CaseFileCard.tsx` is the docket.
 
 ## Do's and don'ts
 - Do: one primary (navy) button per view; orange only for the current step, the active nav item, the focus ring and the logo.
@@ -69,3 +70,4 @@ The Tailwind `slate-*` ramp is re-pointed to navy-tinted neutrals in `src/app/gl
   - Navigation never wraps on phones: one horizontally scrolling row.
   - Home service tiles use the Kenyan flag colours in the flag's order (black, white, red, green) with crescent edges and a 3px white rim (the flag's white bands): along the bottom when stacked on phones, along the right in one row (lg), straight edges in the 2x2 grid between. White text on black/red/green, navy on white. This is the only place the flag colours fill a surface.
   - Home hero image (`public/images/hero-scales.jpg`, 736px wide): text always sits on navy. From lg the image fills the right half (58% from xl) with navy fading into it; on phones it sits behind the text under an 85% navy wash. The overlapping service panel needs `relative z-10` to stay above the hero.
+  - Home story ("From complaint to decision"): five rows, statement and illustration alternating sides from lg, statement first on phones. Illustrations are case objects drawn in code (so every word is translated and stays sharp), never stock or generated images; each is `role="img"` with a translated description and the drawing inside `aria-hidden`. Step numbers are orange outline circles with `accent-ink` digits (white on orange fails contrast). Overlapping pieces (the SMS on the docket) overlap by a fixed margin in normal flow, never absolute-positioned over text, so a longer Swahili string pushes down instead of covering.

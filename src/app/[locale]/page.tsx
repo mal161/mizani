@@ -2,8 +2,16 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { PublicShell } from "@/components/shell/PublicShell";
 import Image from "next/image";
-import { StageTrack } from "@/components/case/StageTrack";
-import { CaseFileCard } from "@/components/home/CaseFileCard";
+import { DecisionArt, EvidenceArt, HearingArt, NoticeArt, ReceivedArt } from "@/components/home/StoryArt";
+
+/** The five steps of the home story, each with its illustration (StoryArt.tsx). */
+const STORY = [
+  { key: "received", Art: ReceivedArt },
+  { key: "notified", Art: NoticeArt },
+  { key: "investigation", Art: EvidenceArt },
+  { key: "hearing", Art: HearingArt },
+  { key: "decision", Art: DecisionArt },
+] as const;
 
 /**
  * The four service tiles take the Kenyan flag's colours in its order (black, white, red, green). White text on the
@@ -18,13 +26,11 @@ const FLAG_TILES = [
 
 /**
  * Public home (DESIGN.md): navy hero with the Commission's name and one primary action, the full logo beside it;
- * a task row (eCitizen-style), how a complaint moves, and how to complain without internet.
+ * a task row (eCitizen-style), the five-step story of a case, and how to complain without internet.
  */
 export default async function HomePage() {
   const t = await getTranslations("home");
   const ts = await getTranslations("shell");
-  const tStages = await getTranslations("stages");
-  const tTrack = await getTranslations("caseTrack");
 
   const services = [
     { href: "/my/file", title: ts("nav.file"), text: t("service.file") },
@@ -92,14 +98,43 @@ export default async function HomePage() {
         </ul>
       </section>
 
-      {/* One case file per complaint: what the system keeps, with an example docket. */}
-      <section aria-labelledby="case-file" className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-20 pb-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        <div className="flex flex-col gap-6">
-          <h2 id="case-file" className="max-w-[16ch] text-4xl leading-tight font-bold text-primary sm:text-5xl sm:leading-[1.1]">
-            {t("file.title")}
+      {/* From complaint to decision: five alternating rows, statement on one side and the case object on the other. */}
+      <section aria-labelledby="story" className="mx-auto max-w-6xl px-4 pt-20 pb-16 sm:px-6">
+        <div className="flex max-w-2xl flex-col gap-4">
+          <h2 id="story" className="text-4xl leading-tight font-bold text-primary sm:text-5xl sm:leading-[1.1]">
+            {t("story.title")}
           </h2>
-          <p className="max-w-xl text-lg leading-8 text-slate-700">{t("file.text")}</p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <p className="text-lg leading-8 text-slate-700">{t("story.intro")}</p>
+        </div>
+
+        <ol className="mt-16 flex flex-col gap-24 lg:gap-32">
+          {STORY.map(({ key, Art }, i) => (
+            <li key={key} className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+              <div className={`flex flex-col gap-4 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
+                <p className="flex items-center gap-3 text-base font-medium text-accent-ink">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-accent bg-accent-soft text-sm font-bold text-accent-ink tabular-nums">{i + 1}</span>
+                  <span>
+                    <span className="sr-only">{t("story.step", { n: i + 1 })}: </span>
+                    {t(`story.steps.${key}.label`)}
+                  </span>
+                </p>
+                <h3 className="max-w-[20ch] text-3xl leading-tight font-bold text-primary">{t(`story.steps.${key}.title`)}</h3>
+                <p className="max-w-xl text-lg leading-8 text-slate-700">{t(`story.steps.${key}.text`)}</p>
+              </div>
+              <div className={i % 2 === 1 ? "lg:order-1" : ""}>
+                <Art />
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-24 flex flex-col gap-6 rounded-lg border bg-white p-8 sm:flex-row sm:items-center sm:justify-between">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+            <li>{t("file.fact1")}</li>
+            <li>{t("file.fact2")}</li>
+            <li>{t("file.fact3")}</li>
+          </ul>
+          <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
             <Link href="/status" className="rounded-md bg-primary px-6 py-3 text-base font-medium text-white hover:bg-primary-hover">
               {t("trackCase")}
             </Link>
@@ -107,22 +142,6 @@ export default async function HomePage() {
               {t("fileComplaint")}
             </Link>
           </div>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-            <li>{t("file.fact1")}</li>
-            <li>{t("file.fact2")}</li>
-            <li>{t("file.fact3")}</li>
-          </ul>
-        </div>
-        <CaseFileCard />
-      </section>
-
-      <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
-        <div className="flex max-w-2xl flex-col gap-2">
-          <h2 className="text-2xl font-bold text-primary">{t("process")}</h2>
-          <p className="text-base leading-7 text-slate-600">{t("processIntro")}</p>
-        </div>
-        <div className="rounded-lg border bg-white p-6">
-          <StageTrack current={null} title={t("process")} nowLabel={tTrack("now")} label={(s) => tStages(s)} />
         </div>
       </section>
 
