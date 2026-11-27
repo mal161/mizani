@@ -9,7 +9,7 @@ import { hasLocale } from "next-intl";
 export type LoginState = {
   step: "phone" | "code";
   phone: string;
-  error?: "invalid_phone" | "rate_limited" | "invalid_code";
+  error?: "invalid_phone" | "rate_limited" | "sms_failed" | "invalid_code";
 };
 
 function localeOf(formData: FormData): Locale {

@@ -32,7 +32,7 @@ export async function createActivation(caseId: string, advocateId: string, creat
 
 export type StartResult =
   | { ok: true }
-  | { ok: false; reason: "invalid" | "phone_in_use" | "invalid_phone" | "rate_limited" | "already_activated" };
+  | { ok: false; reason: "invalid" | "phone_in_use" | "invalid_phone" | "rate_limited" | "sms_failed" | "already_activated" };
 
 function normaliseAdmissionNo(s: string): string {
   return s.trim().replace(/\s+/g, " ");
@@ -91,7 +91,7 @@ export async function startAdvocateActivation(
 
   await admin.from("advocate_activations").update({ pending_phone: phone }).eq("id", match.id);
   const sent = await requestLoginCode(phone, locale, caller);
-  if (!sent.ok) return { ok: false, reason: sent.reason === "invalid_phone" ? "invalid_phone" : "rate_limited" };
+  if (!sent.ok) return { ok: false, reason: sent.reason };
   return { ok: true };
 }
 
