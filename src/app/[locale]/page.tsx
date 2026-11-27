@@ -5,6 +5,17 @@ import Image from "next/image";
 import { StageTrack } from "@/components/case/StageTrack";
 
 /**
+ * The four service tiles take the Kenyan flag's colours in its order (black, white, red, green). White text on the
+ * flag red (6.4:1) and green (7.2:1) passes; the white tile uses navy text. Hover darkens each tile and its crescent.
+ */
+const FLAG_TILES = [
+  { tile: "bg-flag-black hover:bg-[#1f1f1f]", bulge: "bg-flag-black group-hover:bg-[#1f1f1f]", title: "text-white", text: "text-white/85" },
+  { tile: "bg-white hover:bg-primary-soft", bulge: "bg-white group-hover:bg-primary-soft", title: "text-primary", text: "text-slate-600" },
+  { tile: "bg-flag-red hover:bg-[#9e0000]", bulge: "bg-flag-red group-hover:bg-[#9e0000]", title: "text-white", text: "text-white/90" },
+  { tile: "bg-flag-green hover:bg-[#005400]", bulge: "bg-flag-green group-hover:bg-[#005400]", title: "text-white", text: "text-white/90" },
+] as const;
+
+/**
  * Public home (DESIGN.md): navy hero with the Commission's name and one primary action, the full logo beside it;
  * a task row (eCitizen-style), how a complaint moves, and how to complain without internet.
  */
@@ -51,15 +62,32 @@ export default async function HomePage() {
         <h2 id="services" className="sr-only">
           {t("services")}
         </h2>
-        <ul className="grid overflow-hidden rounded-lg border bg-white shadow-[0_8px_24px_rgb(15_23_42/0.08)] sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s, i) => (
-            <li key={s.href} className={`border-slate-200 ${i > 0 ? "border-t sm:border-t-0" : ""} ${i % 2 === 1 ? "sm:border-l" : ""} ${i > 1 ? "sm:border-t lg:border-t-0" : ""} ${i > 0 ? "lg:border-l" : ""}`}>
-              <Link href={s.href} className="group flex h-full flex-col gap-2 p-6 hover:bg-primary-soft">
-                <span className="text-base font-medium text-primary group-hover:underline">{s.title}</span>
-                <span className="text-sm leading-6 text-slate-600">{s.text}</span>
-              </Link>
-            </li>
-          ))}
+        {/* Kenyan flag colours in the flag's order, each edge a crescent with a white rim (the flag's white bands):
+            stacked on phones the crescent runs along the bottom; in one row (lg) along the right. The 2x2 grid in
+            between keeps straight edges with thin white separators. */}
+        <ul className="grid overflow-hidden rounded-lg bg-white shadow-[0_8px_24px_rgb(15_23_42/0.12)] sm:grid-cols-2 sm:gap-[3px] lg:grid-cols-4 lg:gap-0">
+          {services.map((s, i) => {
+            const tone = FLAG_TILES[i];
+            const last = i === services.length - 1;
+            return (
+              <li key={s.href} className="group relative" style={{ zIndex: services.length - i }}>
+                <Link href={s.href} className={`flex h-full flex-col gap-2 p-6 ${i > 0 ? "pt-10 sm:pt-6 lg:pl-12" : ""} ${tone.tile}`}>
+                  <span className={`text-base font-medium group-hover:underline ${tone.title}`}>{s.title}</span>
+                  <span className={`text-sm leading-6 ${tone.text}`}>{s.text}</span>
+                </Link>
+                {!last && (
+                  <>
+                    <span aria-hidden className="pointer-events-none absolute inset-x-0 top-full h-6 overflow-hidden sm:hidden">
+                      <span className={`absolute -top-6 -left-[10%] h-12 w-[120%] rounded-[50%] shadow-[0_0_0_3px_#fff] ${tone.bulge}`} />
+                    </span>
+                    <span aria-hidden className="pointer-events-none absolute inset-y-0 left-full hidden w-7 overflow-hidden lg:block">
+                      <span className={`absolute -top-[10%] -left-7 h-[120%] w-14 rounded-[50%] shadow-[0_0_0_3px_#fff] ${tone.bulge}`} />
+                    </span>
+                  </>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </section>
 
