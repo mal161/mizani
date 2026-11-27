@@ -34,7 +34,7 @@ describe("submitAdvocateResponse", () => {
   it("stores an on-time response privately, records a text-free event, meets the deadline and alerts the officer", async () => {
     const c = await notifiedCase();
     const pdf = new File([makeTextPdf(["Receipt"])], "receipt.pdf", { type: "application/pdf" });
-    expect(await submitAdvocateResponse(adv.userId, c.id, text, [pdf])).toEqual({ late: false });
+    expect(await submitAdvocateResponse(adv.userId, c.id, text, [pdf])).toEqual({ late: false, documentIds: expect.any(Array) });
 
     const admin = adminClient();
     const { data: resp } = await admin.from("advocate_responses").select("text,late,advocate_profile_id").eq("case_id", c.id);
@@ -57,7 +57,7 @@ describe("submitAdvocateResponse", () => {
 
   it("marks a response after the deadline as late", async () => {
     const c = await notifiedCase(-1);
-    expect(await submitAdvocateResponse(adv.userId, c.id, text, [])).toEqual({ late: true });
+    expect(await submitAdvocateResponse(adv.userId, c.id, text, [])).toEqual({ late: true, documentIds: expect.any(Array) });
   });
 
   it("refuses another advocate, a case not yet notified, and a too-short response", async () => {

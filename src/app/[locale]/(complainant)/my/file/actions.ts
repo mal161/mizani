@@ -6,6 +6,7 @@ import { checkFilingLimit } from "@/lib/ai/limits";
 import { getCurrentUser } from "@/lib/auth/session";
 import { fileComplaint, ComplaintValidationError } from "@/lib/cases/file-complaint";
 import { afterFiling } from "@/lib/cases/after-filing";
+import { queueOcr } from "@/lib/ocr/run";
 import { routing, type Locale } from "@/i18n/routing";
 
 export type FileState =
@@ -46,6 +47,7 @@ export async function fileComplaintAction(_prev: FileState, formData: FormData):
       { complainantId: user.id, filedBy: user.id, channel: "online", locale },
     );
     await afterFiling(r.caseId, (task) => after(task));
+    queueOcr(r.documentIds, (task) => after(task));
     return { status: "filed", caseNumber: r.caseNumber, pin: r.pin };
   } catch (e) {
     if (e instanceof ComplaintValidationError) {

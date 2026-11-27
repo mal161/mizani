@@ -45,6 +45,6 @@ Deliberately left for the ACC to prioritise after handover:
 - No in-app password change or reset for staff. The password an administrator issues stays valid until an admin sets a new one in Supabase Studio; the authenticator-app step is what protects a staff account whose password others have seen.
 - No in-app reset of a complainant's status PIN (complainants with a phone can sign in by SMS instead).
 - No automatic deletion: retention periods must be set first ([data-protection.md](data-protection.md)).
-- Scanned evidence images are not read for AI summaries (no OCR).
+- Scanned evidence is read by soma-OCR (a separate service on the same server, key-protected); its text is staff-only, kept out of the audit log, and used in AI summaries only at 60% confidence or more.
 - No calendar invitations for hearings. Online hearings use a link pasted by staff or a Jitsi room Mizani creates (`src/lib/commission/video.ts`). On the default public meet.jit.si, call audio and video pass through a third-party service outside Kenya; the room name holds no case details and is unguessable, but for production set `HEARING_VIDEO_BASE_URL` to an ACC-run Jitsi server.
 - Mizani does not send email; notice letters are printed or sent from the ACC's own mail system.

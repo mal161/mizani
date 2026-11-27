@@ -12,6 +12,8 @@ import { CaseStamp } from "@/components/case/CaseStamp";
 import { Timeline, type TimelineEvent } from "@/components/case/Timeline";
 import { Link, type Locale } from "@/i18n/routing";
 import { CaseActions } from "./CaseActions";
+import { rereadOcrAction } from "./actions";
+import { OcrText, type OcrTextRow } from "@/components/case/OcrText";
 import { latestAi } from "@/lib/ai/triage";
 import { getAiProvider } from "@/lib/ai";
 import { caseFlags } from "@/lib/cases/flags";
@@ -37,7 +39,7 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
 
   const [{ data: events }, { data: docs }, { data: officers }, cfg] = await Promise.all([
     supabase.from("case_events").select("id,type,visibility,created_at,body").eq("case_id", c.id).order("created_at"),
-    supabase.from("documents").select("id,file_name,visibility,created_at").eq("case_id", c.id).order("created_at"),
+    supabase.from("documents").select("id,file_name,visibility,created_at,document_texts(status,text,confidence)").eq("case_id", c.id).order("created_at"),
     supabase.from("profiles").select("id,full_name,office").in("role", ["staff", "admin"]).eq("active", true).order("full_name"),
     loadWorkflowConfig(),
   ]);
@@ -124,6 +126,12 @@ export default async function StaffCasePage({ params }: { params: Promise<{ loca
                   <a href={`/api/documents/${d.id}`} className="underline">
                     {d.file_name}
                   </a>
+                  <OcrText
+                    row={d.document_texts as unknown as OcrTextRow | null}
+                    documentId={d.id}
+                    path={`/${locale}/staff/cases/${caseSlug(c.case_number)}`}
+                    rereadAction={user.role !== "commissioner" ? rereadOcrAction : undefined}
+                  />
                 </li>
               ))}
             </ul>

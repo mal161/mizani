@@ -11,13 +11,15 @@ For the ACC's data protection officer. Mizani was built with the Data Protection
    - `AI_PROVIDER=none` or *Use AI assistance* switched off — nothing leaves the system;
    - a model hosted in Kenya (`openai-compatible`);
    - an external provider (`claude`, or `openrouter` pinned with `OPENROUTER_PROVIDERS`) under a data-transfer agreement, treated as a cross-border transfer.
+   
+   **OCR:** scanned documents go only to the ACC's own soma-OCR instance (`OCR_URL`), which must run in Kenya, normally on the same server. It keeps nothing after answering. The hackathon demo uses a soma-OCR instance outside Kenya and synthetic data only.
 5. **Retention periods** for each kind of record (table below). Mizani does **not** delete anything automatically yet; once the ACC sets periods, a scheduled deletion job can be added per table.
 6. **Lawful basis and notices:** confirm the lawful basis (statutory function under the Advocates Act) and publish a privacy notice. The filing form will not submit without the complainant ticking consent to data processing, but the consent itself is not stored as a separate record (the case existing is the evidence); if the ACC relies on consent, add a stored consent record with its wording and time.
 7. **Rotate every key** used during the hackathon and remove all demo data before go-live.
 
 ## What AI receives
 
-Only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, national ID, KRA PIN and passport numbers and the two parties' names with placeholders. Files are never sent; text-layer PDFs are read on the server and redacted; scanned images are not read. Redaction does **not** catch: names of other people (witnesses, relatives, judges, clerks), land parcel and bank account numbers, and addresses written in free text. Record this in the DPIA. AI output is stored separately (`ai_outputs`), labelled *AI-generated*, never shown to complainants or advocates, never included in case bundles, and only used when an officer clicks **Apply suggestion**.
+Only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, national ID, KRA PIN and passport numbers and the two parties' names with placeholders. Files are never sent; text-layer PDFs are read on the server and redacted; scanned documents are read by the ACC's own soma-OCR, and their text is used only when OCR's confidence is at least 60% (garbled text can hide names from redaction), then redacted like the rest. Redaction does **not** catch: names of other people (witnesses, relatives, judges, clerks), land parcel and bank account numbers, and addresses written in free text. Record this in the DPIA. AI output is stored separately (`ai_outputs`), labelled *AI-generated*, never shown to complainants or advocates, never included in case bundles, and only used when an officer clicks **Apply suggestion**.
 
 ## Personal-data inventory
 
@@ -27,6 +29,7 @@ Only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, national
 | `cases` | complainant link, advocate named, complaint text, language, channel, office, PIN hash | the complaint itself | complainant (own case, no internal fields); notified advocate (allegations only); staff | closure + the ACC's records-retention period |
 | `case_events` | timeline: notes, information requests and replies, stage changes, decisions | case history | parties see only events marked for them; internal notes staff only | with the case |
 | `documents` + Storage `evidence` | uploaded evidence files | evidence | complainant (own, non-internal); advocate (only files shared with them); staff | with the case |
+| `document_texts` | text read from scanned evidence by OCR, with confidence | evidence | staff only (never complainants or advocates); not copied into the audit log | deleted with its document |
 | `advocates` | roll data: name, admission number, phone, firm | identifying and contacting the advocate | staff; the advocate (own entry) | while on the roll |
 | `advocate_responses` | the advocate's written response | case record | the advocate (own); staff — never the complainant | with the case |
 | `hearings` | date, venue, online link, panel, **minutes** | hearings | staff and commissioners; parties see date/place/link only, never minutes | with the case |

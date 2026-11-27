@@ -33,6 +33,8 @@ export interface FiledCase {
   caseId: string;
   caseNumber: string;
   pin: string;
+  /** Uploaded evidence, for OCR after the response. */
+  documentIds: string[];
 }
 
 /**
@@ -82,8 +84,9 @@ export async function fileComplaint(
   if (insErr) throw new Error(`create case: ${insErr.message}`);
   const caseId = created.id as string;
 
+  let documentIds: string[] = [];
   try {
-    await uploadEvidence(caseId, evidence, ctx.filedBy);
+    documentIds = await uploadEvidence(caseId, evidence, ctx.filedBy);
     const { error: evErr } = await admin.from("case_events").insert({
       case_id: caseId,
       type: "filed",
@@ -118,5 +121,5 @@ export async function fileComplaint(
       });
     }
   }
-  return { caseId, caseNumber, pin };
+  return { caseId, caseNumber, pin, documentIds };
 }

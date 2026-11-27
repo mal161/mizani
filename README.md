@@ -112,7 +112,7 @@ The handover pack is in [`docs/handover/`](docs/handover/README.md): [self-hosti
 ## AI assistance
 
 - **What it does:** suggests a category, priority, urgency reasons and an English + Kiswahili summary for each new complaint, and summarises a whole case file on request. Staff see it labelled *AI-generated* and click **Apply suggestion** to use it; AI never changes a case on its own. Complainants never see AI output.
-- **What is sent:** only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, ID numbers, KRA PINs, passport numbers and the parties' names with placeholders. Files are never sent; text-layer PDFs are read locally and redacted. Scanned images are not read (no OCR yet).
+- **What is sent:** only text, after `src/lib/ai/redact.ts` replaces phone numbers, emails, ID numbers, KRA PINs, passport numbers and the parties' names with placeholders. Files are never sent; text-layer PDFs are read locally and redacted. Scanned documents are read by [soma-OCR](https://github.com/mal161/soma-OCR) (open-source, self-hosted) and their text is used only at 60% OCR confidence or more.
 - **Providers** (`AI_PROVIDER`):
   - `claude`: Anthropic API, model `claude-opus-5-5` unless `AI_MODEL` is set; needs `ANTHROPIC_API_KEY`; refusals fall back server-side.
   - `openrouter`: any model on OpenRouter with one key; needs `AI_API_KEY` and `AI_MODEL` (e.g. `anthropic/…`, `google/…`, `meta-llama/…`). Requests ask OpenRouter to use only hosts that don't store or train on prompts; `OPENROUTER_PROVIDERS=HostA,HostB` pins the hosts (e.g. those covered by a data-transfer agreement).

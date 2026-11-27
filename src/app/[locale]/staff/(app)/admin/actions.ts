@@ -71,6 +71,7 @@ export async function saveSettingsAction(_p: AdminState, fd: FormData): Promise<
       slaDays: slaDays as SettingsPatch["slaDays"],
       conciliationEnabled: fd.get("conciliationEnabled") === "on",
       aiEnabled: fd.get("aiEnabled") === "on",
+      ocrEnabled: fd.get("ocrEnabled") === "on",
       advocateResponseDays: Number.parseInt(String(fd.get("advocateResponseDays") ?? ""), 10),
       categories: String(fd.get("categories") ?? "")
         .split(/[\n,]/)

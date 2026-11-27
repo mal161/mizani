@@ -4,6 +4,7 @@ import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 import type { Locale } from "@/i18n/routing";
 import type { ComplaintInput } from "./schema";
 import { complaintSchema, validateEvidence } from "./schema";
+import { queueOcr } from "@/lib/ocr/run";
 import { fileComplaint, ComplaintValidationError, type FiledCase } from "./file-complaint";
 import { afterFiling, type Scheduler } from "./after-filing";
 import { logAudit } from "@/lib/audit";
@@ -58,5 +59,6 @@ export async function fileWalkInComplaintAs(
   });
   await logAudit({ actorId: actor.id, channel: "web", action: "file_walk_in", entity: "cases", entityId: filed.caseId, details: { office: actor.office ?? null, with_phone: Boolean(form.phone?.trim()) } });
   await afterFiling(filed.caseId, schedule);
+  if (schedule) queueOcr(filed.documentIds, schedule);
   return filed;
 }

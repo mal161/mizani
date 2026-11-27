@@ -58,3 +58,15 @@ describe("workflow config", () => {
     expect(parsed.categories).toEqual(DEFAULT_WORKFLOW.categories);
   });
 });
+
+describe("ocrEnabled", () => {
+  it("defaults to on", () => {
+    expect(parseWorkflowConfig([]).ocrEnabled).toBe(true);
+  });
+  it("can be switched off", () => {
+    expect(parseWorkflowConfig([{ key: "ocr_enabled", value: false }]).ocrEnabled).toBe(false);
+  });
+  it("ignores a value that is not a boolean", () => {
+    expect(parseWorkflowConfig([{ key: "ocr_enabled", value: "no" }]).ocrEnabled).toBe(true);
+  });
+});

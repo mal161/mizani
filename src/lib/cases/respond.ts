@@ -26,7 +26,8 @@ export async function openInfoRequest(caseId: string): Promise<OpenInfoRequest |
 }
 
 /** The case's own complainant answers the open request (text + optional evidence). */
-export async function respondToInfoRequest(caseId: string, userId: string, text: string, files: File[]): Promise<void> {
+/** Returns the uploaded documents' ids (for OCR). */
+export async function respondToInfoRequest(caseId: string, userId: string, text: string, files: File[]): Promise<string[]> {
   const admin = createAdminClient();
   const { data: c } = await admin.from("cases").select("complainant_id,assigned_officer_id").eq("id", caseId).maybeSingle();
   if (!c || c.complainant_id !== userId) throw new Error("not your case");
@@ -38,7 +39,7 @@ export async function respondToInfoRequest(caseId: string, userId: string, text:
   if (evidenceError) throw new ComplaintValidationError(evidenceError);
   const evidence = realFiles(files);
 
-  await uploadEvidence(caseId, evidence, userId);
+  const documentIds = await uploadEvidence(caseId, evidence, userId);
   const { error } = await admin.from("case_events").insert({
     case_id: caseId,
     type: "info_provided",
@@ -51,4 +52,5 @@ export async function respondToInfoRequest(caseId: string, userId: string, text:
   if (c.assigned_officer_id) {
     await admin.from("notifications").insert({ user_id: c.assigned_officer_id, case_id: caseId, kind: "info_provided" });
   }
+  return documentIds;
 }

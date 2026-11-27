@@ -496,7 +496,9 @@
       "save": "Save settings",
       "saved": "Settings saved.",
       "aiEnabled": "Use AI assistance",
-      "aiHint": "When off, nothing is sent to any AI provider and staff triage manually. Personal details are always removed before text is sent."
+      "aiHint": "When off, nothing is sent to any AI provider and staff triage manually. Personal details are always removed before text is sent.",
+      "ocrEnabled": "Read scanned documents (OCR)",
+      "ocrHint": "Reads the text of scanned PDFs and photos so staff and the AI summary can use it. When off, no document is sent to the OCR service."
     },
     "routing": {
       "title": "Routing rules",
@@ -938,5 +940,14 @@
       "advocate": "Advocate",
       "complainant": "Complainant"
     }
+  },
+  "ocr": {
+    "pending": "Reading the text of this scan…",
+    "failed": "The text of this scan could not be read.",
+    "reread": "Read text again",
+    "summary": "Text read from this scan (OCR) · confidence {confidence}%",
+    "low": "Low confidence",
+    "empty": "No text was found in this scan.",
+    "note": "OCR can misread words. Check against the scan before relying on it."
   }
 }

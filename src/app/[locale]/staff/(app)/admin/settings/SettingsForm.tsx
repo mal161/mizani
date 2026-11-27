@@ -97,6 +97,11 @@ export function SettingsForm({
           {t("aiEnabled")}
         </label>
         <p className="text-xs text-slate-500 sm:col-span-2">{t("aiHint")}</p>
+        <label className="flex items-center gap-2 text-sm">
+          <input name="ocrEnabled" type="checkbox" defaultChecked={cfg.ocrEnabled} />
+          {t("ocrEnabled")}
+        </label>
+        <p className="text-xs text-slate-500 sm:col-span-2">{t("ocrHint")}</p>
       </div>
 
       <label className="flex flex-col gap-1 text-sm">

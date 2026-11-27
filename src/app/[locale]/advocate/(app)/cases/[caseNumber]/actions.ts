@@ -1,8 +1,10 @@
 "use server";
 
+import { after } from "next/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { submitAdvocateResponse } from "@/lib/advocates/respond";
 import { ComplaintValidationError } from "@/lib/cases/file-complaint";
+import { queueOcr } from "@/lib/ocr/run";
 
 export type AdvocateResponseState = { status: "idle" | "sent" | "error"; reason?: string; late?: boolean };
 
@@ -16,6 +18,7 @@ export async function advocateRespondAction(_prev: AdvocateResponseState, formDa
       String(formData.get("text") ?? ""),
       formData.getAll("evidence").filter((f): f is File => f instanceof File),
     );
+    queueOcr(r.documentIds, (task) => after(task));
     return { status: "sent", late: r.late };
   } catch (e) {
     if (e instanceof ComplaintValidationError) return { status: "error", reason: e.reason };

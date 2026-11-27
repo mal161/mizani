@@ -6,7 +6,8 @@ import { fileComplaint } from "@/lib/cases/file-complaint";
 import { getAiProvider, resetAiProviderForTests } from "@/lib/ai";
 import type { FakeAiProvider } from "@/lib/ai/fake";
 import type { StaffUser } from "@/lib/auth/staff-types";
-import { adminClient, signInAs, signInStaff } from "../helpers/db";
+import { adminClient, signInAs, signInStaff, makeCase } from "../helpers/db";
+import { uploadEvidence } from "@/lib/cases/evidence";
 import { makeTextPdf } from "../helpers/pdf";
 
 let officer: StaffUser;
@@ -76,5 +77,38 @@ describe("summarizeCaseAs", () => {
     } finally {
       await adminClient().from("settings").update({ value: true }).eq("key", "ai_enabled");
     }
+  });
+});
+
+describe("summarizeCaseAs with OCR text", () => {
+  async function caseWithScan(row: Record<string, unknown> | null) {
+    const kase = await makeCase(complainantId);
+    const png = new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1])], "scan.png", { type: "image/png" });
+    const [documentId] = await uploadEvidence(kase.id, [png], complainantId);
+    if (row) await adminClient().from("document_texts").insert({ document_id: documentId, ...row });
+    return kase.id;
+  }
+  const timeline = () => (fake().calls.at(-1)!.input as { timeline: string }).timeline;
+
+  it("uses reliable OCR text, labelled and redacted", async () => {
+    const caseId = await caseWithScan({ status: "done", confidence: 85, page_count: 1, engine: "fake", text: "Paid by M-Pesa from 0722 333 444 on 3 March" });
+    expect((await summarizeCaseAs(officer, caseId)).status).toBe("ok");
+    expect(timeline()).toContain("Document scan.png (text read by OCR, confidence 85%):");
+    expect(timeline()).toContain("Paid by M-Pesa");
+    expect(timeline()).toContain("[PHONE]");
+    expect(timeline()).not.toContain("0722 333 444");
+  });
+
+  it("keeps low-confidence OCR text out", async () => {
+    const caseId = await caseWithScan({ status: "done", confidence: 40, page_count: 1, engine: "fake", text: "garbled words here" });
+    expect((await summarizeCaseAs(officer, caseId)).status).toBe("ok");
+    expect(timeline()).toContain("Document scan.png: scanned, but the text could not be read reliably.");
+    expect(timeline()).not.toContain("garbled words");
+  });
+
+  it("says when a scan has not been read yet", async () => {
+    const caseId = await caseWithScan(null);
+    expect((await summarizeCaseAs(officer, caseId)).status).toBe("ok");
+    expect(timeline()).toContain("Document scan.png: scanned, text not read yet.");
   });
 });

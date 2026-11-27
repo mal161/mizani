@@ -496,7 +496,9 @@
       "save": "Hifadhi mipangilio",
       "saved": "Mipangilio imehifadhiwa.",
       "aiEnabled": "Tumia msaada wa AI",
-      "aiHint": "Ikizimwa, hakuna kinachotumwa kwa mtoa huduma yeyote wa AI na wafanyakazi hupanga kesi wenyewe. Taarifa binafsi huondolewa kila mara kabla maandishi kutumwa."
+      "aiHint": "Ikizimwa, hakuna kinachotumwa kwa mtoa huduma yeyote wa AI na wafanyakazi hupanga kesi wenyewe. Taarifa binafsi huondolewa kila mara kabla maandishi kutumwa.",
+      "ocrEnabled": "Soma nyaraka zilizoskaniwa (OCR)",
+      "ocrHint": "Husoma maandishi ya PDF na picha zilizoskaniwa ili wafanyakazi na muhtasari wa AI wayatumie. Ikizimwa, hakuna hati inayotumwa kwa huduma ya OCR."
     },
     "routing": {
       "title": "Kanuni za ugawaji",
@@ -938,5 +940,14 @@
       "advocate": "Wakili",
       "complainant": "Mlalamikaji"
     }
+  },
+  "ocr": {
+    "pending": "Maandishi ya hati hii yanasomwa…",
+    "failed": "Maandishi ya hati hii hayakuweza kusomwa.",
+    "reread": "Soma maandishi tena",
+    "summary": "Maandishi yaliyosomwa kutoka hati hii (OCR) · uhakika {confidence}%",
+    "low": "Uhakika mdogo",
+    "empty": "Hakuna maandishi yaliyopatikana katika hati hii.",
+    "note": "OCR inaweza kusoma maneno vibaya. Linganisha na hati kabla ya kuyategemea."
   }
 }

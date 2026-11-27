@@ -8,6 +8,7 @@ import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
 import { labelFor } from "@/lib/cases/workflow-config";
 import { logAudit } from "@/lib/audit";
 import { COMMISSION_ROLES } from "@/lib/commission/roles";
+import { OcrText, type OcrTextRow } from "@/components/case/OcrText";
 import { caseHearings } from "@/lib/commission/hearings";
 import { currentDecision } from "@/lib/commission/decisions";
 import { panelMembers } from "@/lib/commission/portal";
@@ -35,7 +36,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
   const admin = createAdminClient();
   const [{ data: events }, { data: docs }, { data: responses }, { data: adv }, hearings, decision, members, cfg] = await Promise.all([
     supabase.from("case_events").select("id,type,visibility,created_at,body").eq("case_id", c.id).order("created_at"),
-    supabase.from("documents").select("id,file_name,created_at").eq("case_id", c.id).order("created_at"),
+    supabase.from("documents").select("id,file_name,created_at,document_texts(status,text,confidence)").eq("case_id", c.id).order("created_at"),
     admin.from("advocate_responses").select("id,text,late,created_at").eq("case_id", c.id).order("created_at"),
     admin.from("cases").select("advocates(full_name,admission_no,firm)").eq("id", c.id).single(),
     caseHearings(c.id),
@@ -129,6 +130,7 @@ export default async function CommissionCasePage({ params }: { params: Promise<{
                   <a href={`/api/documents/${d.id}`} className="underline">
                     {d.file_name}
                   </a>
+                  <OcrText row={d.document_texts as unknown as OcrTextRow | null} documentId={d.id} path={path} />
                 </li>
               ))}
             </ul>
