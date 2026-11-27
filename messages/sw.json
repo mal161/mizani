@@ -940,5 +940,14 @@
       "advocate": "Wakili",
       "complainant": "Mlalamikaji"
     }
+  },
+  "ocr": {
+    "pending": "Maandishi ya hati hii yanasomwa…",
+    "failed": "Maandishi ya hati hii hayakuweza kusomwa.",
+    "reread": "Soma maandishi tena",
+    "summary": "Maandishi yaliyosomwa kutoka hati hii (OCR) · uhakika {confidence}%",
+    "low": "Uhakika mdogo",
+    "empty": "Hakuna maandishi yaliyopatikana katika hati hii.",
+    "note": "OCR inaweza kusoma maneno vibaya. Linganisha na hati kabla ya kuyategemea."
   }
 }

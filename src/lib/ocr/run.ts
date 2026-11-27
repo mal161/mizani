@@ -2,6 +2,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { extractPdfText } from "@/lib/ai/document-text";
 import { loadWorkflowConfig } from "@/lib/cases/load-workflow";
 import { getOcrProvider, OcrError } from "./index";
+import { logAudit } from "@/lib/audit";
+import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 
 /** Reads per document before it stays `failed` (the cron retries until then). */
 export const MAX_OCR_ATTEMPTS = 3;
@@ -116,4 +118,16 @@ export async function rereadOcr(documentId: string): Promise<void> {
     .from("document_texts")
     .update({ status: "pending", attempts: 0, error: null, claimed_at: null })
     .eq("document_id", documentId);
+}
+
+/** An officer or admin presses "Read text again": fresh attempts, audited, and the read is scheduled. */
+export async function rereadDocumentTextAs(
+  actor: StaffUser,
+  documentId: string,
+  schedule: (task: () => Promise<void>) => void,
+): Promise<void> {
+  if (actor.role !== "staff" && actor.role !== "admin") throw new ForbiddenError();
+  await rereadOcr(documentId);
+  await logAudit({ actorId: actor.id, channel: "web", action: "ocr_reread", entity: "documents", entityId: documentId });
+  schedule(() => runOcr(documentId).then(() => undefined));
 }

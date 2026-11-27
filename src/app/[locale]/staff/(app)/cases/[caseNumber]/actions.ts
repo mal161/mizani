@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { assertStaff, ForbiddenError } from "@/lib/auth/staff";
 import {
   changeStageAs,
@@ -120,4 +121,13 @@ export async function setShareAction(formData: FormData): Promise<void> {
   const actor = await assertStaff(WRITERS);
   const { setDocumentSharedAs } = await import("@/lib/cases/actions");
   await setDocumentSharedAs(actor, String(formData.get("documentId")), formData.get("shared") === "true");
+}
+
+/** "Read text again" on a scanned document whose OCR failed (officers and admins). */
+export async function rereadOcrAction(formData: FormData): Promise<void> {
+  const actor = await assertStaff(WRITERS);
+  const { rereadDocumentTextAs } = await import("@/lib/ocr/run");
+  await rereadDocumentTextAs(actor, String(formData.get("documentId") ?? ""), (task) => after(task));
+  const path = String(formData.get("path") ?? "");
+  if (path.startsWith("/")) revalidatePath(path);
 }

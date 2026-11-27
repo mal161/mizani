@@ -940,5 +940,14 @@
       "advocate": "Advocate",
       "complainant": "Complainant"
     }
+  },
+  "ocr": {
+    "pending": "Reading the text of this scan…",
+    "failed": "The text of this scan could not be read.",
+    "reread": "Read text again",
+    "summary": "Text read from this scan (OCR) · confidence {confidence}%",
+    "low": "Low confidence",
+    "empty": "No text was found in this scan.",
+    "note": "OCR can misread words. Check against the scan before relying on it."
   }
 }
