@@ -1,13 +1,7 @@
 import { getTranslations } from "next-intl/server";
+import { OCR_RELIABLE_CONFIDENCE, type OcrTextRow } from "@/lib/ocr/text";
 
-export interface OcrTextRow {
-  status: "pending" | "done" | "failed" | "skipped";
-  text: string | null;
-  confidence: number | null;
-}
-
-/** Below this, the text is shown with a warning and kept out of AI summaries. */
-export const OCR_RELIABLE_CONFIDENCE = 60;
+export type { OcrTextRow } from "@/lib/ocr/text";
 
 /**
  * What OCR read from one scanned document, for staff and commissioners only (the RLS on document_texts

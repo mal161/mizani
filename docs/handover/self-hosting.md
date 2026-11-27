@@ -52,6 +52,19 @@ Call the deadline job **every hour**:
 
 The token must equal `CRON_SECRET`.
 
+### Reading scanned documents (soma-OCR)
+
+Scanned PDFs and photos are read by [soma-OCR](https://github.com/mal161/soma-OCR), a separate open-source OCR service. Run it on the same server (documents never leave it):
+
+```sh
+git clone https://github.com/mal161/soma-OCR && docker build -t soma-ocr soma-OCR
+openssl rand -hex 32 > /etc/mizani/ocr_key && chmod 600 /etc/mizani/ocr_key
+docker run -d --restart unless-stopped --name soma-ocr -p 127.0.0.1:8080:8080 \
+  -e API_KEYS="mizani:$(cat /etc/mizani/ocr_key)" soma-ocr
+```
+
+Then set `OCR_PROVIDER=http`, `OCR_URL=http://127.0.0.1:8080` and `OCR_API_KEY` to the same key. Uploads are read in the background after the upload; the daily job (section 3) retries failures and reads older documents, five per run. Admins can switch it off under *Workflow settings → Read scanned documents (OCR)*.
+
 ## 4. SMS and USSD (Africa's Talking)
 
 Use an ACC-owned Africa's Talking account with a dedicated short code or alphanumeric sender ID. Set `SMS_PROVIDER=africastalking`, `AT_USERNAME`, `AT_API_KEY` and `AT_SENDER_ID` (without it, messages go out from Africa's Talking's default sender). For USSD, set the service callback URL to `https://mizani.acc.example/api/ussd?key=<USSD_CALLBACK_SECRET>`.
@@ -90,6 +103,9 @@ A fresh install has an empty `advocates` table; the demo roll in `supabase/seed.
 | `AI_BASE_URL` | Base URL of an `openai-compatible` server | with `openai-compatible` | no |
 | `OPENROUTER_PROVIDERS` | Comma-separated list pinning which OpenRouter hosts may serve requests | no | no |
 | `HEARING_VIDEO_BASE_URL` | https address of the ACC's Jitsi server for hearing video rooms Mizani creates (default `https://meet.jit.si`) | no | no |
+| `OCR_PROVIDER` | `none` (scans not read), `http` (a soma-OCR instance) or `fake` (demo) | no (default `none`) | no |
+| `OCR_URL` | Address of the ACC's soma-OCR instance, e.g. `http://127.0.0.1:8080` | with `http` | no |
+| `OCR_API_KEY` | The key soma-OCR was started with for Mizani (the part after `name:` in its `API_KEYS`) | with `http` | **yes** |
 
 `OTP_TEST_CODE` exists for automated tests only. It is ignored when `SMS_PROVIDER=africastalking` or `NODE_ENV=production`; **never set it on a server**.
 

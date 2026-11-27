@@ -17,7 +17,7 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 
 ## Workflow settings
 
-**Administration → Workflow settings**: stage names (English and Kiswahili), stage deadlines (SLAs), the advocate response window (default 14 days), whether conciliation is used, and the *Use AI assistance* switch. **Administration → Routing rules**: which office/officer receives new complaints by category and priority. Changes apply to new deadlines and new cases; they are recorded in the audit log.
+**Administration → Workflow settings**: stage names (English and Kiswahili), stage deadlines (SLAs), the advocate response window (default 14 days), whether conciliation is used, the *Use AI assistance* switch and the *Read scanned documents (OCR)* switch. **Administration → Routing rules**: which office/officer receives new complaints by category and priority. Changes apply to new deadlines and new cases; they are recorded in the audit log.
 
 ## Backups
 
@@ -32,6 +32,12 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 - Undelivered SMS appear as "SMS could not be sent" entries on the case timeline (`case_events` rows of type `sms_failed`); check for them weekly, e.g. `select count(*) from case_events where type = 'sms_failed' and created_at > now() - interval '7 days';`. Watch the app's own output for repeated 5xx errors.
 - The hourly deadline job writes alerts to staff; if officers stop receiving "deadline within 48 hours" alerts, check the cron entry and `CRON_SECRET`.
 
+### Scanned documents (OCR)
+
+- Each scanned upload is read by soma-OCR right after it is uploaded; staff see the result under the document on the case page ("Text read from this scan (OCR)", with a confidence score).
+- The daily job retries failed reads (three attempts per document) and reads documents uploaded before OCR was switched on, five per run. A document that still fails shows **Read text again** to officers and admins.
+- `document_texts` shows the state of every document (`pending`, `done`, `failed` with a short error code, `skipped` for PDFs that already contain text). Many `unreachable` errors mean soma-OCR is down: check `curl http://127.0.0.1:8080/health`.
+
 ## Rotating secrets
 
 Rotate at handover, then at least yearly and immediately after any suspected leak:
@@ -41,6 +47,7 @@ Rotate at handover, then at least yearly and immediately after any suspected lea
 | Supabase service role key / JWT secret | Supabase config | update the app env file, restart the app |
 | `AT_API_KEY` | Africa's Talking dashboard | update env file, restart |
 | `ANTHROPIC_API_KEY` / `AI_API_KEY` | provider console | update env file, restart |
+| `OCR_API_KEY` | generate a new random value | restart soma-OCR with it in `API_KEYS`, update the env file, restart the app |
 | `CRON_SECRET` | generate a new random value | update env file **and** the cron entry |
 | `USSD_CALLBACK_SECRET` | generate a new random value | update env file **and** the USSD callback URL at Africa's Talking |
 
