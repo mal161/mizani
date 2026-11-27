@@ -30,13 +30,13 @@ Day-to-day running of Mizani once it is installed (see [self-hosting.md](self-ho
 
 - `GET /api/health` every minute from the ACC's monitoring tool. Alert when the status is not 200 or `db` is not `"ok"`. The response holds no personal data; provider names and the version are added only for callers sending `Authorization: Bearer $CRON_SECRET`.
 - Undelivered SMS appear as "SMS could not be sent" entries on the case timeline (`case_events` rows of type `sms_failed`); check for them weekly, e.g. `select count(*) from case_events where type = 'sms_failed' and created_at > now() - interval '7 days';`. Watch the app's own output for repeated 5xx errors.
-- The hourly deadline job writes alerts to staff; if officers stop receiving "deadline within 48 hours" alerts, check the cron entry and `CRON_SECRET`.
+- The deadline job (hourly when self-hosted, daily on the hackathon demo) writes alerts to staff; if officers stop receiving "deadline within 48 hours" alerts, check the cron entry and `CRON_SECRET`.
 
 ### Scanned documents (OCR)
 
 - Each scanned upload is read by soma-OCR right after it is uploaded; staff see the result under the document on the case page ("Text read from this scan (OCR)", with a confidence score).
-- The daily job retries failed reads (three attempts per document) and reads documents uploaded before OCR was switched on, five per run. A document that still fails shows **Read text again** to officers and admins.
-- `document_texts` shows the state of every document (`pending`, `done`, `failed` with a short error code, `skipped` for PDFs that already contain text). Many `unreachable` errors mean soma-OCR is down: check `curl http://127.0.0.1:8080/health`.
+- Each run of the deadline job retries failed reads (three attempts per document; a wrong key or URL does not use up attempts) and reads documents uploaded before OCR was switched on, up to five per run. A document that still fails shows **Read text again** to officers and admins.
+- `document_texts` shows the state of every document (`pending`, `done`, `failed` with a short error code, `skipped` for PDFs that already contain text). Many `unreachable` errors mean Mizani cannot reach soma-OCR: check from where Mizani runs, e.g. `docker exec mizani wget -qO- http://soma-ocr:8080/health` (Docker) or `curl http://127.0.0.1:8080/health` (Node directly). `unauthorized` means `OCR_API_KEY` does not match soma-OCR's `API_KEYS`.
 
 ## Rotating secrets
 

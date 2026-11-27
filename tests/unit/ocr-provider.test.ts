@@ -69,7 +69,19 @@ describe("HttpOcrProvider", () => {
     vi.stubGlobal("fetch", vi.fn(async () => Response.json({ error: "file_too_large", message: "x" }, { status: 413 })));
     const err = await new HttpOcrProvider("https://ocr.example", "k").read(png, "a.png", "image/png").catch((e) => e);
     expect(err).toBeInstanceOf(OcrError);
-    expect(err).toMatchObject({ code: "file_too_large", retryable: false });
+    expect(err).toMatchObject({ code: "file_too_large", retryable: false, consumesAttempt: true });
+  });
+
+  it("retries configuration errors without using up attempts", async () => {
+    for (const [status, body] of [
+      [401, { error: "unauthorized" }],
+      [400, { error: "unsupported_language" }],
+      [404, null],
+    ] as const) {
+      vi.stubGlobal("fetch", vi.fn(async () => (body ? Response.json(body, { status }) : new Response("no", { status }))));
+      const err = await new HttpOcrProvider("https://ocr.example", "k").read(png, "a.png", "image/png").catch((e) => e);
+      expect(err).toMatchObject({ retryable: true, consumesAttempt: false });
+    }
   });
 
   it("retries server errors", async () => {

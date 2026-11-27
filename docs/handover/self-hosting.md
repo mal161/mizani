@@ -59,11 +59,22 @@ Scanned PDFs and photos are read by [soma-OCR](https://github.com/mal161/soma-OC
 ```sh
 git clone https://github.com/mal161/soma-OCR && docker build -t soma-ocr soma-OCR
 openssl rand -hex 32 > /etc/mizani/ocr_key && chmod 600 /etc/mizani/ocr_key
-docker run -d --restart unless-stopped --name soma-ocr -p 127.0.0.1:8080:8080 \
-  -e API_KEYS="mizani:$(cat /etc/mizani/ocr_key)" soma-ocr
 ```
 
-Then set `OCR_PROVIDER=http`, `OCR_URL=http://127.0.0.1:8080` and `OCR_API_KEY` to the same key. Uploads are read in the background after the upload; the daily job (section 3) retries failures and reads older documents, five per run. Admins can switch it off under *Workflow settings → Read scanned documents (OCR)*.
+**With Option A (Docker)**, put both containers on one private network; soma-OCR needs no published port:
+
+```sh
+docker network create mizani
+docker run -d --restart unless-stopped --name soma-ocr --network mizani \
+  -e API_KEYS="mizani:$(cat /etc/mizani/ocr_key)" soma-ocr
+# start (or re-create) the Mizani container with --network mizani as well
+```
+
+and set `OCR_URL=http://soma-ocr:8080` in `mizani.env`. (Inside the Mizani container, `127.0.0.1` is the container itself.)
+
+**With Option B (Node directly)**, publish soma-OCR on the host only (`-p 127.0.0.1:8080:8080` instead of `--network mizani`) and set `OCR_URL=http://127.0.0.1:8080`.
+
+In both cases set `OCR_PROVIDER=http` and `OCR_API_KEY` to the same key. Uploads are read in the background right after the upload; each run of the deadline job (section 3) also retries failures and reads older documents, up to five per run. Admins can switch OCR off under *Workflow settings → Read scanned documents (OCR)*.
 
 ## 4. SMS and USSD (Africa's Talking)
 

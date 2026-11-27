@@ -21,15 +21,19 @@ const fake = () => getOcrProvider() as FakeOcrProvider;
 const row = async (id: string) =>
   (await adminClient().from("document_texts").select("*").eq("document_id", id).maybeSingle()).data;
 
-async function setOcrEnabled(value: boolean) {
-  await adminClient().from("settings").upsert({ key: "ocr_enabled", value });
+async function setOcrEnabled(value: boolean | undefined) {
+  if (value === undefined) await adminClient().from("settings").delete().eq("key", "ocr_enabled");
+  else await adminClient().from("settings").upsert({ key: "ocr_enabled", value });
 }
+let savedSetting: boolean | undefined;
 
 beforeAll(async () => {
   process.env.SMS_PROVIDER = "fake";
   process.env.OCR_PROVIDER = "fake";
   resetOcrProviderForTests();
   ({ userId } = await signInAs("complainant", "+254700008201"));
+  const { data } = await adminClient().from("settings").select("value").eq("key", "ocr_enabled").maybeSingle();
+  savedSetting = typeof data?.value === "boolean" ? data.value : undefined;
   await setOcrEnabled(true);
 });
 beforeEach(() => {
@@ -38,7 +42,7 @@ beforeEach(() => {
   fake().calls.length = 0;
 });
 afterAll(async () => {
-  await setOcrEnabled(true);
+  await setOcrEnabled(savedSetting);
 });
 
 describe("runOcr", () => {
@@ -105,7 +109,7 @@ describe("runOcr", () => {
       expect(await sweepOcr({ caseId: kase.id })).toEqual({ processed: 0 });
       expect(fake().calls).toHaveLength(0);
     } finally {
-      await setOcrEnabled(true);
+      await setOcrEnabled(true); // the suite's own state; afterAll restores the admin's value
     }
   });
 
@@ -138,5 +142,33 @@ describe("sweepOcr and queueOcr", () => {
     await Promise.all(tasks.map((t) => t()));
     expect((await row(ids[0]))?.status).toBe("done");
     expect((await row(ids[1]))?.status).toBe("done");
+  });
+});
+
+describe("review fixes", () => {
+  it("keeps retrying after a configuration error without using up attempts", async () => {
+    const kase = await makeCase(userId);
+    const [id] = await uploadEvidence(kase.id, [png("wrong-key.png")], userId);
+    fake().failNext(new OcrError("unauthorized", true, false));
+    expect(await runOcr(id)).toBe("failed");
+    expect(await row(id)).toMatchObject({ status: "failed", error: "unauthorized", attempts: 0 });
+    await sweepOcr({ caseId: kase.id });
+    expect(await row(id)).toMatchObject({ status: "done", attempts: 1 });
+  });
+
+  it("turns a read that died on its last attempt into a failure staff can retry", async () => {
+    const kase = await makeCase(userId);
+    const [id] = await uploadEvidence(kase.id, [png("killed.png")], userId);
+    const stale = new Date(Date.now() - 10 * 60_000).toISOString();
+    await adminClient().from("document_texts").insert({ document_id: id, status: "pending", attempts: MAX_OCR_ATTEMPTS, claimed_at: stale });
+    await sweepOcr({ caseId: kase.id });
+    expect(await row(id)).toMatchObject({ status: "failed", error: "interrupted", claimed_at: null });
+  });
+
+  it("starts no read once the sweep's time budget is spent", async () => {
+    const kase = await makeCase(userId);
+    const [id] = await uploadEvidence(kase.id, [png("late.png")], userId);
+    expect(await sweepOcr({ caseId: kase.id, budgetMs: 0 })).toEqual({ processed: 0 });
+    expect(await row(id)).toBeNull();
   });
 });

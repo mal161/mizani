@@ -7,8 +7,12 @@ import { ForbiddenError, type StaffUser } from "@/lib/auth/staff-types";
 
 /** Reads per document before it stays `failed` (the cron retries until then). */
 export const MAX_OCR_ATTEMPTS = 3;
-/** Documents read per cron run, one after another (keeps the run well inside the function time limit). */
+/** Documents read per cron run, one after another. */
 export const OCR_SWEEP_BATCH = 5;
+/** No new read starts after this much of a sweep (each read may take up to 120 s; the function limit is 300 s). */
+export const OCR_SWEEP_BUDGET_MS = 150_000;
+/** A claim older than this belongs to a read that died (the claim function uses the same 5 minutes). */
+const STALE_CLAIM_MS = 5 * 60_000;
 
 export type OcrRunStatus = "done" | "failed" | "skipped" | "pending" | "off";
 
@@ -66,7 +70,13 @@ export async function runOcr(documentId: string): Promise<OcrRunStatus> {
       return "done";
     } catch (e) {
       const err = e instanceof OcrError ? e : new OcrError("engine_error", true);
-      await finish({ status: "failed", error: err.code, ...(err.retryable ? {} : { attempts: MAX_OCR_ATTEMPTS }) });
+      let attempts: Record<string, number> = {};
+      if (!err.retryable) attempts = { attempts: MAX_OCR_ATTEMPTS };
+      else if (!err.consumesAttempt) {
+        const { data } = await admin.from("document_texts").select("attempts").eq("document_id", documentId).single();
+        attempts = { attempts: Math.max(0, Number(data?.attempts ?? 1) - 1) };
+      }
+      await finish({ status: "failed", error: err.code, ...attempts });
       return "failed";
     }
   } catch (e) {
@@ -84,9 +94,25 @@ export function queueOcr(documentIds: string[], schedule: (task: () => Promise<v
  * Cron: retries `pending`/`failed` documents with attempts left, and reads documents that have never been read
  * (uploaded before OCR existed), oldest first, up to OCR_SWEEP_BATCH per run. `caseId` limits it to one case.
  */
-export async function sweepOcr(scope: { caseId?: string } = {}): Promise<{ processed: number }> {
+export async function sweepOcr(scope: { caseId?: string; budgetMs?: number } = {}): Promise<{ processed: number }> {
   if (!(await ocrActive())) return { processed: 0 };
+  const started = Date.now();
+  const budget = scope.budgetMs ?? OCR_SWEEP_BUDGET_MS;
   const admin = createAdminClient();
+
+  // A read killed mid-way (e.g. the function hit its time limit) on its last attempt would stay "pending" for
+  // ever: make it a failure, so staff see "Read text again".
+  let dead = admin
+    .from("document_texts")
+    .update({ status: "failed", error: "interrupted", claimed_at: null })
+    .eq("status", "pending")
+    .gte("attempts", MAX_OCR_ATTEMPTS)
+    .lt("claimed_at", new Date(started - STALE_CLAIM_MS).toISOString());
+  if (scope.caseId) {
+    const { data: docs } = await admin.from("documents").select("id").eq("case_id", scope.caseId);
+    dead = dead.in("document_id", (docs ?? []).map((d) => d.id as string));
+  }
+  await dead;
 
   let retry = admin
     .from("document_texts")
@@ -108,8 +134,13 @@ export async function sweepOcr(scope: { caseId?: string } = {}): Promise<{ proce
   const { data: fresh } = await unread;
 
   const ids = [...(retries ?? []).map((r) => r.document_id as string), ...(fresh ?? []).map((d) => d.id as string)].slice(0, OCR_SWEEP_BATCH);
-  for (const id of ids) await runOcr(id);
-  return { processed: ids.length };
+  let processed = 0;
+  for (const id of ids) {
+    if (Date.now() - started >= budget) break;
+    await runOcr(id);
+    processed += 1;
+  }
+  return { processed };
 }
 
 /** "Read text again": gives the document fresh attempts. The caller schedules runOcr. */
