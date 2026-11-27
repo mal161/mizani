@@ -534,6 +534,19 @@
       "previous": "Iliyotangulia",
       "next": "Inayofuata",
       "pageOf": "Ukurasa {page} kati ya {pages}"
+    },
+    "smsInbox": {
+      "title": "Kikasha cha SMS za majaribio",
+      "intro": "SMS zikiwa katika hali ya majaribio, Mizani huhifadhi nakala ya kila ujumbe ambao ingetuma: nambari za kuingia, PIN za kesi, mabadiliko ya hatua na ilani za usikilizaji. Itumie kuingia na kufuatilia kesi wakati wa majaribio. Ujumbe huhifadhiwa kwa siku 7.",
+      "warning": "Kwa majaribio tu. Yeyote anayeweza kusoma ukurasa huu anaweza kuingia kama watu walioorodheshwa. Badili kwenda mtoa huduma halisi wa SMS kabla ya malalamiko halisi kufika; kikasha hiki kitajiondolea ujumbe wote.",
+      "off": "Kikasha cha majaribio kimezimwa, kwa hiyo ujumbe mpya hauhifadhiwi. Weka SMS_TEST_INBOX=on kukiwasha SMS zikiwa katika hali ya majaribio.",
+      "live": "SMS halisi zimewashwa, kwa hiyo ujumbe unaenda kwenye simu za watu na hakuna kinachohifadhiwa hapa.",
+      "empty": "Hakuna ujumbe katika siku 7 zilizopita.",
+      "head": {
+        "when": "Ulitumwa",
+        "to": "Kwa",
+        "message": "Ujumbe"
+      }
     }
   },
   "ai": {

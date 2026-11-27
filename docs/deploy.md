@@ -21,6 +21,7 @@ Hosting: Vercel (app) + Supabase (database, auth, storage). Demo data only.
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key (secret) |
 | `SMS_PROVIDER` | `africastalking` for real SMS, `fake` otherwise |
+| `SMS_TEST_INBOX` | `on` to keep test-mode SMS in **Administration → Test SMS inbox** (sign-in codes, PINs) while `SMS_PROVIDER=fake`; never for real complaints |
 | `AT_USERNAME` | `sandbox` for the Africa's Talking sandbox |
 | `AT_API_KEY` | Africa's Talking API key |
 | `USSD_CALLBACK_SECRET` | random string; append `?key=<it>` to the USSD callback URL |

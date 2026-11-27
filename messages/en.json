@@ -534,6 +534,19 @@
       "previous": "Previous",
       "next": "Next",
       "pageOf": "Page {page} of {pages}"
+    },
+    "smsInbox": {
+      "title": "Test SMS inbox",
+      "intro": "While SMS is in test mode, Mizani keeps a copy of every message it would have texted: sign-in codes, case PINs, stage changes and hearing notices. Use it to sign in and follow cases during testing. Messages are kept for 7 days.",
+      "warning": "For testing only. Anyone who can read this page can sign in as the people listed. Switch to a real SMS provider before real complaints arrive; this inbox then empties itself.",
+      "off": "The test inbox is switched off, so new messages are not kept. Set SMS_TEST_INBOX=on to turn it on while SMS is in test mode.",
+      "live": "Real SMS is on, so messages go to people's phones and nothing is kept here.",
+      "empty": "No messages in the last 7 days.",
+      "head": {
+        "when": "Sent",
+        "to": "To",
+        "message": "Message"
+      }
     }
   },
   "ai": {
