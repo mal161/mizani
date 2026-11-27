@@ -51,7 +51,7 @@ describe("getOcrProvider", () => {
 
 describe("HttpOcrProvider", () => {
   it("sends the file, the languages and the key, and maps the answer", async () => {
-    const fetchMock = vi.fn(async (_url: string, _init: RequestInit) =>
+    const fetchMock = vi.fn<(url: string, init: RequestInit) => Promise<Response>>(async () =>
       Response.json({ text: "hello", confidence: 87.5, page_count: 2, engine: "tesseract 5.3", pages: [] }),
     );
     vi.stubGlobal("fetch", fetchMock);
@@ -94,7 +94,7 @@ describe("FakeOcrProvider", () => {
       pageCount: 1,
       engine: "fake",
     });
-    expect(fake.calls).toEqual([{ fileName: "receipt.png" }]);
+    expect(fake.calls).toEqual([{ fileName: "receipt.png", mime: "image/png" }]);
   });
 
   it("reports low confidence and failures by file name", async () => {

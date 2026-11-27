@@ -3,15 +3,15 @@ import { OcrError, type OcrProvider, type OcrResult } from "./provider";
 /** Deterministic stand-in for tests and demos without an OCR service. Never calls a network. */
 export class FakeOcrProvider implements OcrProvider {
   readonly name = "fake";
-  calls: { fileName: string }[] = [];
+  calls: { fileName: string; mime: string }[] = [];
   private nextError: OcrError | null = null;
 
   failNext(error: OcrError) {
     this.nextError = error;
   }
 
-  async read(_bytes: Uint8Array, fileName: string, _mime?: string): Promise<OcrResult> {
-    this.calls.push({ fileName });
+  async read(_bytes: Uint8Array, fileName: string, mime: string): Promise<OcrResult> {
+    this.calls.push({ fileName, mime });
     const err = this.nextError;
     this.nextError = null;
     if (err) throw err;
