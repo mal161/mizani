@@ -496,7 +496,9 @@
       "save": "Hifadhi mipangilio",
       "saved": "Mipangilio imehifadhiwa.",
       "aiEnabled": "Tumia msaada wa AI",
-      "aiHint": "Ikizimwa, hakuna kinachotumwa kwa mtoa huduma yeyote wa AI na wafanyakazi hupanga kesi wenyewe. Taarifa binafsi huondolewa kila mara kabla maandishi kutumwa."
+      "aiHint": "Ikizimwa, hakuna kinachotumwa kwa mtoa huduma yeyote wa AI na wafanyakazi hupanga kesi wenyewe. Taarifa binafsi huondolewa kila mara kabla maandishi kutumwa.",
+      "ocrEnabled": "Soma nyaraka zilizoskaniwa (OCR)",
+      "ocrHint": "Husoma maandishi ya PDF na picha zilizoskaniwa ili wafanyakazi na muhtasari wa AI wayatumie. Ikizimwa, hakuna hati inayotumwa kwa huduma ya OCR."
     },
     "routing": {
       "title": "Kanuni za ugawaji",

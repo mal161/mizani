@@ -22,6 +22,8 @@ export interface WorkflowConfig {
   categories: string[];
   advocateResponseDays: number;
   aiEnabled: boolean;
+  /** Read scanned documents with OCR (soma-OCR). */
+  ocrEnabled: boolean;
 }
 
 export const DEFAULT_WORKFLOW: WorkflowConfig = {
@@ -39,6 +41,7 @@ export const DEFAULT_WORKFLOW: WorkflowConfig = {
   categories: ["withheld_funds", "negligence", "delay", "misconduct", "overcharging", "conflict_of_interest", "other"],
   advocateResponseDays: 14,
   aiEnabled: true,
+  ocrEnabled: true,
 };
 
 export function allowedNextStages(from: Stage, cfg: WorkflowConfig): Stage[] {
@@ -96,6 +99,9 @@ export function parseWorkflowConfig(rows: { key: string; value: unknown }[]): Wo
 
   const ai = get("ai_enabled");
   if (typeof ai === "boolean") cfg.aiEnabled = ai;
+
+  const ocr = get("ocr_enabled");
+  if (typeof ocr === "boolean") cfg.ocrEnabled = ocr;
 
   const days = get("advocate_response_days");
   if (isPosInt(days)) cfg.advocateResponseDays = days;

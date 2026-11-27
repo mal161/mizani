@@ -25,7 +25,7 @@ export async function submitAdvocateResponse(
   caseId: string,
   text: string,
   files: File[],
-): Promise<{ late: boolean }> {
+): Promise<{ late: boolean; documentIds: string[] }> {
   if (!(await isAdvocateCase(userId, caseId))) throw new Error("not your case");
   const body = text.trim();
   if (body.length < 20 || body.length > 20000) throw new ComplaintValidationError("invalid_input", ["text"]);
@@ -45,7 +45,7 @@ export async function submitAdvocateResponse(
   const late = deadline ? Date.now() > new Date(deadline.due_at).getTime() : false;
 
   // Advocate documents are internal: staff and the uploading advocate see them, the complainant does not.
-  await uploadEvidence(caseId, evidence, userId, "internal");
+  const documentIds = await uploadEvidence(caseId, evidence, userId, "internal");
   const { error } = await admin.from("advocate_responses").insert({ case_id: caseId, advocate_profile_id: userId, text: body, late });
   if (error) throw new Error(`store response: ${error.message}`);
   const { error: evErr } = await admin.from("case_events").insert({
@@ -64,5 +64,5 @@ export async function submitAdvocateResponse(
     await admin.from("notifications").insert({ user_id: c.assigned_officer_id, case_id: caseId, kind: "advocate_responded" });
   }
   await logAudit({ actorId: userId, channel: "web", action: "advocate_response", entity: "cases", entityId: caseId, details: { late, documents: evidence.length } });
-  return { late };
+  return { late, documentIds };
 }
