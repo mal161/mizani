@@ -102,6 +102,7 @@ A fresh install has an empty `advocates` table; the demo roll in `supabase/seed.
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public (anon) key; all access is still limited by row-level security | yes (build arg) | no |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only key used after the app has checked the user's role | yes | **yes** |
 | `SMS_PROVIDER` | `africastalking` in production; `fake` only for development (codes printed to the log) | yes | no |
+| `SMS_TEST_INBOX` | `on` keeps a copy of every SMS in the admin **Test SMS inbox** while `SMS_PROVIDER=fake` (testing and demos only; ignored once real SMS is on, and emptied by the daily job) | no | no |
 | `AT_USERNAME` | Africa's Talking username (`sandbox` for testing) | with Africa's Talking | no |
 | `AT_API_KEY` | Africa's Talking API key | with Africa's Talking | **yes** |
 | `AT_SENDER_ID` | The ACC's registered short code or sender ID shown to recipients | recommended with Africa's Talking | no |
