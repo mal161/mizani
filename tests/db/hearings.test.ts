@@ -83,6 +83,40 @@ describe("scheduleHearingAs", () => {
     await expect(scheduleHearingAs(officer, c.id, { ...base, mode: "online", venue: undefined, onlineLink: "http://insecure" })).rejects.toThrow(/https/);
   });
 
+  it("creates an unguessable video room for an online hearing when no link is pasted", async () => {
+    const a = await investigationCase();
+    const b = await investigationCase();
+    const online = { startsAt: inDays(6), durationMinutes: 60, mode: "online" as const, panel: [comm.id], confirmClash: true };
+    const ra = await scheduleHearingAs(officer, a.id, online);
+    const rb = await scheduleHearingAs(officer, b.id, { ...online, onlineLink: "   " });
+    const admin = adminClient();
+    const link = async (id: string) => (await admin.from("hearings").select("online_link").eq("id", id).single()).data!.online_link as string;
+    const la = await link(ra.hearingId);
+    const lb = await link(rb.hearingId);
+    expect(la).toMatch(/^https:\/\/meet\.jit\.si\/ACC-Hearing-[a-z0-9]{16}$/);
+    expect(lb).toMatch(/^https:\/\/meet\.jit\.si\/ACC-Hearing-[a-z0-9]{16}$/);
+    expect(la).not.toBe(lb);
+    // The room name carries no case details to the video service.
+    expect(la).not.toContain(a.case_number.replace(/\//g, "-"));
+  });
+
+  it("keeps a pasted link, and uses HEARING_VIDEO_BASE_URL for its own rooms", async () => {
+    const a = await investigationCase();
+    const pasted = await scheduleHearingAs(officer, a.id, { startsAt: inDays(7), durationMinutes: 60, mode: "online", onlineLink: "https://teams.example.org/l/acc-42", panel: [comm.id], confirmClash: true });
+    const admin = adminClient();
+    expect((await admin.from("hearings").select("online_link").eq("id", pasted.hearingId).single()).data!.online_link).toBe("https://teams.example.org/l/acc-42");
+
+    const b = await investigationCase();
+    process.env.HEARING_VIDEO_BASE_URL = "https://video.acc.example.go.ke/";
+    try {
+      const own = await scheduleHearingAs(officer, b.id, { startsAt: inDays(8), durationMinutes: 60, mode: "online", panel: [comm.id], confirmClash: true });
+      const l = (await admin.from("hearings").select("online_link").eq("id", own.hearingId).single()).data!.online_link;
+      expect(l).toMatch(/^https:\/\/video\.acc\.example\.go\.ke\/ACC-Hearing-[a-z0-9]{16}$/);
+    } finally {
+      delete process.env.HEARING_VIDEO_BASE_URL;
+    }
+  });
+
   it("warns about a panel member's overlapping hearing, and allows it when confirmed", async () => {
     const a = await investigationCase();
     const b = await investigationCase();

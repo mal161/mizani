@@ -781,7 +781,7 @@
     "when": "Date and time",
     "duration": "Length",
     "format": "Format",
-    "link": "Online link",
+    "link": "Online link (optional)",
     "venue": "Venue",
     "clash": "A panel member is already booked at this time (case {cases}).",
     "scheduleAnyway": "Schedule anyway",
@@ -806,13 +806,14 @@
       "duration": "Choose a length between 15 minutes and 8 hours.",
       "panel": "Choose 1 to 5 active commissioners.",
       "venue": "Enter the venue for an in-person hearing.",
-      "link": "Enter an https:// link for an online hearing.",
+      "link": "Enter a link that starts with https://, or leave it blank to create a video room.",
       "stage": "Hearings can be scheduled from investigation, conciliation or hearing.",
       "reason": "Give a reason.",
       "already_scheduled": "This case already has a scheduled hearing. Reschedule it instead.",
       "not_scheduled": "Only a scheduled hearing can be changed."
     },
-    "reasonHint": "The reason is shown to the complainant and the advocate."
+    "reasonHint": "The reason is shown to the complainant and the advocate.",
+    "linkHint": "Paste a link from Zoom, Teams, Google Meet or another service, or leave it blank and Mizani creates a video room for this hearing."
   },
   "analytics": {
     "title": "Analytics",
