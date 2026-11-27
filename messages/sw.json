@@ -132,7 +132,8 @@
     "errors": {
       "invalid_phone": "Weka nambari sahihi ya simu ya Kenya, k.m. 0712 345 678.",
       "rate_limited": "Umeomba nambari nyingi mno. Tafadhali subiri dakika 10 ujaribu tena.",
-      "invalid_code": "Nambari hiyo si sahihi au imeisha muda. Angalia SMS au omba nambari mpya."
+      "invalid_code": "Nambari hiyo si sahihi au imeisha muda. Angalia SMS au omba nambari mpya.",
+      "sms_failed": "Hatukuweza kutuma nambari sasa hivi. Tafadhali jaribu tena baada ya dakika chache."
     }
   },
   "myCases": {
@@ -619,7 +620,8 @@
         "invalid_phone": "Weka nambari sahihi ya simu ya Kenya.",
         "invalid_code": "Nambari hiyo si sahihi au imeisha muda.",
         "rate_limited": "Majaribio mengi mno kutoka kwenye muunganisho huu. Tafadhali subiri saa moja ujaribu tena.",
-        "already_activated": "Akaunti hii ya wakili tayari imeanzishwa. Ingia kwenye ukurasa wa kuingia kwa nambari ya simu uliyosajili."
+        "already_activated": "Akaunti hii ya wakili tayari imeanzishwa. Ingia kwenye ukurasa wa kuingia kwa nambari ya simu uliyosajili.",
+        "sms_failed": "Hatukuweza kutuma nambari sasa hivi. Tafadhali jaribu tena baada ya dakika chache."
       }
     },
     "respond": {

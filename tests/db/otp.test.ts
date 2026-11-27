@@ -28,6 +28,36 @@ describe("phone login codes", () => {
     expect(fake().sent[0].message).toMatch(/nambari/i);
   });
 
+  it("reports sms_failed instead of throwing when the SMS provider refuses (e.g. a bad API key)", async () => {
+    process.env.SMS_PROVIDER = "africastalking";
+    process.env.AT_USERNAME = "sandbox";
+    const realFetch = globalThis.fetch;
+    const smsCalls: string[] = [];
+    // Only the SMS request is faked (401, as Africa's Talking answers a wrong key); the database calls go through.
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input instanceof Request ? input.url : input);
+      if (url.includes("africastalking.com")) {
+        smsCalls.push(url);
+        return new Response("The supplied authentication is invalid", { status: 401 });
+      }
+      return realFetch(input, init);
+    }) as typeof fetch;
+    const errors: unknown[][] = [];
+    const realError = console.error;
+    console.error = (...args: unknown[]) => void errors.push(args);
+    try {
+      expect(await requestLoginCode(rand(), "en")).toEqual({ ok: false, reason: "sms_failed" });
+      expect(smsCalls).toHaveLength(1);
+      // The failure is logged for operators, without the code itself.
+      expect(errors.length).toBeGreaterThan(0);
+      expect(JSON.stringify(errors)).not.toMatch(/\b\d{6}\b/);
+    } finally {
+      globalThis.fetch = realFetch;
+      console.error = realError;
+      delete process.env.AT_USERNAME;
+    }
+  });
+
   it("rejects an invalid phone number", async () => {
     expect(await requestLoginCode("12345", "en")).toEqual({ ok: false, reason: "invalid_phone" });
   });

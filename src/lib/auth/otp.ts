@@ -15,7 +15,7 @@ const codeSms: Record<Locale, (code: string) => string> = {
 
 export { phoneEmail } from "./accounts";
 
-export type RequestResult = { ok: true } | { ok: false; reason: "invalid_phone" | "rate_limited" };
+export type RequestResult = { ok: true } | { ok: false; reason: "invalid_phone" | "rate_limited" | "sms_failed" };
 
 /** A fixed login code is honoured only for local development/tests with faked SMS — never on a deployment. */
 function testCodeOverride(): string | undefined {
@@ -47,7 +47,14 @@ export async function requestLoginCode(
   });
   if (error) throw new Error(`could not store login code: ${error.message}`);
   if (!issued) return { ok: false, reason: "rate_limited" };
-  await getSmsProvider().send(phone, codeSms[locale](code));
+  try {
+    await getSmsProvider().send(phone, codeSms[locale](code));
+  } catch (e) {
+    // The provider refused or was unreachable (e.g. a wrong API key). Tell the person to try again instead of
+    // failing the page; log for operators without the code.
+    console.error("login code SMS could not be sent:", e instanceof Error ? e.message : e);
+    return { ok: false, reason: "sms_failed" };
+  }
   return { ok: true };
 }
 

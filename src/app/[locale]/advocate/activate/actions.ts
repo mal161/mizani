@@ -10,7 +10,7 @@ export type ActivateState = {
   step: "start" | "verify";
   admissionNo: string;
   phone: string;
-  error?: "invalid" | "rate_limited" | "already_activated" | "phone_in_use" | "invalid_phone" | "invalid_code";
+  error?: "invalid" | "rate_limited" | "sms_failed" | "already_activated" | "phone_in_use" | "invalid_phone" | "invalid_code";
 };
 
 export async function activateAction(prev: ActivateState, formData: FormData): Promise<ActivateState> {
