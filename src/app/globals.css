@@ -125,7 +125,13 @@
     rgb(122 84 48 / 0.16) calc(var(--ripple-phase) + var(--wave) * 0.7),
     rgb(255 252 246 / 0) calc(var(--ripple-phase) + var(--wave))
   );
-  mask-image: radial-gradient(circle at 50% 50%, transparent 10%, #000 26%, rgb(0 0 0 / 0.6) 54%, transparent 76%);
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 10%,
+    #000 26%,
+    rgb(0 0 0 / 0.6) 54%,
+    transparent 76%
+  );
   filter: blur(1.5px);
   animation: ripple-flow 3.2s linear infinite;
 }
@@ -169,6 +175,31 @@
   .skeleton-bar::after {
     animation: none;
     display: none;
+  }
+}
+
+/*
+ * Scroll reveal (components/RevealOnScroll.tsx): blocks marked data-reveal fade in and rise 16px as they enter
+ * the viewport. Hidden only once the script has added .reveal-ready, so without JavaScript nothing is hidden.
+ * --reveal-delay staggers siblings (e.g. a story row's illustration follows its text). Reduced motion: never hidden.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  /* Only the reveal is animated; hiding blocks below the fold on load is instant. */
+  .reveal-ready [data-reveal].is-revealed {
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 700ms var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready [data-reveal]:not(.is-revealed) {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

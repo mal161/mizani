@@ -63,6 +63,26 @@ test("the placeholder text bars in the illustrations shimmer, and stay still for
   expect(await page.locator("[data-skeleton] > span").first().evaluate((el) => getComputedStyle(el, "::after").animationName)).toBe("none");
 });
 
+test("blocks below the fold fade in as they scroll into view; on-screen and reduced-motion content is shown at once", async ({ page }) => {
+  const opacity = (sel: string) => page.locator(sel).first().evaluate((el) => Number(getComputedStyle(el).opacity));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/en");
+  await page.waitForLoadState("networkidle");
+  const last = '[data-reveal="story-decision"]';
+  await expect(page.locator("[data-reveal]")).not.toHaveCount(0);
+  // Already on screen at load: shown, never hidden.
+  expect(await opacity('[data-reveal="services"]')).toBe(1);
+  // Far below the fold: waiting to be revealed.
+  expect(await opacity(last)).toBe(0);
+  await page.locator(last).scrollIntoViewIfNeeded();
+  await expect.poll(() => opacity(last), { timeout: 5000 }).toBe(1);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await page.waitForLoadState("networkidle");
+  expect(await opacity(last)).toBe(1);
+});
+
 test("/sw shows the Swahili title", async ({ page }) => {
   await page.goto("/sw");
   await expect(page.getByRole("banner")).toContainText("Tume ya Malalamiko dhidi ya Mawakili");

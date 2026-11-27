@@ -10,6 +10,7 @@ import {
   ReceivedArt,
 } from "@/components/home/StoryArt";
 import { Ripple } from "@/components/home/Ripple";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 /** The five steps of the home story, each with its illustration (StoryArt.tsx). */
 const STORY = [
@@ -72,6 +73,7 @@ export default async function HomePage() {
 
   return (
     <PublicShell>
+      <RevealOnScroll />
       <section className="relative isolate overflow-hidden bg-primary text-white">
         {/* Hero image: full-bleed behind the text on phones, the right side from lg (shown near its native 736px). */}
         <div
@@ -121,6 +123,7 @@ export default async function HomePage() {
       <div className="home-warm flow-root">
         <section
           aria-labelledby="services"
+          data-reveal="services"
           className="relative z-10 mx-auto -mt-10 max-w-6xl px-4 sm:px-6"
         >
           <h2 id="services" className="sr-only">
@@ -183,7 +186,10 @@ export default async function HomePage() {
           aria-labelledby="story"
           className="mx-auto max-w-6xl overflow-x-clip px-4 pt-20 pb-16 sm:px-6"
         >
-          <div className="flex max-w-2xl flex-col gap-4">
+          <div
+            data-reveal="story-heading"
+            className="flex max-w-2xl flex-col gap-4"
+          >
             <h2
               id="story"
               className="text-4xl leading-tight font-bold text-primary sm:text-5xl sm:leading-[1.1]"
@@ -202,6 +208,7 @@ export default async function HomePage() {
                 className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16"
               >
                 <div
+                  data-reveal={`story-${key}`}
                   className={`flex flex-col gap-4 ${i % 2 === 1 ? "lg:order-2" : ""}`}
                 >
                   <p className="flex items-center gap-3 text-base font-medium text-accent-ink">
@@ -222,7 +229,10 @@ export default async function HomePage() {
                     {t(`story.steps.${key}.text`)}
                   </p>
                 </div>
+                {/* The illustration follows its text by a beat. */}
                 <div
+                  data-reveal={`story-${key}-art`}
+                  style={{ ["--reveal-delay" as string]: "150ms" }}
                   className={`relative isolate py-6 ${i % 2 === 1 ? "lg:order-1" : ""}`}
                 >
                   <Ripple offset={i} />
@@ -232,7 +242,10 @@ export default async function HomePage() {
             ))}
           </ol>
 
-          <div className="mt-24 flex flex-col gap-6 rounded-lg border bg-white p-8 sm:flex-row sm:items-center sm:justify-between">
+          <div
+            data-reveal="story-actions"
+            className="mt-24 flex flex-col gap-6 rounded-lg border bg-white p-8 sm:flex-row sm:items-center sm:justify-between"
+          >
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
               <li>{t("file.fact1")}</li>
               <li>{t("file.fact2")}</li>
@@ -256,7 +269,10 @@ export default async function HomePage() {
         </section>
 
         <section className="border-t bg-white">
-          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:grid-cols-[5fr_7fr] md:items-start">
+          <div
+            data-reveal="channels"
+            className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:grid-cols-[5fr_7fr] md:items-start"
+          >
             <h2 className="text-xl font-bold text-primary">
               {t("channelsTitle")}
             </h2>
